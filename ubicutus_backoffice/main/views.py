@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 # Create your views here.
 def index(request):
-    return render(request,'base_site.html',{'variable':''})
+    return render(request,'home.html',{'variable':''})
 
 def dashboard(request):
     return render(request,'dashboard/index.html',{'variable':''})
