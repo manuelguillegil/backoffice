@@ -6,3 +6,6 @@ def login(request):
 
 def signup(request):
     return render(request,'register.html',{'variable':''})
+
+def profile(request):
+    return render(request,'ajustes_perfil.html',{'variable':''})
