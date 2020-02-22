@@ -31,7 +31,7 @@
     rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -43,6 +43,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
+    {% block sidebar %}
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
@@ -123,8 +124,8 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="#">Login</a>
-            <a class="collapse-item" href="# ">Register</a>
+            <a class="collapse-item" href="{% url 'login' %}">Login</a>
+            <a class="collapse-item" href="{% url 'signup' %}">Signup</a>
             <a class="collapse-item" href="#">Forgot Password</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Other Pages:</h6>
@@ -158,6 +159,7 @@
 
     </ul>
     <!-- End of Sidebar -->
+    {% endblock sidebar %}
 
     <!-- Content Wrapper -->
     <div id="content-wrapper" class="d-flex flex-column">
@@ -166,6 +168,7 @@
       <div id="content">
 
         <!-- Topbar -->
+        {% block navbar %}
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
           <!-- Sidebar Toggle (Topbar) -->
@@ -360,6 +363,7 @@
 
         </nav>
         <!-- End of Topbar -->
+        {% endblock navbar %}
 
         {% block content %}
         {% endblock content%}

@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls import url
 from main import views
+from accounts import views as views_account
 
 urlpatterns = [
     url(r'^$', views.index, name='home'),
     url(r'^dashboard/$', views.index, name='home'),
+    url(r'^login/$', views_account.login, name='login'),
+    url(r'^signup/$', views_account.signup, name='signup'),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
