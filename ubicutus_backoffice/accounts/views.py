@@ -20,7 +20,6 @@ def registerView(request):
 		form = SignUpForm(request.POST)
 		if form.is_valid():
 			user = form.save(commit=False)
-			print(user.username)
 			if (not validate_email(user.username) ):
 				form = SignUpForm()
 				return render(request,'registration/register.html',{'form':form})
@@ -37,17 +36,13 @@ def validate_email(email):
 
 	from django.core.validators import validate_email
 	from django.core.exceptions import ValidationError
-	print (email)
 	try:
 		validate_email(email)
-		print ("bienn")
 		return validate_ubicutus_email(email)
 	except ValidationError:
-		print ("hola2")
 		return False
 
 def validate_ubicutus_email(email):
-	print ("hola")
 	if len(email)<14:
 		return False
 	email_reverse=email[::-1]
@@ -55,5 +50,4 @@ def validate_ubicutus_email(email):
 	for i in range(13):
 		if (email_reverse[i] != ubic[i]):
 			return False
-	print("cool")
 	return True;
