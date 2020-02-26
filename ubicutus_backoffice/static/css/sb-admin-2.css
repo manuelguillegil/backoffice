@@ -64,6 +64,11 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
 }
 
+
+footer {
+  padding-top : 2rem;
+}
+
 body {
   margin: 0;
   font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -561,6 +566,9 @@ pre code {
   width: 100%;
   padding-right: 0.75rem;
   padding-left: 0.75rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.9rem;
+
   margin-right: auto;
   margin-left: auto;
 }
@@ -2267,8 +2275,8 @@ fieldset:disabled a.btn {
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #2e59d9;
-  border-color: #2653d4;
+  background-color: var(--ubicutus-naranja);
+  border-color: var(--ubicutus-naranja);
 }
 
 .btn-primary:focus, .btn-primary.focus {
