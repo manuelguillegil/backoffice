@@ -22,13 +22,13 @@ def registerView(request):
 			user = form.save(commit=False)
 			if (not validate_email(user.username) ):
 				form = SignUpForm()
-				return render(request,'registration/register.html',{'form':form})
+				return render(request,'register.html',{'form':form})
 			else:
 				form.save()
-				return redirect('login_url')
+				return redirect('login')
 	else:
 		form = SignUpForm()
-	return render(request,'registration/register.html',{'form':form})
+	return render(request,'register.html',{'form':form})
 
 
 
@@ -50,4 +50,14 @@ def validate_ubicutus_email(email):
 	for i in range(13):
 		if (email_reverse[i] != ubic[i]):
 			return False
-	return True;
+	return True
+
+# Create your views here.
+def login(request):
+    return render(request,'login.html',{'variable':''})
+
+def signup(request):
+    return render(request,'register.html',{'variable':''})
+
+def profile(request):
+    return render(request,'ajustes_perfil.html',{'variable':''})

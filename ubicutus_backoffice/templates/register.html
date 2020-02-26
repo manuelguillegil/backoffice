@@ -1,0 +1,57 @@
+{% extends 'base_welcome.html' %}
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
+
+
+{% block welcomeMsg %}
+<h1 class = "p-4 h2 text-gray-900 mb-4"> <strong> ¡Ingresa al sistema BackOffice! </strong> </h1>
+<p class="p-4">Y descubre las nuevas facilidades que te ofrecemos aquí en Ubicutus</p>                
+{% endblock %}
+
+{% block form_title %} 
+¿Aún no tienes una cuenta? ¡Regístrate!
+{% endblock %}
+
+{% block welcome_form %}
+<form class="user">
+  <div class="form-group row">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+      <input type="text" class="form-control form-control-user" id="exampleFirstName"
+        placeholder="Primer Nombre">
+    </div>
+    <div class="col-sm-6">
+      <input type="text" class="form-control form-control-user" id="exampleLastName"
+        placeholder="Apellido">
+    </div>
+  </div>
+  <div class="form-group">
+    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+      placeholder="Dirección de correo">
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+      <input type="password" class="form-control form-control-user" id="exampleInputPassword"
+        placeholder="Contraseña">
+    </div>
+    <div class="col-sm-6">
+      <input type="password" class="form-control form-control-user" id="exampleRepeatPassword"
+        placeholder="Repite tu contraseña">
+    </div>
+  </div>
+  <a href="login.html" class="btn btn-primary btn-user btn-block">
+  Registrar mi cuenta
+  </a>
+</form>                
+{% endblock welcome_form %}
+
+{% block welcome_links %}
+<div class="text-center">
+  <a class="small" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
+</div>
+<div class="text-center">
+  <a class="small" href="login.html">¿Ya tienes una cuenta? Inicia sesión!</a>
+</div> 
+{% endblock welcome_links %}

@@ -1,0 +1,68 @@
+{% extends 'base_site.html' %}
+{% load static %}
+{% block sidebar %}
+{% endblock sidebar %}
+{% block navbar %}
+{% endblock navbar %}
+
+<!--
+  Este template base exporta los siguientes bloques:
+  welcomeMsg: Mensajes de bienvenida en la tarjeta de la izquierda
+  form_title: Título del form que va a la derecha
+  welcome_form: form que va a la derecha
+  welcome_links: links que van después del form
+-->
+
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block content %}
+<div class="bg-welcome">
+<div class="container">
+
+  <!-- Outer Row -->
+  <div class="row justify-content-center">
+
+    <div class="col-xl-10 col-lg-12 col-md-9">
+
+      <div class="card o-hidden border-0 shadow-lg my-5">
+        <div class="card-body p-0">
+
+          <!-- Nested Row within Card Body -->
+          <div class="row">
+            <div class="col-lg-6 d-none d-lg-block text-center container d-flex justify-content-between mh-100">
+              
+
+                <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
+
+                {% block welcomeMsg %}
+                
+                {% endblock %}
+              
+            </div>
+            <div class="col-lg-6">
+              <div class="p-5">
+                <div class="text-center">
+                  <h1 class="h4 text-gray-900 mb-4"> {% block form_title %} {% endblock %} </h1>
+                </div>
+                {% block welcome_form %}
+                
+                {% endblock welcome_form %}
+                <hr>
+                {% block welcome_links %}
+                
+                {% endblock welcome_links %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+</div>
+{% endblock %}

@@ -15,8 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls import url
+from main import views
+from accounts import views as views_account
 
 urlpatterns = [
+    url(r'^$', views.index, name='home'),
+    url(r'^dashboard/$', views.index, name='home'),
+    url(r'^login/$', views_account.login, name='login'),
+    url(r'^signup/$', views_account.signup, name='signup'),
+    url(r'^profile/$', views_account.profile, name='profile'),
+    url(r'^vacaciones/$', views.vacaciones, name='vacaciones'),
+    url(r'^adelanto/$', views.adelanto, name='adelanto'),
+    url(r'^horas_trabajadas/$', views.consulta_horas_trabajadas, name='horas_trabajadas'),
+    url(r'^registro_horas/$', views.registro_horas_trabajadas, name='registrar_horas'),
+    url(r'^reporte/$', views.reporte, name='reporte_falta'),
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
     path('accounts/',include('accounts.urls')),
 ]
