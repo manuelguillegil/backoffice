@@ -1,72 +1,57 @@
-{% extends 'base_site.html' %}
+{% extends 'base_welcome.html' %}
 {% load static %}
-{% block sidebar %}
-{% endblock sidebar %}
-{% block navbar %}
-{% endblock navbar %}
-{% block content %}
 
-<div class="container">
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
 
-  <div class="card o-hidden border-0 shadow-lg my-5">
-    <div class="card-body p-0">
-      <!-- Nested Row within Card Body -->
-      <div class="row">
-        <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
-        <div class="col-lg-7">
-          <div class="p-5">
-            <div class="text-center">
-              <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
-            </div>
-            <form class="user">
-              <div class="form-group row">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                    placeholder="First Name">
-                </div>
-                <div class="col-sm-6">
-                  <input type="text" class="form-control form-control-user" id="exampleLastName"
-                    placeholder="Last Name">
-                </div>
-              </div>
-              <div class="form-group">
-                <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                  placeholder="Email Address">
-              </div>
-              <div class="form-group row">
-                <div class="col-sm-6 mb-3 mb-sm-0">
-                  <input type="password" class="form-control form-control-user" id="exampleInputPassword"
-                    placeholder="Password">
-                </div>
-                <div class="col-sm-6">
-                  <input type="password" class="form-control form-control-user" id="exampleRepeatPassword"
-                    placeholder="Repeat Password">
-                </div>
-              </div>
-              <a href="login.html" class="btn btn-primary btn-user btn-block">
-                Register Account
-              </a>
-              <hr>
-              <a href="index.html" class="btn btn-google btn-user btn-block">
-                <i class="fab fa-google fa-fw"></i> Register with Google
-              </a>
-              <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-              </a>
-            </form>
-            <hr>
-            <div class="text-center">
-              <a class="small" href="forgot-password.html">Forgot Password?</a>
-            </div>
-            <div class="text-center">
-              <a class="small" href="login.html">Already have an account? Login!</a>
-            </div>
-          </div>
-        </div>
-      </div>
+
+{% block welcomeMsg %}
+<h1 class = "p-4 h2 text-gray-900 mb-4"> <strong> ¡Ingresa al sistema BackOffice! </strong> </h1>
+<p class="p-4">Y descubre las nuevas facilidades que te ofrecemos aquí en Ubicutus</p>                
+{% endblock %}
+
+{% block form_title %} 
+¿Aún no tienes una cuenta? ¡Regístrate!
+{% endblock %}
+
+{% block welcome_form %}
+<form class="user">
+  <div class="form-group row">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+      <input type="text" class="form-control form-control-user" id="exampleFirstName"
+        placeholder="Primer Nombre">
+    </div>
+    <div class="col-sm-6">
+      <input type="text" class="form-control form-control-user" id="exampleLastName"
+        placeholder="Apellido">
     </div>
   </div>
+  <div class="form-group">
+    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+      placeholder="Dirección de correo">
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-6 mb-3 mb-sm-0">
+      <input type="password" class="form-control form-control-user" id="exampleInputPassword"
+        placeholder="Contraseña">
+    </div>
+    <div class="col-sm-6">
+      <input type="password" class="form-control form-control-user" id="exampleRepeatPassword"
+        placeholder="Repite tu contraseña">
+    </div>
+  </div>
+  <a href="login.html" class="btn btn-primary btn-user btn-block">
+  Registrar mi cuenta
+  </a>
+</form>                
+{% endblock welcome_form %}
 
+{% block welcome_links %}
+<div class="text-center">
+  <a class="small" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
 </div>
-
-{% endblock %}
+<div class="text-center">
+  <a class="small" href="login.html">¿Ya tienes una cuenta? Inicia sesión!</a>
+</div> 
+{% endblock welcome_links %}
