@@ -5,6 +5,7 @@ from .forms import SignUpForm
 from django.contrib.auth.models import User
 from django.core.validators import validate_email as VALIDATE_THE_EMAIL
 from django.core.exceptions import ValidationError
+from django.views.decorators.csrf import csrf_protect
 
 # Create your views here.
 
@@ -15,6 +16,7 @@ def indexView(request):
 def dashboardView(request):
 	return render(request,'dashboard.html')
 
+@csrf_protect
 def registerView(request):
 	if request.method == "POST":
 		form = SignUpForm(request.POST)

@@ -1,5 +1,6 @@
 {% extends 'base_welcome.html' %}
 {% load static %}
+<!-- ACORDARSE DE AGREGAR WIDGET TWEAKS PARA CAMBIAR LAS COSAS AQUI-->
 
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
@@ -16,34 +17,34 @@
 {% endblock %}
 
 {% block welcome_form %}
-<form class="user">
+<form class="user" name="registerUser" id="registerUser" novalidate method="POST" >
+  {% csrf_token %}
+  {{ form.non_field_errors }}
   <div class="form-group row">
     <div class="col-sm-6 mb-3 mb-sm-0">
-      <input type="text" class="form-control form-control-user" id="exampleFirstName"
-        placeholder="Primer Nombre">
+      {{ form.username.errors }}
+      {{ form.username }}
     </div>
     <div class="col-sm-6">
-      <input type="text" class="form-control form-control-user" id="exampleLastName"
-        placeholder="Apellido">
+      {{ form.lastname.errors }}
+      {{ form.lastname }}
     </div>
   </div>
   <div class="form-group">
-    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-      placeholder="Dirección de correo">
+    {{ form.email.errors }}
+    {{ form.email }}
   </div>
   <div class="form-group row">
     <div class="col-sm-6 mb-3 mb-sm-0">
-      <input type="password" class="form-control form-control-user" id="exampleInputPassword"
-        placeholder="Contraseña">
+      {{ form.password1.errors }}
+      {{ form.password1 }}
     </div>
     <div class="col-sm-6">
-      <input type="password" class="form-control form-control-user" id="exampleRepeatPassword"
-        placeholder="Repite tu contraseña">
+      {{ form.password2.errors }}
+      {{ form.password2 }}
     </div>
   </div>
-  <a href="login.html" class="btn btn-primary btn-user btn-block">
-  Registrar mi cuenta
-  </a>
+  <button type="submit" class="btn btn-primary btn-user btn-block" id="sendRegister">Registrar mi cuenta</button>
 </form>                
 {% endblock welcome_form %}
 
