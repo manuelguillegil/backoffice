@@ -18,12 +18,13 @@ from django.urls import path, include
 from django.conf.urls import url
 from main import views
 from accounts import views as views_account
+from django.contrib.auth.views import LoginView, LogoutView
 
 # PURGAR URLS PLSSSSSSSSS
 urlpatterns = [
     url(r'^$', views.index, name='home'),
     url(r'^dashboard/$', views.index, name='home'),
-    url(r'^login/$', views_account.login, name='login'),
+    #url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^signup/$', views_account.registerView, name='signup'),
     url(r'^profile/$', views_account.profile, name='profile'),
     url(r'^vacaciones/$', views.vacaciones, name='vacaciones'),

@@ -4,10 +4,10 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import password_validation
 from .models import UserProfile
-
+#CAMBIAR USERNAME PARA QUE SEA EL EMAIL Y PASAR EL REGISTER A ACCOUNTS
 class SignUpForm(UserCreationForm):
-    username = forms.CharField(
-        label='Username',
+    name = forms.CharField(
+        label='name',
         max_length=30,
         required=True,
         widget=forms.TextInput(attrs={'class': "form-control form-control-user",'id': 'exampleFirstName', 'placeholder': 'Primer Nombre'}),
@@ -20,7 +20,7 @@ class SignUpForm(UserCreationForm):
         widget=forms.TextInput(attrs={'class': "form-control form-control-user",'id': 'exampleLastName', 'placeholder': 'Apellido'}),
     )
 
-    email = forms.CharField(
+    username = forms.CharField(
         label="Email",
         max_length=50, 
         required=True,
@@ -43,11 +43,11 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('username', 'lastname', 'email', 'password1', 'password2')
+        fields = ('name', 'lastname', 'username', 'password1', 'password2')
 
 class LoginForm(LoginView):
-    email = forms.CharField(
-        label='Email',
+    username = forms.CharField(
+        label='Username',
         max_length=50,
         required=True,
     )
@@ -59,7 +59,7 @@ class LoginForm(LoginView):
 
     class Meta:
         model = User
-        fields = ('username', 'password1')
+        fields = ('username', 'password')
 
 
 class EditUserDataForm(forms.ModelForm):
