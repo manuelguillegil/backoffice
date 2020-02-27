@@ -2,26 +2,36 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 #from datetime import datetime
 from datetime import date
+from enum import Enum
 
 # Create your models here.
 
 class UserProfile(models.Model):
 
-    class Position(models.TextChoices):
-        REQSTUDENT = 'Estudiante por requerimientos'
-        PERMSTUDENT = 'Estudiante fijo'
-        TRAINEE = 'Trainee'
-        JUNIOR = 'Junior'
-        SEMISENIOR = 'Semi-Senior'
-        SENIOR = 'Senior'
+    REQSTUDENT = 'RS'
+    PERMSTUDENT = 'PS'
+    TRAINEE = 'TR'
+    JUNIOR = 'JR'
+    SEMISENIOR = 'SS'
+    SENIOR = 'SR'
+
+    Position = [
+        (REQSTUDENT,'Estudiante por requerimientos'),
+        (PERMSTUDENT,'Estudiante fijo'),
+        (TRAINEE,'Trainee'),
+        (JUNIOR,'Junior'),
+        (SEMISENIOR,'Semi-Senior'),
+        (SENIOR,'Senior'),
+    ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     position = models.CharField(
         max_length=60,
-        choices=Position.choices,
-        default=Position.REQSTUDENT,
+        choices=Position,
+        default=REQSTUDENT,
     )
 
 class  Task(models.Model):
