@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^registro_horas/$', views.registro_horas_trabajadas, name='registrar_horas'),
     url(r'^reporte/$', views.reporte, name='reporte_falta'),
     path('jet/', include('jet.urls', 'jet')),
-    path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('admin/', admin.site.urls),
     path('accounts/',include('accounts.urls')),
