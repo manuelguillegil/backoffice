@@ -6,7 +6,7 @@ def index(request):
     return render(request,'home.html',{'variable':''})
 
 def dashboard(request):
-    return render(request,'dashboard/index.html',{'variable':''})
+    return render(request,'home.html',{'variable':''})
 
 def vacaciones(request):
     return render(request,'solicitud_vacaciones.html',{'variable':''})
