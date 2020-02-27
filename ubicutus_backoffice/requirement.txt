@@ -4,7 +4,6 @@ Django==3.0.3
 django-bootstrap4==1.1.1
 django-widget-tweaks==1.4.5
 https://github.com/Barukimang/django-jet/
-pkg-resources==0.0.0
 psycopg2-binary==2.8.4
 pytz==2019.3
 soupsieve==1.9.5
