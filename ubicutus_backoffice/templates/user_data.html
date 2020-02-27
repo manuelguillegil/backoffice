@@ -1,0 +1,15 @@
+
+{% extends 'base_site.html' %}
+{% load static %}
+{% block content %}
+
+<h2>Tu info</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ user_info.email }}
+    {{ user_info.userprofile.position }}
+    <button type="submit" class="btn btn-success">Post</button>
+  </form>
+
+{% endblock %}

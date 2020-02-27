@@ -1,0 +1,14 @@
+
+{% extends 'base_site.html' %}
+{% load static %}
+{% block content %}
+
+<h2>Edita tu info</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Post</button>
+  </form>
+
+{% endblock %}
