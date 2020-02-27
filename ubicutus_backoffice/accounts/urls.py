@@ -11,6 +11,7 @@ urlpatterns = [
     path('login/',LoginView.as_view(),name="login_url"),
     path('register/',views.registerView,name="register_url"),
     path('logout/',LogoutView.as_view(next_page='home'),name="logout"),
+    path('my-time/',views.my_time,name="my-time"),
     
     url(r'^personal_data/$', views.user_data, name = 'user_data'),
     url(r'^personal_data/edit/$', views.edit_user_data, name = 'edit_user_data'),

@@ -100,3 +100,11 @@ def user_data(request):
 
     return render(request, 'user_data.html', args)
 
+def my_time(request):
+
+    # user = request.user
+    # profile = user.userprofile
+
+    # args = { 'user_info': user, 'profile_info': profile }
+
+    return render(request, 'my_time.html')
