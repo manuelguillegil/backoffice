@@ -1,10 +1,45 @@
-{% extends 'index.html' %}
+{%extends 'base_welcome.html' %}
+{% load static %}
+{% load widget_tweaks %}
 
-{% block content %}
-	<h1>inicia sesion</h1>
-	<form method="POST">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button>inicia</button>
-	</form>
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
 {% endblock %}
+
+{% block welcomeMsg %}
+    <h1 class = "p-4 h2 text-gray-900 mb-4"> <strong> Bienvenido al sistema Backoffice de Ubicutus </strong> </h1>
+    <p class="p-4">Aquí podrás registrar tu productividad y solicitar información importante, ¡Como tus vacaciones!</p>
+{% endblock %}
+{% block form_title %}  ¡Bienvenido al trabajo! {% endblock %}
+
+{% block welcome_form %}
+<form class="user" name="loginUser" id="loginUser" novalidate="novalidate" method="POST">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="form-group">
+        {{ form.username.errors }}
+        {{ form.username|attr:"type:email"|attr:"class:form-control form-control-user"|attr:"id:exampleInputEmail"|attr:"placeholder:Ingresa tu correo de Ubicutus"|attr:"aria-describedby:emailHelp" }}
+    </div>
+    <div class="form-group">
+        {{ form.password.errors }}
+        {{ form.password|attr:"type:password"|attr:"class:form-control form-control-user"|attr:"id:exampleInputPassword"|attr:"placeholder:Contraseña" }}
+    </div>
+    <div class="form-group">
+    <div class="custom-control custom-checkbox small">
+        <input type="checkbox" class="custom-control-input" id="customCheck">
+        <label class="custom-control-label" for="customCheck">Recuérdame &#9834; </label>
+    </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-user btn-block" id="sendMessageButton">Ingresar</button>
+</form>
+{% endblock welcome_form %}
+
+{% block welcome_links %}
+<div class="text-center">
+    <a class="small" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
+</div>
+<div class="text-center">
+    <a class="small" href="register.html">¡Crea una cuenta!</a>
+</div>
+{% endblock welcome_links %}
