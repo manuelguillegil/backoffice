@@ -104,15 +104,15 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'reporte_falta' %}">
           <i class="far fa-bell"></i>
-          <span href="{% url 'reporte_falta' %}">Reporte faltas o incidencias laborales</span>
+          <span>Reporte faltas o incidencias laborales</span>
         </a>
       </li>
 
       <!-- time-counting section button -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'registrar_horas' %}">
           <i class="fas fa-stopwatch"></i>
           <!--Aqui falta poner el url hacia la vista del reloj @TODO-->
           <span href="">Contar mi tiempo</span>
@@ -121,7 +121,7 @@
 
       <!-- recent actions section button -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'horas_trabajadas' %}">
           <i class="fas fa-calendar"></i>
           <!--Aqui falta poner el url hacia la vista del historial @TODO-->
           <span href="">Historial reciente</span>
