@@ -22,3 +22,6 @@ def registro_horas_trabajadas(request):
 
 def reporte(request):
     return render(request,'reporte_faltas.html',{'variable':''})
+
+def tareas(request):
+    return render(request,'tareas.html',{'variable':''})
