@@ -65,8 +65,8 @@ class LoginForm(LoginView):
 class EditUserDataForm(forms.ModelForm):
     
     username = forms.CharField(
-        label='Username',
-        help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', 
+        label='Email',
+        help_text='Debe ser una dirección @ubicutus.com', 
         max_length=152,
         required=True, 
     )   
