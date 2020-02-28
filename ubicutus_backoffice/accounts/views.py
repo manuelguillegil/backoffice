@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.core.validators import validate_email as VALIDATE_THE_EMAIL
 from django.core.exceptions import ValidationError
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 @csrf_protect
