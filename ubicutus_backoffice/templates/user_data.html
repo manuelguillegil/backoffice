@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block title %}Información del usuario{% endblock %}
+{% block pageTitle %}Información del usuario{% endblock %}
 
 {% block content %}
 
@@ -41,7 +42,7 @@
                     </div>
                     {% block welcome_form %}
                     <div class="profile-img">
-                      <img src=" {% static 'img/default-user.png'  %} " alt=""/>
+                      <img src=" {% static 'img/default-user.png'  %} " alt="" class="img-fluid"/>
                     </div>
                     <h1 class="h4 text-gray-900 mb-4">Cargo: </h1> 
                     <h4 class="text-center">{{ user_info.userprofile.get_position_display }}</h4>
@@ -49,7 +50,7 @@
                     <hr>
                     {% block welcome_links %}
                     <div class="user">
-                      <a href="{% url 'edit_user_data' %}" class="btn btn-primary btn-user btn-block" id="edit-profile"> <strong>Edit Profile</strong> </a>
+                      <a href="{% url 'edit_user_data' %}" class="btn btn-primary btn-user btn-block rounded-pill" id="edit-profile"> <strong>Edit Profile</strong> </a>
                     </div>
                     {% endblock welcome_links %}
                   </div>
