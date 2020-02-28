@@ -22,12 +22,12 @@
   {{ form.non_field_errors }}
   <div class="form-group row">
     <div class="col-sm-6 mb-3 mb-sm-0">
-      {{ form.name.errors }}
-      {{ form.name }}
+      {{ form.first_name.errors }}
+      {{ form.first_name }}
     </div>
     <div class="col-sm-6">
-      {{ form.lastname.errors }}
-      {{ form.lastname }}
+      {{ form.last_name.errors }}
+      {{ form.last_name }}
     </div>
   </div>
   <div class="form-group">
@@ -53,6 +53,6 @@
   <a class="small" href="forgot-password.html">¿Olvidaste tu contraseña?</a>
 </div>
 <div class="text-center">
-  <a class="small" href="login.html">¿Ya tienes una cuenta? Inicia sesión!</a>
+  <a class="small" href="{% url 'login' %}">¿Ya tienes una cuenta? Inicia sesión!</a>
 </div> 
 {% endblock welcome_links %}

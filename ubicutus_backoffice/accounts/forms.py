@@ -6,15 +6,15 @@ from django.contrib.auth import password_validation
 from .models import UserProfile
 #CAMBIAR USERNAME PARA QUE SEA EL EMAIL Y PASAR EL REGISTER A ACCOUNTS
 class SignUpForm(UserCreationForm):
-    name = forms.CharField(
-        label='name',
+    first_name = forms.CharField(
+        label='first_name',
         max_length=30,
         required=True,
         widget=forms.TextInput(attrs={'class': "form-control form-control-user",'id': 'exampleFirstName', 'placeholder': 'Primer Nombre'}),
     )
 
-    lastname = forms.CharField(
-        label='Lastname',
+    last_name = forms.CharField(
+        label='last_name',
         max_length=30,
         required=True,
         widget=forms.TextInput(attrs={'class': "form-control form-control-user",'id': 'exampleLastName', 'placeholder': 'Apellido'}),
@@ -43,7 +43,7 @@ class SignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('name', 'lastname', 'username', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'username', 'password1', 'password2')
 
 class LoginForm(LoginView):
     username = forms.CharField(
@@ -92,11 +92,11 @@ class EditUserDataForm(forms.ModelForm):
 
 class EditProfileForm(forms.ModelForm):
     
-    position = forms.CharField(
+    position = forms.ChoiceField(
         label='Position',
         help_text='Required. 150 characters or fewer. Letters only.', 
-        max_length=152,
-        required=True, 
+        required=True,
+        choices=UserProfile.Position
     )   
 
     class Meta:

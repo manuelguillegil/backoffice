@@ -132,6 +132,11 @@ dmypy.json
 
 alumnusb_system/get-pip.py
 
+<<<<<<< HEAD
+# sqlite
+db.sqlite
+=======
 **/db.sqlite3
 db.sqlite3
 *db.sqlite3
+>>>>>>> c5c6cc50aecf15086e44142fb92cf3e17c9670c2

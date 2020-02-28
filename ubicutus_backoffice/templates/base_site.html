@@ -160,6 +160,8 @@
             <a class="collapse-item" href="{% url 'login' %}">Login</a>
             <a class="collapse-item" href="{% url 'signup' %}">Signup</a>
             <a class="collapse-item" href="#">Forgot Password</a>
+            <a class="collapse-item" href="{% url 'user_data' %}">User Data</a>
+            <a class="collapse-item" href="{% url 'edit_user_data' %}">Edit User Data</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Other Pages:</h6>
             <a class="collapse-item" href="#"> 404 Page</a>
@@ -342,7 +344,7 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{% block username %}Manuel Gil{% endblock %}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{% block username %}{{user.name}}{% endblock %}</span>
                 <img class="img-profile rounded-circle" src="{% static 'img/default-user.png' %}">
               </a>
               <!-- Dropdown - User Information -->
@@ -395,20 +397,14 @@
 
             <div class="col-lg-4 mb-5 mb-lg-0">
               <h4 class="text-uppercase mb-4 text-black">Contacto</h4>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.instagram.com/alumn_usb/">
+              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.instagram.com/ubicutus/">
                 <i class="fab fa-fw fa-instagram"></i>
               </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://twitter.com/alumn_usb/">
+              <a class="btn btn-outline-dark btn-social mx-1" href="https://twitter.com/ubicutus">
                 <i class="fab fa-fw fa-twitter"></i>
               </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://facebook.com/alumnusb/">
+              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.facebook.com/ubicutus/">
                 <i class="fab fa-fw fa-facebook-f"></i>
-              </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.youtube.com/c/alumnusb/">
-                <i class="fab fa-fw fa-youtube"></i>
-              </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.linkedin.com/company/alumnusb/">
-                <i class="fab fa-fw fa-linkedin-in"></i>
               </a>
             </div>
 
@@ -450,15 +446,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">¿Seguro quieres salir?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-body">Descansa, has trabajado mucho. ¡Sigue así!</div>
         <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="# ">Logout</a>
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          <a class="btn btn-primary" href="{% url 'logout' %}">Salir</a>
         </div>
       </div>
     </div>
@@ -482,8 +478,8 @@
   <script src="{%static  'vendor/chart.js/Chart.min.js' %}"></script>
 
   <!-- Page level custom scripts -->
-  <script src="{%static  'js/demo/chart-area-demo.js' %}"></script>
-  <script src="{%static  'js/demo/chart-pie-demo.js' %}"></script>
+  {% block cscripts %} 
+  {% endblock %}
 </body>
 
 </html>
