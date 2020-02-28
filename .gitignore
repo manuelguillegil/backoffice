@@ -131,3 +131,5 @@ dmypy.json
 
 alumnusb_system/get-pip.py
 
+# sqlite
+db.sqlite
