@@ -130,7 +130,7 @@
 
       <!-- recent actions section button -->
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{% url 'tareas' %}">
           <i class="fas fa-list"></i>
           <!--Aqui falta poner el url hacia la vista de las tareas @TODO-->
           <span href="">Tareas</span>
@@ -160,6 +160,8 @@
             <a class="collapse-item" href="{% url 'login' %}">Login</a>
             <a class="collapse-item" href="{% url 'signup' %}">Signup</a>
             <a class="collapse-item" href="#">Forgot Password</a>
+            <a class="collapse-item" href="{% url 'user_data' %}">User Data</a>
+            <a class="collapse-item" href="{% url 'edit_user_data' %}">Edit User Data</a>
             <div class="collapse-divider"></div>
             <h6 class="collapse-header">Other Pages:</h6>
             <a class="collapse-item" href="#"> 404 Page</a>
@@ -395,20 +397,14 @@
 
             <div class="col-lg-4 mb-5 mb-lg-0">
               <h4 class="text-uppercase mb-4 text-black">Contacto</h4>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.instagram.com/alumn_usb/">
+              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.instagram.com/ubicutus/">
                 <i class="fab fa-fw fa-instagram"></i>
               </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://twitter.com/alumn_usb/">
+              <a class="btn btn-outline-dark btn-social mx-1" href="https://twitter.com/ubicutus">
                 <i class="fab fa-fw fa-twitter"></i>
               </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://facebook.com/alumnusb/">
+              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.facebook.com/ubicutus/">
                 <i class="fab fa-fw fa-facebook-f"></i>
-              </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.youtube.com/c/alumnusb/">
-                <i class="fab fa-fw fa-youtube"></i>
-              </a>
-              <a class="btn btn-outline-dark btn-social mx-1" href="https://www.linkedin.com/company/alumnusb/">
-                <i class="fab fa-fw fa-linkedin-in"></i>
               </a>
             </div>
 
