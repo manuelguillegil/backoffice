@@ -92,11 +92,11 @@ class EditUserDataForm(forms.ModelForm):
 
 class EditProfileForm(forms.ModelForm):
     
-    position = forms.CharField(
+    position = forms.ChoiceField(
         label='Position',
         help_text='Required. 150 characters or fewer. Letters only.', 
-        max_length=152,
-        required=True, 
+        required=True,
+        choices=UserProfile.Position
     )   
 
     class Meta:
