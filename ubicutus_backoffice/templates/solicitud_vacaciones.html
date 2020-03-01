@@ -1,42 +1,84 @@
-{% extends 'base_site.html' %}
+
+{%extends 'base_site.html' %}
 {% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
+
+{% block title %}Solicitar Vacaciones{% endblock %}
+{% block pageTitle %}Solicitar Vacaciones{% endblock %}
+
 {% block content %}
 
-<!-- Begin Page Content -->
-<div class="container-fluid">
+  <div class="bg-welcome">
+    <div class="container">
+    
+      <!-- Outer Row -->
+      <div class="row justify-content-center">
+    
+        <div class="col-xl-10 col-lg-12 col-md-9">
+    
+          <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+    
+              <!-- Nested Row within Card Body -->
+              <div class="row">
+                
+                <div class="col-lg-6 d-none d-lg-block text-center container d-flex justify-content-between mh-100">
 
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Solicitud de Vacaciones</h1>
+                  <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
+                </br>
+              </br>
+                    <img class="p-4 img-fluid" src="https://i.ya-webdesign.com/images/beach-png-1.png" alt="">
+                  
+                </div>
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    {% block welcomeMsg %}
+                    <h1 class = "p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Solicitar Vacaciones </strong></h1>
+                    {% endblock %}
+                      <form class="form" action="#">
+                        <div class="form-group row">
+                          <label for="vacationdate_i" class="col-5 col-form-label">Fecha inicial</label>
+                          <div class="col-7">
+                            <input class="form-control form-control-user rounded-pill" type="date" id="vacationdate_i" name="vacationdate_i">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="vacationdate_f" class="col-5 col-form-label">Fecha final</label>
+                          <div class="col-7">
+                            <input class="form-control form-control-user rounded-pill" type="date" id="vacationdate_f" name="vacationdate_f">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="remaining_days" class="col-5 col-form-label">Días restantes</label>
+                          <div class="col-7">
+                            <input class="form-control form-control-user rounded-pill" id="remaining_days" type="text" placeholder="Aquí la resta..." readonly>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="info" class="col-5 col-form-label">Información adicional</label>
+                          <div class="col-7"><textarea class="form-control form-control-user rounded-pill" rows="5" id="info" name="info"></textarea></div>
+                        </div>
+                        </br>
+                        <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Enviar Solicitud</button>
+                      </form>
 
-  <form class="form" action="#">
-    <div class="form-group row">
-      <label for="vacationdate_i" class="col-2 col-form-label">Fecha inicial</label>
-      <div class="col-4">
-        <input class="form-control" type="date" id="vacationdate_i" name="vacationdate_i">
+
+
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+    
       </div>
+    
     </div>
-    <div class="form-group row">
-      <label for="vacationdate_f" class="col-2 col-form-label">Fecha final</label>
-      <div class="col-4">
-        <input class="form-control" type="date" id="vacationdate_f" name="vacationdate_f">
-      </div>
     </div>
-    <div class="form-group row">
-      <label for="remaining_days" class="col-2 col-form-label">Dias restantes</label>
-      <div class="col-4">
-        <input class="form-control" id="remaining_days" type="text" placeholder="Aquí la resta..." readonly>
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="info" class="col-2 col-form-label">Información extra:</label>
-      <div class="col-4"><textarea class="form-control" rows="3" id="info" name="info"></textarea></div>
-    </div>
-    <button type="submit" class="col-6 border-left-primary shadow h-100 py-2 btn-primary rounded">Enviar Solicitud</button>
-  </form>
-
-
-</div>
-<!-- /.container-fluid -->
-
-
 {% endblock %}
+
+  
