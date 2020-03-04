@@ -1,15 +1,68 @@
 
-{% extends 'base_site.html' %}
+{%extends 'base_site.html' %}
 {% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
+
+{% block title %}Información del usuario{% endblock %}
+{% block pageTitle %}Información del usuario{% endblock %}
+
 {% block content %}
 
-<h2>Tu info</h2>
-
-  <form method="post">
-    {% csrf_token %}
-    {{ user_info.email }}
-    {{ user_info.userprofile.position }}
-    <button type="submit" class="btn btn-success">Post</button>
-  </form>
-
+  <div class="bg-welcome">
+    <div class="container">
+    
+      <!-- Outer Row -->
+      <div class="row justify-content-center">
+    
+        <div class="col-xl-10 col-lg-12 col-md-9">
+    
+          <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+    
+              <!-- Nested Row within Card Body -->
+              <div class="row">
+                <div class="col-lg-6 d-none d-lg-block text-center container d-flex justify-content-between mh-100">
+                  
+    
+                    <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
+    
+                    {% block welcomeMsg %}
+                    <h1 class = "p-4 h2 text-gray-900 mb-4"> <strong> Información de usuario </strong> </h1>
+                    <p class="p-4">Aquí podrás examinar y editar tu información</p>
+                    {% endblock %}
+                  
+                </div>
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    <div class="text-center">
+                      <h1 class="h4 text-gray-900 mb-4"> {% block form_title %} {{user_info.first_name}} {{user_info.last_name}} {% endblock %} </h1>
+                    </div>
+                    {% block welcome_form %}
+                    <div class="profile-img">
+                      <img src=" {% static 'img/default-user.png'  %} " alt="" class="img-fluid"/>
+                    </div>
+                    <h1 class="h4 text-gray-900 mb-4">Cargo: </h1> 
+                    <h4 class="text-center">{{ user_info.userprofile.get_position_display }}</h4>
+                    {% endblock welcome_form %}
+                    <hr>
+                    {% block welcome_links %}
+                    <div class="user">
+                      <a href="{% url 'edit_user_data' %}" class="btn btn-primary btn-user btn-block rounded-pill" id="edit-profile"> <strong>Edit Profile</strong> </a>
+                    </div>
+                    {% endblock welcome_links %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+    
+      </div>
+    
+    </div>
+    </div>
 {% endblock %}

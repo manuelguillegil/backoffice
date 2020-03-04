@@ -1,15 +1,45 @@
-
-{% extends 'base_site.html' %}
+{% extends 'user_data.html' %}
 {% load static %}
-{% block content %}
+{% load widget_tweaks %}
 
-<h2>Edita tu info</h2>
+{% block title %}Editar datos{% endblock %}
 
-  <form method="post">
+{% block form_title %} Edita tu información {% endblock %}
+{% block welcome_form %}
+
+  <form class="user" name="editUser" id="editUser" novalidate="novalidate" method="POST">
     {% csrf_token %}
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    <button type="submit" class="btn btn-success">Post</button>
-  </form>
+    {{ form.non_field_errors }}
 
-{% endblock %}
+    <div class="form-group">
+      {{ user_form.username.errors }}
+      {{ user_form.username.label_tag }}
+      {{ user_form.username|attr:"type:email"|attr:"class:form-control form-control-user"|attr:"id:exampleInputEmail"|attr:"placeholder:Ingresa tu correo de Ubicutus"|attr:"aria-describedby:emailHelp" }}
+      {% if user_form.username.help_text %}
+        <p>{{ user_form.username.help_text|safe }}</p>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      {{ user_form.first_name.errors }}
+      <p> Nombre </p>
+      {{ user_form.first_name|attr:"type:email"|attr:"class:form-control form-control-user"|attr:"id:exampleInputEmail"|attr:"placeholder:Ingresa tu correo de Ubicutus"|attr:"aria-describedby:emailHelp" }}
+    </div>
+
+    <div class="form-group">
+      {{ user_form.last_name.errors }}
+      <p> Apellido </p>
+      {{ user_form.last_name|attr:"type:email"|attr:"class:form-control form-control-user"|attr:"id:exampleInputEmail"|attr:"placeholder:Ingresa tu correo de Ubicutus"|attr:"aria-describedby:emailHelp" }}
+    </div>
+
+    <div class="form-group">
+      {{ profile_form.position.errors }}
+      <p> Cargo </p>
+      {{ profile_form.position|attr:"type:email"|attr:"class:form-control form-control-user"|attr:"id:exampleInputEmail"|attr:"placeholder:Ingresa tu correo de Ubicutus"|attr:"aria-describedby:emailHelp" }}
+    </div>
+    <button type="submit" class="btn btn-primary btn-user btn-block" id="sendMessageButton">Editar</button>
+  </form>
+  {% block welcome_links %}
+  {% endblock welcome_links %}
+
+{% endblock welcome_form %}

@@ -1,85 +1,177 @@
 {% extends 'base_site.html' %}
 {% load static %}
-{% block content %}
 
+
+{% block pageTitle %}Tareas{% endblock %}
+
+{% block content %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
   <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Tareas en las que has trabajado</h1>
+  <center>
+  <h1 class="h3 mb-4 text-gray-800 ">Tareas en las que has trabajado</h1></center>
 
-</div>
+
 <!-- /.container-fluid -->
 <!-- Content Row -->
-<div class="row">
+    <div class="row">
 
-    <!-- Content Column -->
-    <div class="col-lg-6 mb-4">
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
 
-        <!-- Task Cart -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Tareas principales</h6>
+            <!-- Task Cart -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-success py-3">
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-star"></i> Nuevo</h6>
+                </div>
+                <div class="card-body">
+                    <!--Task-->
+                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                    <h4 class="small font-weight-bold">Reuniones</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                </div>
             </div>
-            <div class="card-body">
-                <!--Task-->
-                <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
-                <div class="text-danger">
-                    <strong>
-                        Detenido
-                        <i class="fas fa-snowflake"></i>
-                    </strong>
-                </div>
-                <hr>
-                <!--Endtask-->
+        </div>
 
-                <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                <div class="text-warning">
-                    <strong>
-                        En curso
-                        <i class="fas fa-pen"></i>
-                    </strong>
-                </div>
-                <hr>
-                
-                <h4 class="small font-weight-bold">Crear vista login</h4>
-                <div class="text-primary">
-                    <strong>
-                        Hecho 
-                        <i class="fas fa-check"></i>
-                    </strong>
-                </div>
-                <hr>
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
 
-                <h4 class="small font-weight-bold"> Escribir los documentos</h4>
-                <div class="text-warning">
-                    <strong>
-                        En curso
-                        <i class="fas fa-pen"></i>
-                    </strong>
+            <!-- Task Cart -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-warning py-3">
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-pen"></i> En curso</h6>
                 </div>
-                <hr>
+                <div class="card-body">
+                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+                    <!--Endtask-->
 
-                <h4 class="small font-weight-bold">Reuniones</h4>
-                <div class="text-primary">
-                    <strong>
-                        Hecho 
-                        <i class="fas fa-check"></i>
-                    </strong>
+                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
                 </div>
-                <hr>
-
             </div>
         </div>
     </div>
 
-    <!-- Content Column -->
-    <div class="col-lg-6 mb-4">
+    <div class="row">
 
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
+
+            <!-- Task Cart -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-danger py-3">
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-snowflake"></i> Detenido</h6>
+                </div>
+                <div class="card-body">
+                    <!--Task-->
+                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+                    <!--Endtask-->
+
+                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+                    
+                    <h4 class="small font-weight-bold">Crear vista login</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                    <h4 class="small font-weight-bold">Reuniones</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Column -->
+        <div class="col-lg-6 mb-4">
+
+            <!-- Task Cart -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary py-3">
+                    <h6 class="m-0 font-weight-bold text-white">
+                        <i class="fas fa-check"></i> Hecho</h6>
+                </div>
+                <div class="card-body">
+                    <!--Task-->
+                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+                    <!--Endtask-->
+
+                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+                    
+                    <h4 class="small font-weight-bold">Crear vista login</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                    <h4 class="small font-weight-bold">Reuniones</h4>
+                    <span class="small font-weight-italic">
+                        Hola esta es una descripción base
+                    </span>
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 mb-4">
         <!-- Task Cart -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Tareas recientes</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Todas</h6>
             </div>
             <div class="card-body">
                 <!--Task-->
@@ -128,13 +220,12 @@
                     </strong>
                 </div>
                 <hr>
-
+            </div>
             </div>
         </div>
     </div>
 </div>
-
-        
-
+</div>
+</div>
 
 {% endblock %}
