@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Value, F
 #from datetime import datetime, timedelta, weekday
-import datetime
+from datetime import datetime, timedelta
 from accounts.models import *
 
 
@@ -17,25 +17,34 @@ def dashboard(request):
     #suma de horas trabajadas por el request.user
     time_intervals = TimeInterval.objects.filter(user=request.user)#.aggregate(a=Sum((timeinterval.end_time.hour-timeinterval.init_time.hour)))
     for i in time_intervals:
-        worked_hours_total = worked_hours_total + hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
+        if(i.init_time==None):
+            i.init_time = datetime.now()
+        if(i.end_time==None):
+            i.end_time = datetime.now() #+ timedelta(days=1)   
+        worked_hours_total = worked_hours_total + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
 
     # El intervalo entre start_date y end_date es de lunes a viernes
-    today = datetime.datetime.today()
+    today = datetime.today()
     day_of_week = today.weekday()
-    start_date = today - datetime.timedelta(days=day_of_week)
-    end_date = start_date + datetime.timedelta(days=4)
-    st = start_date.time
-    et = end_date.time
+    start_date = today - timedelta(days=day_of_week+1)
+    end_date = start_date + timedelta(days=5)
+    st = start_date
+    et = end_date
     time_intervals = TimeInterval.objects.filter(user=request.user, end_time__lte=et,  init_time__gte=st)
 
     for i in time_intervals:
-        worked_hours_week = worked_hours_week + hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
+        if(i.init_time==None):
+            i.init_time = datetime.now()
+        if(i.end_time==None):
+            i.end_time = datetime.now() #+ timedelta(days=1)   
+        worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
+
 
     completed_task = Task.objects.filter(status='Closed', usertaskassignrelation__user=request.user).count()
 
-    args = {'worked_hours_week': worked_hours_week, 
-            'worked_hours_total': worked_hours_total, 
+    args = {'worked_hours_week': int(worked_hours_week), 
+            'worked_hours_total': int(worked_hours_total), 
             'completed_task': completed_task }
 
     return render(request, 'home.html', args)

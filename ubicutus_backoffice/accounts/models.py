@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 #from datetime import datetime
-from datetime import date
+from datetime import datetime
 from enum import Enum
 
 # Create your models here.
@@ -44,8 +44,8 @@ class  Task(models.Model):
 
     name = models.CharField(max_length=60, default='')
     description = models.TextField(max_length=1000, default='')
-    init_date = models.DateField(default=date.today)
-    end_date = models.DateField(blank=True, null=True, default=None)
+    init_date = models.DateTimeField(default=datetime.now)
+    end_date = models.DateTimeField(blank=True, null=True, default=None)
     status = models.CharField(
         max_length=60,
         choices=Status.choices,
@@ -53,8 +53,8 @@ class  Task(models.Model):
     )
 
 class TimeInterval(models.Model):
-    init_time = models.TimeField(auto_now_add=True)
-    end_time = models.TimeField(auto_now=True)
+    init_time = models.DateTimeField(default=datetime.now)
+    end_time = models.DateTimeField(blank=True, null=True, default=None)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     task = models.ForeignKey(Task,on_delete=models.CASCADE)
 
