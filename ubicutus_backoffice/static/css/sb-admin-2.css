@@ -1829,8 +1829,8 @@ select.form-control:focus::-ms-value {
   line-height: 1.5;
   color: #858796;
   background-color: transparent;
-  border: solid transparent;
-  border-width: 1px 0;
+  border: 1px solid #d1d3e2;
+  border-radius: 0.35rem;
 }
 
 .form-control-plaintext.form-control-sm, .form-control-plaintext.form-control-lg {

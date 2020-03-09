@@ -51,6 +51,7 @@ class  Task(models.Model):
         choices=Status.choices,
         default=Status.NEW,
     )
+    user = models.ManyToManyField('UserProfile')
 
 class TimeInterval(models.Model):
     init_time = models.DateTimeField(default=datetime.now)

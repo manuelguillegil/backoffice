@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Value, F
 #from datetime import datetime, timedelta, weekday
 from datetime import datetime, timedelta
 from accounts.models import *
+from main.forms import RegisterTaskForm
 
 
 # Create your views here.
@@ -68,7 +69,14 @@ def consulta_horas_trabajadas(request):
 
 @login_required
 def registro_horas_trabajadas(request):
-    return render(request,'registro_horas.html',{'variable':''})
+    if request.method == "POST":
+        form = RegisterTaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('horas_trabajadas')
+    else:
+        form = RegisterTaskForm()
+    return render(request,'registro_horas.html',{'form':form})
 
 @login_required
 def reporte(request):
@@ -76,4 +84,24 @@ def reporte(request):
 
 @login_required
 def tareas(request):
+    """
+    #Check the username and the loged user
+    if request.user.username != username:
+        return redirect('dashboard')
+    
+    #try to get the user data if exists
+    usr = get_object_or_404(UserTaskAssignRelation, username=User.username)
+
+    #Try to get the user stats:
+    usr_stats = get_object_or_404(User_stats, Email=usr.email)
+
+    if request.method == 'POST':
+        
+        form = EditUserDataForm(request.POST, instance=user_info)
+        if form.is_valid():
+            form.save()
+            return redirect('user_data')  
+    else:
+        form = EditUserDataForm(instance=user_info)
+    return render(request, 'dashboard/index.html', {'User_information': user_info, 'form': form, 'stat':usr_stats})"""
     return render(request,'tareas.html',{'variable':''})

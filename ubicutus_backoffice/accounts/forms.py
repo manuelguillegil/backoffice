@@ -25,6 +25,7 @@ class SignUpForm(UserCreationForm):
         max_length=50, 
         required=True,
         widget=forms.TextInput(attrs={'class': "form-control form-control-user",'id': 'exampleInputEmail', 'placeholder': 'Dirección de correo'}),
+        error_messages={'required': "El correo debe ser de la forma 'ejemplo@ubicutus.com'"}
     )
     
     password1 = forms.CharField(

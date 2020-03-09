@@ -1,5 +1,6 @@
 {% extends 'base_welcome.html' %}
 {% load static %}
+{% load widget_tweaks %}
 <!-- ACORDARSE DE AGREGAR WIDGET TWEAKS PARA CAMBIAR LAS COSAS AQUI-->
 
 {% block stylesheet %}
@@ -37,11 +38,11 @@
   <div class="form-group row">
     <div class="col-sm-6 mb-3 mb-sm-0">
       {{ form.password1.errors }}
-      {{ form.password1 }}
+      {{ form.password1|attr:"type:password" }}
     </div>
     <div class="col-sm-6">
       {{ form.password2.errors }}
-      {{ form.password2 }}
+      {{ form.password2|attr:"type:password" }}
     </div>
   </div>
   <button type="submit" class="btn btn-primary btn-user btn-block" id="sendRegister">Registrar mi cuenta</button>
