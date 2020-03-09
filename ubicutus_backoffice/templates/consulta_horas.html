@@ -4,11 +4,57 @@
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
-
   <!-- Page Heading -->
   <h1 class="h3 mb-4 text-gray-800">Consulta de Horas Trabajadas</h1>
 
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Total de horas trabajadas</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Tarea</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>ID</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Tarea</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td>0</td>
+              <td>03/03/2020 01:00:00</td>
+              <td>08/10/2020 05:00:00</td>
+              <td>Estructura del Backoffice</td>
+            </tr>
+            {% for time in time_intervals%}
+            <tr>
+              <td>{{time.id}}</td>
+              <td>{{time.init_time}}</td>
+              <td>{{time.end_time}}</td>
+              <td>{{time.task_id}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+
 <!-- /.container-fluid -->
 
 

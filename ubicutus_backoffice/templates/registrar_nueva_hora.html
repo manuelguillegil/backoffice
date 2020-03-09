@@ -26,8 +26,7 @@
                   <div class="row">
                     <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
                   </div>
-                  <div class="row d-flex justify-content-center align-items-center"
-                    style="font-size: 150px; color: #C83764">
+                  <div class="row d-flex justify-content-center align-items-center" style="font-size: 150px; color: #C83764">
                     <div>
                       <i class="far fa-clock"></i>
                     </div>
@@ -36,17 +35,28 @@
                 <div class="col-lg-6">
                   <div class="p-5">
                     {% block welcomeMsg %}
-                    <h1 class="p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Tareas
+                    <h1 class="p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Registrar hora
                       </strong></h1>
                     {% endblock %}
 
-                    {% for task in tasks %}
-                    <a href="{% url 'nueva_hora' task %}" class="item">
-                      <li>
-                        {{task}}
-                      </li>
-                    </a>
-                    {% endfor %}
+                    <form lass="user" name="registerTimeInterval" id="registerTimeInterval" novalidate method="POST">
+                      {% csrf_token %}
+                      {{ form.non_field_errors }}
+                      <div class="form-group row">
+                        <label for="vacationdate_i" class="col-6 col-form-label">Fecha inicial</label>
+                        <div class="col-sm-6 mb-3 mb-sm-0">
+                          {{ form.init_time.errors }}
+                          {{ form.init_time }}
+                        </div>
+                        <label for="vacationdate_i" class="col-6 col-form-label">Fecha final</label>
+                        <div class="col-sm-6">
+                          {{ form.end_time.errors }}
+                          {{ form.end_time }}
+                        </div>
+                      </div>
+                      <button type="submit"
+                        class="col-12 btn btn-primary btn-user btn-block rounded-pill">Registrar</button>
+                    </form>
                   </div>
                 </div>
               </div>
