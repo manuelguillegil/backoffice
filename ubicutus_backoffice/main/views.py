@@ -108,14 +108,14 @@ def registrar_tareas_trabajadas(request):
             return redirect('horas_trabajadas')
     else:
         form = RegisterTaskForm()
-    return render(request,'registrar_tareas.html',{'form':form})
+    return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
 	tasks = []
 	for t_id in UserTaskAssignRelation.objects.filter(user=request.user):
 		tasks.append(Task.objects.filter(id = t_id))
-	return render(request,'registrar_tareas.html',{'tasks':tasks})
+	return render(request,'lista_tareas.html',{'tasks':tasks})
 
 
 @login_required
