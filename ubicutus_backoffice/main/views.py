@@ -100,7 +100,7 @@ def consulta_horas_trabajadas(request):
 	return render(request,'consulta_horas.html',{'time_intervals':time_intervals_dummie, 'tasks': task_dummie})
 
 @login_required
-def registro_horas_trabajadas(request):
+def registrar_tareas_trabajadas(request):
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
         if form.is_valid():
@@ -108,14 +108,14 @@ def registro_horas_trabajadas(request):
             return redirect('horas_trabajadas')
     else:
         form = RegisterTaskForm()
-    return render(request,'registro_horas.html',{'form':form})
+    return render(request,'registrar_tareas.html',{'form':form})
 
 @login_required
-def registrar_hora(request):
+def lista_tarea(request):
 	tasks = []
 	for t_id in UserTaskAssignRelation.objects.filter(user=request.user):
 		tasks.append(Task.objects.filter(id = t_id))
-	return render(request,'registro_horas.html',{'tasks':tasks})
+	return render(request,'registrar_tareas.html',{'tasks':tasks})
 
 
 @login_required
