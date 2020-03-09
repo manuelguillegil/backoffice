@@ -41,7 +41,7 @@ def dashboard(request):
         worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
 
-    completed_task = Task.objects.filter(status='Closed', usertaskassignrelation__user=request.user).count()
+##    completed_task = Task.objects.filter(status='Closed', usertaskassignrelation__user=request.user).count()
 
     args = {'worked_hours_week': int(worked_hours_week), 
             'worked_hours_total': int(worked_hours_total), 
@@ -76,4 +76,9 @@ def reporte(request):
 
 @login_required
 def tareas(request):
-    return render(request,'tareas.html',{'variable':''})
+    task = []
+    for t_id in UserTaskAssignRelation.objects.filter(user=request.user):
+        task.append(Task.objects.filter(id = t_id))
+    print('PRINTTTT!!!')
+    print(task)
+    return render(request,'tareas.html',{'tasks':task})
