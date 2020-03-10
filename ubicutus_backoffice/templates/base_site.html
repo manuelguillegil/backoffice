@@ -83,7 +83,9 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <a class="collapse-item" href="{% url 'horas_trabajadas' %}">
               <i class="far fa-eye mr-1"></i>Consulta</a>
-            <a class="collapse-item" href="{% url 'registrar_horas' %}">
+              <a class="collapse-item" href="{% url 'lista_tareas' %}">
+                  <i class="fas fa-plus mr-1"></i>Registrar hora</a>
+            <a class="collapse-item" href="{% url 'registrar_tarea' %}">
               <i class="fas fa-plus mr-1"></i>Registrar tarea</a>
           </div>
         </div>
@@ -112,7 +114,7 @@
 
       <!-- time-counting section button -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'registrar_horas' %}">
+        <a class="nav-link" href="{% url 'tareas' %}">
           <i class="fas fa-stopwatch"></i>
           <!--Aqui falta poner el url hacia la vista del reloj @TODO-->
           <span href="">Contar mi tiempo</span>

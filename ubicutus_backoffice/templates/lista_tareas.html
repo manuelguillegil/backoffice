@@ -1,0 +1,62 @@
+{% extends 'base_welcome_forms.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Registro de Tareas{% endblock %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
+
+
+<div class="bg-welcome">
+    <div class="container">
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+
+                            <div
+                                class="col-lg-6 d-none d-lg-block text-center container d-flex justify-content-between mh-100">
+                                <div class="row">
+                                    <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}"
+                                        alt="">
+                                </div>
+                                <div class="row d-flex justify-content-center align-items-center"
+                                    style="font-size: 150px; color: #C83764">
+                                    <div>
+                                        <i class="far fa-clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="p-5">
+                                    {% block welcomeMsg %}
+                                    <h1 class="p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Tareas
+                                        </strong></h1>
+                                    {% endblock %}
+
+                                    {% for task in tasks %}
+                                    <a href="{% url 'nueva_hora' task %}" class="item">
+                                        <li>
+                                            {{task}}
+                                        </li>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
