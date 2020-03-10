@@ -88,3 +88,8 @@ class RegisterTimeInterval(forms.ModelForm):
     class Meta:
         model = TimeInterval
         fields = ['init_time', 'end_time', 'task']
+
+class EditTaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ('name', 'description', 'init_date', 'end_date', 'status')

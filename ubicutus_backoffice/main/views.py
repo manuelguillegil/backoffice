@@ -6,7 +6,7 @@ from django.db.models import Sum, Count, Value, F
 from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
-from .forms import RegisterTimeInterval
+from .forms import RegisterTimeInterval, EditTaskForm
 
 
 # Create your views here.
@@ -168,3 +168,18 @@ def tareas(request):
             }
 
     return render(request,'tareas.html', args)
+
+
+@login_required
+def editar_tarea(request,pk):
+    task = get_object_or_404(Task, id=pk)
+
+    if request.method == 'POST':
+        form = EditTaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('tareas')  
+    else:
+        form = EditTaskForm(instance=task)
+
+    return render(request, 'edit_task.html', {'tasks': task, 'form': form})
