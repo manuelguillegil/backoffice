@@ -112,10 +112,13 @@ def registrar_tareas_trabajadas(request):
 
 @login_required
 def lista_tarea(request):
-	tasks = []
-	for t_id in UserTaskAssignRelation.objects.filter(user=request.user):
-		tasks.append(Task.objects.filter(id = t_id))
-	return render(request,'lista_tareas.html',{'tasks':tasks})
+    # Query to obtain the user that is requesting his tasks
+    users = User.objects.filter(username=request.user.username)
+    
+    #Query to obtain all in progress tasks
+    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+
+    return render(request,'lista_tareas.html',{'tasks':tasks_ip})
 
 
 @login_required

@@ -41,15 +41,14 @@
                                     {% block welcomeMsg %}
                                     <h1 class="p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Tareas
                                         </strong></h1>
-                                    {% endblock %}
-
                                     {% for task in tasks %}
-                                    <a href="{% url 'nueva_hora' task %}" class="item">
+                                    <a href="{% url 'nueva_hora' task.id %}" class="item">
                                         <li>
-                                            {{task}}
+                                            {{task.name}}
                                         </li>
                                     </a>
                                     {% endfor %}
+                                    {% endblock %}
                                 </div>
                             </div>
                         </div>
