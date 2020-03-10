@@ -140,24 +140,24 @@
                             </strong>
                         </div>
                     {% elif task.status == 'In progress' %}
-                        <div class="text-primary">
+                        <div class="text-warning">
                             <strong>
                                 En curso 
-                                <i class="fas fa-check"></i>
+                                <i class="fas fa-pen"></i>
                             </strong>
                         </div>
                     {% elif task.status == 'Waiting' %}
-                        <div class="text-warning">
+                        <div class="text-danger">
                             <strong>
                                 Detenido
-                                <i class="fas fa-pen"></i>
+                                <i class="fas fa-snowflake"></i>
                             </strong>
                          </div>
                     {% elif task.status == 'Closed' %}
-                        <div class="text-danger">
+                        <div class="text-primary">
                             <strong>
                                 Hecho
-                                <i class="fas fa-snowflake"></i>
+                                <i class="fas fa-check"></i>
                             </strong>
                         </div>
                     {% endif %}
