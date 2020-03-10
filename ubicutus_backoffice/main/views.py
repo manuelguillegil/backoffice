@@ -84,24 +84,26 @@ def reporte(request):
 
 @login_required
 def tareas(request):
-    """
-    #Check the username and the loged user
-    if request.user.username != username:
-        return redirect('dashboard')
     
-    #try to get the user data if exists
-    usr = get_object_or_404(UserTaskAssignRelation, username=User.username)
+    # Query to obtain the user that is requesting his tasks
+    users = User.objects.filter(username=request.user.username)
 
-    #Try to get the user stats:
-    usr_stats = get_object_or_404(User_stats, Email=usr.email)
+    #Query to obtain all new tasks
+    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
 
-    if request.method == 'POST':
-        
-        form = EditUserDataForm(request.POST, instance=user_info)
-        if form.is_valid():
-            form.save()
-            return redirect('user_data')  
-    else:
-        form = EditUserDataForm(instance=user_info)
-    return render(request, 'dashboard/index.html', {'User_information': user_info, 'form': form, 'stat':usr_stats})"""
-    return render(request,'tareas.html',{'variable':''})
+    #Query to obtain all in progress tasks
+    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
+
+    #Query to obtain all waiting to be done tasks
+    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
+    
+    #Query to obtain all done tasks
+    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
+
+    args = {'done': tasks_done,
+            'new': tasks_new,
+            'inpro': tasks_ip,
+            'waiting': tasks_waiting
+            }
+
+    return render(request,'tareas.html', args)

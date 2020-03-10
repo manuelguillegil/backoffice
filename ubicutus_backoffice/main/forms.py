@@ -38,7 +38,7 @@ class RegisterTaskForm(forms.ModelForm):
 
     user = forms.ModelMultipleChoiceField(
         label="Integrante",
-        queryset=User.objects.all().values_list('first_name', flat=True).exclude(username='bo_admin'),
+        queryset=User.objects.all().exclude(username='bo_admin'),
     )
 
     class Meta:
@@ -48,7 +48,7 @@ class RegisterTaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         if kwargs.get('instance'):
             initial = kwargs.setdefault('initial', {})
-            initial['users'] = [t.pk for t in kwargs['instance'].user_set.all()]
+            initial['user'] = [t.pk for t in kwargs['instance'].user.all()]
         forms.ModelForm.__init__(self, *args, **kwargs)
     
     def save(self, commit=True):
@@ -57,14 +57,13 @@ class RegisterTaskForm(forms.ModelForm):
         old_save_m2m = self.save_m2m
         def save_m2m():
             old_save_m2m()
-            instance.user_set.clear()
-            instance.user_set.add(*self.cleaned_data['user'])
+            instance.user.clear()
+            instance.user.add(*self.cleaned_data['user'])
         
         self.save_m2m = save_m2m
 
-        if commit:
-            instance.save()
-            self.save_m2m()
+        instance.save()
+        self.save_m2m()
         
         return instance
 

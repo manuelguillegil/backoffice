@@ -27,18 +27,13 @@
                         <i class="fas fa-star"></i> Nuevo</h6>
                 </div>
                 <div class="card-body">
-                    <!--Task-->
-                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
+                    {% for task in new %}
+                    <h4 class="small font-weight-bold">{{ task.name }}</h4>
                     <span class="small font-weight-italic">
-                        Hola esta es una descripción base
+                        {{ task.description }}
                     </span>
                     <hr>
-
-                    <h4 class="small font-weight-bold">Reuniones</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
+                    {% endfor %}
 
                 </div>
             </div>
@@ -54,18 +49,13 @@
                         <i class="fas fa-pen"></i> En curso</h6>
                 </div>
                 <div class="card-body">
-                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
+                    {% for task in inpro %}
+                    <h4 class="small font-weight-bold">{{ task.name }}</h4>
                     <span class="small font-weight-italic">
-                        Hola esta es una descripción base
+                        {{ task.description }}
                     </span>
                     <hr>
-                    <!--Endtask-->
-
-                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
+                    {% endfor %}
 
                 </div>
             </div>
@@ -84,38 +74,13 @@
                         <i class="fas fa-snowflake"></i> Detenido</h6>
                 </div>
                 <div class="card-body">
-                    <!--Task-->
-                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
+                    {% for task in waiting %}
+                    <h4 class="small font-weight-bold">{{ task.name }}</h4>
                     <span class="small font-weight-italic">
-                        Hola esta es una descripción base
+                        {{ task.description }}
                     </span>
                     <hr>
-                    <!--Endtask-->
-
-                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-                    
-                    <h4 class="small font-weight-bold">Crear vista login</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-
-                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-
-                    <h4 class="small font-weight-bold">Reuniones</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -130,37 +95,20 @@
                         <i class="fas fa-check"></i> Hecho</h6>
                 </div>
                 <div class="card-body">
-                    <!--Task-->
-                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
+                    {% for task in done %}
+                    <div class="row">
+                      <div class="col-11">
+                        <h4 class="small font-weight-bold">{{ task.name }}</h4>
+                      </div>
+                      <div class="col-1">
+                        <a class="nav-link p-0 black" href="{% url 'profile' %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+                      </div>
+                    </div>
                     <span class="small font-weight-italic">
-                        Hola esta es una descripción base
+                        {{ task.description }}
                     </span>
                     <hr>
-                    <!--Endtask-->
-
-                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-                    
-                    <h4 class="small font-weight-bold">Crear vista login</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-
-                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
-
-                    <h4 class="small font-weight-bold">Reuniones</h4>
-                    <span class="small font-weight-italic">
-                        Hola esta es una descripción base
-                    </span>
-                    <hr>
+                    {% endfor %}
 
                 </div>
             </div>
