@@ -122,52 +122,48 @@
                 <h6 class="m-0 font-weight-bold text-primary">Todas</h6>
             </div>
             <div class="card-body">
-                <!--Task-->
-                <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
-                <div class="text-danger">
-                    <strong>
-                        Detenido
-                        <i class="fas fa-snowflake"></i>
-                    </strong>
-                </div>
-                <hr>
-                <!--Endtask-->
-
-                <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                <div class="text-warning">
-                    <strong>
-                        En curso
-                        <i class="fas fa-pen"></i>
-                    </strong>
-                </div>
-                <hr>
+                {% for task in all %}
+                    <div class="row">
+                      <div class="col-11">
+                        <h4 class="small font-weight-bold">{{ task.name }}</h4>
+                      </div>
+                      <div class="col-1">
+                        <a class="nav-link p-0 black" href="{% url 'profile' %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+                      </div>
+                    </div>
+                    
+                    {% if task.status == 'New' %}
+                        <div class="text-success">
+                            <strong>
+                                Nuevo 
+                                <i class="fas fa-star"></i>
+                            </strong>
+                        </div>
+                    {% elif task.status == 'In progress' %}
+                        <div class="text-primary">
+                            <strong>
+                                En curso 
+                                <i class="fas fa-check"></i>
+                            </strong>
+                        </div>
+                    {% elif task.status == 'Waiting' %}
+                        <div class="text-warning">
+                            <strong>
+                                Detenido
+                                <i class="fas fa-pen"></i>
+                            </strong>
+                         </div>
+                    {% elif task.status == 'Closed' %}
+                        <div class="text-danger">
+                            <strong>
+                                Hecho
+                                <i class="fas fa-snowflake"></i>
+                            </strong>
+                        </div>
+                    {% endif %}
+                    <hr>
+                {% endfor %}
                 
-                <h4 class="small font-weight-bold">Crear vista login</h4>
-                <div class="text-primary">
-                    <strong>
-                        Hecho 
-                        <i class="fas fa-check"></i>
-                    </strong>
-                </div>
-                <hr>
-
-                <h4 class="small font-weight-bold"> Escribir los documentos</h4>
-                <div class="text-warning">
-                    <strong>
-                        En curso
-                        <i class="fas fa-pen"></i>
-                    </strong>
-                </div>
-                <hr>
-
-                <h4 class="small font-weight-bold">Reuniones</h4>
-                <div class="text-primary">
-                    <strong>
-                        Hecho 
-                        <i class="fas fa-check"></i>
-                    </strong>
-                </div>
-                <hr>
             </div>
             </div>
         </div>

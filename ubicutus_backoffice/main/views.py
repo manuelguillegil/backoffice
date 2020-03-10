@@ -158,10 +158,13 @@ def tareas(request):
     #Query to obtain all done tasks
     tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
 
+    all_tasks = Task.objects.filter().filter(user__in = users)
+
     args = {'done': tasks_done,
             'new': tasks_new,
             'inpro': tasks_ip,
-            'waiting': tasks_waiting
+            'waiting': tasks_waiting,
+            'all': all_tasks
             }
 
     return render(request,'tareas.html', args)
