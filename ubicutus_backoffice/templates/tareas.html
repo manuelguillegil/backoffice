@@ -28,13 +28,27 @@
                 </div>
                 <div class="card-body">
                     {% for task in new %}
-                    <h4 class="small font-weight-bold">{{ task.name }}</h4>
+                    <a href="#" class="" data-toggle="modal" data-target="#m{{task.id|stringformat:'i'}}" style="text-decoration:none;">
+                        <h5 class="text-success font-weight-bold">{{ task.name }}</h5>
+                    </a>
                     <span class="small font-weight-italic">
-                        {{ task.description }}
+                        {% if task.description|length >= 130 %}
+                          {{task.description|truncatechars:127}}...
+                        {% elif task.description|length == 0 %}
+                          (Sin descripción)
+                        {% else %}
+                          {{ task.description }}
+                        {% endif %}
+
                     </span>
                     <hr>
+                    {% include 'task_modal.html' with mod_task=task %}
+                    {% empty %}
+                    <span>
+                        No hay nada que hacer aquí por ahora 
+                        <i class="fas fa-umbrella-beach mr-1"></i>
+                    </span>
                     {% endfor %}
-
                 </div>
             </div>
         </div>
@@ -50,7 +64,7 @@
                 </div>
                 <div class="card-body">
                     {% for task in inpro %}
-                    <h4 class="small font-weight-bold">{{ task.name }}</h4>
+                    <h5 class="text-warning font-weight-bold">{{ task.name }}</h4>
                     <span class="small font-weight-italic">
                         {{ task.description }}
                     </span>
@@ -75,7 +89,7 @@
                 </div>
                 <div class="card-body">
                     {% for task in waiting %}
-                    <h4 class="small font-weight-bold">{{ task.name }}</h4>
+                    <h5 class="text-danger font-weight-bold">{{ task.name }}</h4>
                     <span class="small font-weight-italic">
                         {{ task.description }}
                     </span>
@@ -98,16 +112,23 @@
                     {% for task in done %}
                     <div class="row">
                       <div class="col-11">
-                        <h4 class="small font-weight-bold">{{ task.name }}</h4>
+                        <h4 class="small font-weight-bold">
+                          <a href="#" class="" data-toggle="modal" data-target="#{{task.id}}"></a>
+                            {{ task.name }}
+                          </a>
+                        </h4>
                       </div>
                       <div class="col-1">
-                        <a class="nav-link p-0 black" href="{% url 'profile' %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+                        <a class="nav-link p-0 black" href="{% url 'profile' %}">
+                            <i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i>
+                        </a>
                       </div>
                     </div>
                     <span class="small font-weight-italic">
-                        {{ task.description }}
+                        {{ task.description}}
                     </span>
                     <hr>
+                    {% include "task_modal.html"  with mod_task=task  %}
                     {% endfor %}
 
                 </div>
