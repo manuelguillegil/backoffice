@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Value, F
 #from datetime import datetime, timedelta, weekday
@@ -7,6 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from .forms import RegisterTimeInterval, EditTaskForm
+
 
 
 # Create your views here.
@@ -101,14 +103,39 @@ def consulta_horas_trabajadas(request):
 
 @login_required
 def registrar_tareas_trabajadas(request):
-    if request.method == "POST":
-        form = RegisterTaskForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('horas_trabajadas')
-    else:
-        form = RegisterTaskForm()
-    return render(request,'registrar_tarea.html',{'form':form})
+
+	if request.POST.get('action') == 'post':
+		args = {
+			'name'        : request.POST.get('task_name'),
+			'description' : request.POST.get('task_description'),
+			'init_date'   : request.POST.get('task_init_date'),
+			'end_date'    : request.POST.get('task_end_date'),
+			'status'      : request.POST.get('end_init_date'),
+			'user'        : [str(request.user.id)]
+		}
+		form = RegisterTaskForm(args)
+		print(request.POST)
+
+		if form.is_valid():
+			form.save()
+			args['status'] = 'success'
+			args['errorMsg'] = 'Everything ok'
+			return JsonResponse(args)
+		else:
+			args['status'] = 'error'
+			args['errorMsg'] = 'Error de validación de campos'
+			return JsonResponse()
+		
+	if request.method == "POST":
+		form = RegisterTaskForm(request.POST)
+		print(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('horas_trabajadas')
+	#If the task its been created on the fly (not by its own page)
+	else:
+		form = RegisterTaskForm()
+	return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
