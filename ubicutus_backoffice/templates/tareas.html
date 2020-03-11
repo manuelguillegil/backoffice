@@ -22,11 +22,19 @@
 
             <!-- Task Cart -->
             <div class="card shadow mb-4">
-                <div class="card-header bg-success py-3">
-                    <h6 class="m-0 font-weight-bold text-white">
-                        <i class="fas fa-star"></i> Nuevo</h6>
+                <div class="card-header bg-success py-2">
+                    <div class="row">
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-white h-100">
+                                <i class="fas fa-star"></i> Nuevo
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" data-target="#newBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body collapse show" id="newBody">
                     {% for task in new %}
                     <a href="#" class="" data-toggle="modal" data-target="#m{{task.id|stringformat:'i'}}" style="text-decoration:none;">
                         <h5 class="text-success font-weight-bold">{{ task.name }}</h5>
@@ -59,8 +67,18 @@
             <!-- Task Cart -->
             <div class="card shadow mb-4">
                 <div class="card-header bg-warning py-3">
-                    <h6 class="m-0 font-weight-bold text-white">
-                        <i class="fas fa-pen"></i> En curso</h6>
+                    <div class="row">
+                        <div class="col-11">
+                            <h6 class="m-0 font-weight-bold text-white">
+                                <i class="fas fa-pen"></i> En curso
+                            </h6>
+                        </div>
+                        <div class="col-1">
+                            <div class="btn text-light">
+                                <i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     {% for task in inpro %}
