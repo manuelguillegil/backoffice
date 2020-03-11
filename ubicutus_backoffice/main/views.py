@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core.serializers.json import json
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Value, F, Max
 #from datetime import datetime, timedelta, weekday
@@ -18,6 +19,8 @@ def dashboard(request):
     completed_task = 0
     assigned_task = 0
     hours_last_five_days = 0
+
+    users = get_user(request)
 
     #suma de horas trabajadas por el request.user
     time_intervals = TimeInterval.objects.filter(user=request.user)
@@ -50,14 +53,11 @@ def dashboard(request):
         worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
     # Tareas completadas
-    completed_task = Task.objects.filter(
-        status='Closed',
-        usertaskassignrelation__user=request.user,
-    ).count()
+    completed_task = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users).count()
     
     # Tareas asignadas
-    assigned_task = Task.objects.filter(usertaskassignrelation__user=request.user)\
-    .exclude(status='Closed').count()
+    assigned_task = Task.objects.filter(user__in = users)\
+    .exclude(status=Task.Status.CLOSED).count()
     
     # Horas trabajadas durante los ultimos 5 dias trabajados
     time_intervals = TimeInterval.objects.filter(user=request.user).order_by('-init_time')
@@ -76,13 +76,6 @@ def dashboard(request):
         if cnt>5:
             break
         hours_last_five_days += ((i.end_time - i.init_time).total_seconds())//3600
-        
-
-    # Nro de tareas agrupados por status
-    status_tasks = Task.objects.filter(user=request.user)\
-    .values('status').annotate(task_count=Count('pk'))\
-    .order_by('status')
-
 
     # Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
     task_hours =  [[None,0] for i  in range(assigned_task + completed_task)]
@@ -114,11 +107,36 @@ def dashboard(request):
             'completed_task': completed_task,
             'assigned_task': assigned_task,
             'hours_last_five_days' : hours_last_five_days,
-            'status_tasks': status_tasks,
             'task_hours_top5': task_hours_top5,
             'recent_tasks_top5' : recent_tasks_top5}
 
     return render(request, 'home.html', args)
+
+######### Views para serializar queries ####################
+
+# Nro de tareas agrupados por status
+def status_chart(request):
+    labels = []
+    data = []
+
+    queryset = Task.objects.filter(user=request.user)\
+    .values('status').annotate(task_count=Count('pk'))\
+    .order_by('status')
+
+    for entry in queryset:
+        if entry['status'] == 'Closed':
+            labels.append('Hecho')
+        elif entry['status'] == 'In progress':
+            labels.append('En curso')
+        elif entry['status'] == 'Waiting':
+            labels.append('Detenido')
+        else:
+            labels.append('Nuevo')
+        data.append(entry['task_count'])
+    
+    return JsonResponse(data = { 'labels': labels, 'data': data})
+
+############################################################
 
 def hours(end_hour, start_hour):
     end_minutes = end_hour.hour*60 + end_hour.minute
@@ -213,7 +231,7 @@ def reporte(request):
 def tareas(request):
     
     # Query to obtain the user that is requesting his tasks
-    users = User.objects.filter(username=request.user.username)
+    users = get_user(request)
 
     #Query to obtain all new tasks
     tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
@@ -252,3 +270,8 @@ def editar_tarea(request,pk):
         form = EditTaskForm(instance=task)
 
     return render(request, 'edit_task.html', {'tasks': task, 'form': form})
+
+
+# UTILITIES FOR THE QUERIES
+def get_user(request):
+    return User.objects.filter(username=request.user.username)
