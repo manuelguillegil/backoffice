@@ -22,18 +22,24 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 # PURGAR URLS PLSSSSSSSSS
 urlpatterns = [
-    url(r'^$', views.index, name='home'),
-    url(r'^dashboard/$', views.index, name='home'),
-    #url(r'^login/$', LoginView.as_view(), name='login'),
-    url(r'^signup/$', views_account.registerView, name='signup'),
+    url(r'^$', LoginView.as_view(), name='login'),
+    url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^profile/$', views_account.profile, name='profile'),
     url(r'^vacaciones/$', views.vacaciones, name='vacaciones'),
     url(r'^adelanto/$', views.adelanto, name='adelanto'),
     url(r'^horas_trabajadas/$', views.consulta_horas_trabajadas, name='horas_trabajadas'),
-    url(r'^registro_horas/$', views.registro_horas_trabajadas, name='registrar_horas'),
+    url(r'^registrar_tareas/$', views.registrar_tareas_trabajadas, name='registrar_tarea'),
+    url(r'^registrar_hora/$', views.lista_tarea, name='lista_tareas'),
+    url(r'^registrar_nueva_hora/(?P<pk>\d+)/$', views.registrar_nueva_hora, name='nueva_hora'),
+    url(r'^editar_tarea/(?P<pk>\d+)/$', views.editar_tarea, name='editar_tarea'),
+
     url(r'^reporte/$', views.reporte, name='reporte_falta'),
+    url(r'^tareas/$', views.tareas, name='tareas'),
+   
+    path('accounts/',include('accounts.urls')),
+   
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+   
     path('admin/', admin.site.urls),
-    path('accounts/',include('accounts.urls')),
 ]

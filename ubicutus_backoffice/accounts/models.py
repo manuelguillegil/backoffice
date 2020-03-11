@@ -2,24 +2,60 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 #from datetime import datetime
-from datetime import date
+from datetime import datetime
+from enum import Enum
 
 # Create your models here.
 
 class UserProfile(models.Model):
+
+    REQSTUDENT = 'RS'
+    PERMSTUDENT = 'PS'
+    TRAINEE = 'TR'
+    JUNIOR = 'JR'
+    SEMISENIOR = 'SS'
+    SENIOR = 'SR'
+
+    Position = [
+        (REQSTUDENT,'Estudiante por requerimientos'),
+        (PERMSTUDENT,'Estudiante fijo'),
+        (TRAINEE,'Trainee'),
+        (JUNIOR,'Junior'),
+        (SEMISENIOR,'Semi-Senior'),
+        (SENIOR,'Senior'),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    position = models.CharField(max_length=60, default='')
+    position = models.CharField(
+        max_length=60,
+        choices=Position,
+        default=REQSTUDENT,
+    )
 
 class  Task(models.Model):
+
+    class Status(models.TextChoices):
+        NEW = 'New'
+        INPROGRESS = 'In progress'
+        WAITING = 'Waiting'
+        CLOSED = 'Closed'
+
     name = models.CharField(max_length=60, default='')
     description = models.TextField(max_length=1000, default='')
-    date = models.DateField( default=date.today)
-    progress = models.IntegerField( default=0)
+    init_date = models.DateTimeField(default=datetime.now)
+    end_date = models.DateTimeField(blank=True, null=True, default=None)
+    status = models.CharField(
+        max_length=60,
+        choices=Status.choices,
+        default=Status.NEW,
+    )
+    user = models.ManyToManyField(User)
 
 class TimeInterval(models.Model):
-    init_time = models.DateField()
-    end_time = models.DateField()
+    init_time = models.DateTimeField(default=datetime.now)
+    end_time = models.DateTimeField(blank=True, null=True, default=None)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     task = models.ForeignKey(Task,on_delete=models.CASCADE)
 
@@ -35,8 +71,8 @@ class UserTaskAssignRelation(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        instance.profile.objects.create(user=instance)
+        UserProfile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+    instance.userprofile.save()
