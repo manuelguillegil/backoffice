@@ -104,10 +104,17 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFalla" aria-expanded="true" aria-controls="collapseFalla">
           <i class="far fa-bell"></i>
           <span href="{% url 'reporte_falta' %}">Reporte faltas o incidencias laborales</span>
         </a>
+
+        <div id="collapseFalla" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="{% url 'reporte_falta' %}"><i class="fas fa-bell"></i> Faltas e Incidencias</a>
+          </div>
+        </div>
+
       </li>
 
       <!-- time-counting section button -->
