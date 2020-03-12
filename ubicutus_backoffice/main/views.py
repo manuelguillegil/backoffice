@@ -184,8 +184,8 @@ def tareas(request):
 	#Query to obtain all done tasks
 	tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
 
-	#Edit task form
-	form = EditTaskForm()
+	#Create task form
+	form = RegisterTaskForm()
 
 	all_tasks = Task.objects.filter().filter(user__in = users)
 

@@ -33,6 +33,7 @@ aria-hidden="true">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <div class="form-group row">      
+                {{form.name.label_tag}}
                 {{ form.name|attr:"class: form-control form-control-user"|attr:"id: exampleName"|attr:"placeholder: Nombre Tarea" }}
                 {{ form.name.errors }}
             </div>
