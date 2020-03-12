@@ -170,8 +170,8 @@
                 
             </div>
             <div class="card-body">
-                {% for task in all %}
-                    {% include 'task_list_item.html' with mtask=task%}
+                {% for pair in tasksWForms %}
+                    {% include 'task_list_item.html' with mtask=pair.0 mform=pair.1 %}
                 {% endfor %}
                 
             </div>

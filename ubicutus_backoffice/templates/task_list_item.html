@@ -3,6 +3,7 @@
 <!--
     Variables required by this template:
         mtask: the task refered by this item
+        mform: form to be rendered by the modal
 
 -->
 <div class="row">
@@ -11,7 +12,7 @@
     </div>
     <!--
     <div class="col-1">
-      <a class="nav-link p-0 black" href="{% url 'editar_tarea' task.id %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+      <a class="nav-link p-0 black" href="{ url 'editar_tarea' task.id }"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
     </div>
     -->
     <div class="col-1">
@@ -51,4 +52,4 @@
       </div>
   {% endif %}
   <hr>
-  {% include 'edit_task_modal.html' with taskId=mtask.id|stringformat:'i' %}
+  {% include 'edit_task_modal.html' with taskId=mtask.id|stringformat:'i' form=mform%}
