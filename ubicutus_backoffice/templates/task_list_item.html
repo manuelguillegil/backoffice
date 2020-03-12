@@ -15,7 +15,9 @@
     </div>
     -->
     <div class="col-1">
-        <div class="text-gray-800 btn"><i class="fas fa-pen" ></i></div>
+        <div class="text-gray-800 btn p-0" data-toggle="modal" data-target="#taskEditModal{{ mtask.id|stringformat:'i'}}" >
+            <i class="fas fa-pen" ></i>
+        </div>
     </div>
   </div>
   
@@ -49,3 +51,4 @@
       </div>
   {% endif %}
   <hr>
+  {% include 'edit_task_modal.html' with taskId=mtask.id|stringformat:'i' %}
