@@ -124,7 +124,7 @@ def registrar_tareas_trabajadas(request):
 		else:
 			args['status'] = 'error'
 			args['errorMsg'] = 'Error de validación de campos'
-			return JsonResponse()
+			return JsonResponse(args)
 		
 	if request.method == "POST":
 		form = RegisterTaskForm(request.POST)
@@ -139,13 +139,12 @@ def registrar_tareas_trabajadas(request):
 
 @login_required
 def lista_tarea(request):
-    # Query to obtain the user that is requesting his tasks
-    users = User.objects.filter(username=request.user.username)
-    
-    #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+	# Query to obtain the user that is requesting his tasks
+	users = User.objects.filter(username=request.user.username)
 
-    return render(request,'lista_tareas.html',{'tasks':tasks_ip})
+	#Query to obtain all in progress tasks
+	tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+	return render(request,'lista_tareas.html',{'tasks':tasks_ip})
 
 
 @login_required
@@ -170,31 +169,35 @@ def reporte(request):
 @login_required
 def tareas(request):
     
-    # Query to obtain the user that is requesting his tasks
-    users = User.objects.filter(username=request.user.username)
+	# Query to obtain the user that is requesting his tasks
+	users = User.objects.filter(username=request.user.username)
 
-    #Query to obtain all new tasks
-    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
+	#Query to obtain all new tasks
+	tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
 
-    #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
+	#Query to obtain all in progress tasks
+	tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
 
-    #Query to obtain all waiting to be done tasks
-    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
+	#Query to obtain all waiting to be done tasks
+	tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
     
-    #Query to obtain all done tasks
-    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
+	#Query to obtain all done tasks
+	tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
 
-    all_tasks = Task.objects.filter().filter(user__in = users)
+	#Edit task form
+	form = EditTaskForm()
 
-    args = {'done': tasks_done,
+	all_tasks = Task.objects.filter().filter(user__in = users)
+
+	args = {'done': tasks_done,
             'new': tasks_new,
             'inpro': tasks_ip,
             'waiting': tasks_waiting,
-            'all': all_tasks
+            'all': all_tasks,
+			'new_task_form' : form
             }
 
-    return render(request,'tareas.html', args)
+	return render(request,'tareas.html', args)
 
 
 @login_required
