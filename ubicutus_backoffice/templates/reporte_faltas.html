@@ -9,7 +9,6 @@
 {% block content %}
 
 
-<!--     ######################     -->
 <div class="container-fluid">
 
   <!-- Page Heading -->
@@ -49,9 +48,9 @@
                     {% endblock %}
                       <form class="form" action="#">
                         <div class="form-group row">
-                          <label for="vacationdate_i" class="col-5 col-form-label">Dia de falta:</label>
+                          <label for="injurydate_i" class="col-5 col-form-label">Dia de falta:</label>
                           <div class="col-7">
-                            <input class="form-control form-control-user rounded-pill" type="date" id="vacationdate_i" name="vacationdate_i">
+                            <input class="form-control form-control-user rounded-pill" type="date" id="injurydate_i" name="injurydate_i">
                           </div>
                         </div>
                         
@@ -60,7 +59,24 @@
                           <div class="col-7"><textarea class="form-control form-control-user rounded" rows="5" id="info" name="info"></textarea></div>
                         </div>
                         </br>
+
+                        <p>Adjunta un justificativo (opcional)</p>
+
+						<div class="input-group">
+						  <div class="input-group-prepend">
+						    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+						  </div>
+						  <div class="custom-file">
+						    <input type="file" class="custom-file-input" id="inputGroupFile01"
+						      aria-describedby="inputGroupFileAddon01">
+						    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+						  </div>
+						</div>
+
+						<br></br>
+
                         <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Enviar Reporte</button>
+
                       </form>
 
                 </div>
