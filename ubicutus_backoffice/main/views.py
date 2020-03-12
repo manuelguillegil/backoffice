@@ -78,22 +78,27 @@ def dashboard(request):
         hours_last_five_days += ((i.end_time - i.init_time).total_seconds())//3600
 
     # Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
-    task_hours =  [[None,0] for i  in range(assigned_task + completed_task)]
+    task_hours = {} #[[None,0] for i  in range(assigned_task + completed_task)]
 
     time_intervals = TimeInterval.objects.filter(user=request.user)
-
+    #PK = 0
     for i in time_intervals:
         if(i.init_time==None):
             i.init_time = datetime.now()
         if(i.end_time==None):
             i.end_time = datetime.now()
         if i.task != None:
-            task_hours[ i.task.pk-1 ][0] = i.task
-            task_hours[ i.task.pk-1 ][1] += ((i.end_time - i.init_time).total_seconds())//3600
+            if i.task not in task_hours:
+                task_hours[i.task] = 0
+            #PK = i.task.pk
+            #assert( PK <= assigned_task + completed_task)
+            task_hours[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
+            #task_hours[ i.task.pk-1 ][0] = i.task
+            #task_hours[ i.task.pk-1 ][1] += ((i.end_time - i.init_time).total_seconds())//3600
 
-    task_hours.sort(key = lambda x: x[1], reverse = True)
-
-    task_hours_top5 = task_hours[:5]
+    #task_hours.sort(key = lambda x: x[1], reverse = True)
+    task_hours_top5 = sorted(task_hours.items(), key = lambda x: x[1], reverse = True)
+    task_hours_top5 = task_hours_top5[:5]
 
     # Top 5 tareas trabajadas mas recientemente, junto con su estatus
     recent_tasks_top5 = TimeInterval.objects.filter(user=1)\
@@ -133,6 +138,23 @@ def status_chart(request):
         else:
             labels.append('Nuevo')
         data.append(entry['task_count'])
+
+    if 'Closed' not in queryset.values():
+        labels.append('Hecho')
+        data.append(0)
+
+    if 'Waiting' not in queryset.values():
+        labels.append('Detenido')
+        data.append(0)
+
+    if 'In progress' not in queryset.values():
+        labels.append('En curso')
+        data.append(0)
+
+    if 'New' not in queryset.values():
+        labels.append('Nuevo')
+        data.append(0)
+
     
     return JsonResponse(data = { 'labels': labels, 'data': data})
 
