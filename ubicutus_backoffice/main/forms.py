@@ -93,3 +93,10 @@ class EditTaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ('name', 'description', 'init_date', 'end_date', 'status')
+
+
+class RequestVacation(forms.ModelForm):
+
+    class Meta:
+        model = Vacation
+        fields = ('init_date','end_date','description')
