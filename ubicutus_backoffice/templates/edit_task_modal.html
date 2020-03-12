@@ -1,0 +1,57 @@
+{% load static %}
+{% load widget_tweaks %}
+{% load bootstrap4 %}
+<!--
+    Template variables:
+    form: a task creation form
+    taskId: task related to this form
+-->
+
+<div class="modal fade" id="taskEditModal{{ taskId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    
+  <div class="modal-content w-100">
+    <div class="modal-header">
+
+        <!--Modal title-->
+      <h5 class="modal-title text-primary" id="exampleModalLabel">
+          <i class="fas fa-pen"></i>
+          Editar tarea   
+      </h5>
+
+      <!--Close button-->
+      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+      </button>
+
+    </div>
+
+    <div class="modal-body w-100">
+        
+            soy el modal:  taskEditModal{{ taskId }}
+        
+
+    </div>
+
+    <div class="modal-footer">
+
+        <button class="btn btn-primary" type="button" data-dismiss="modal">Cerrar</button>
+
+    </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static  'vendor/jquery/jquery.min.js' %}"></script>
+    <script>
+        $(document).ready(function(){
+            console.log("existo y mi id es: "+ '{{ taskId }}taskEditModal');
+        });
+    </script>
+    <!--Custom scripts-->
+        <!--Custom django viarable declarations-->
+    <!--
+    <script> var dataUrl = '{% url "registrar_tarea" %}';</script>
+    <script src="{% static 'js/taskModelForm.js' %}"></script>
+    -->
+  </div>
+</div>
+</div>
