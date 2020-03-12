@@ -3,7 +3,7 @@
 {% load bootstrap4 %}
 <!--
     Template variables:
-    form: a task edition form
+    mform: a task edition form
     mtask: a task to be edited
 -->
 
@@ -56,6 +56,7 @@ aria-hidden="true">
             
         </form>
 
+        #{{ mtask.id|stringformat:'i' }}editTaskMod
     </div>
 
     <div class="modal-footer">
@@ -65,11 +66,11 @@ aria-hidden="true">
     </div>
     <!-- Bootstrap core JavaScript -->
     <script src="{% static  'vendor/jquery/jquery.min.js' %}"></script>
-    
     <!--Custom scripts-->
         <!--Custom django viarable declarations-->
+
     <script> 
-        var dataUrl = '{% url "editar_tarea" mtask.id%}';
+        var dataUrl = '{% url "editar_tarea" mtask.id %}';
         var formId  = "#{{ mtask.id|stringformat:'i' }}editTaskMod"
     </script>
     <script src="{% static 'js/editTaskModelForm.js' %}"></script>
