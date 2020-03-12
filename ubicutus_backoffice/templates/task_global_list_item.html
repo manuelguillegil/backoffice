@@ -1,0 +1,55 @@
+<!--
+    Variables to fill this template:
+        task: The task being currenty listed
+        form: the form related to this task
+-->
+{% load static %}
+<div class="row">
+    <div class="col-11">
+      <h4 class="small font-weight-bold">{{ task.name }}</h4>
+    </div>
+    <!--
+    <div class="col-1">
+      <a class="nav-link p-0 black" href="{% url 'editar_tarea' task.id %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+    </div>
+    -->
+    <div class="col-1">
+      <div class="btn p-0 text-gray-800" data-toggle="modal" data-target="#medit{{task.id|stringformat:'i'}}">
+          <i class="fas fa-pen"></i>
+      </div>
+    </div>
+  </div>
+  
+  {% if task.status == 'New' %}
+      <div class="text-success">
+          <strong>
+              Nuevo 
+              <i class="fas fa-star"></i>
+          </strong>
+      </div>
+  {% elif task.status == 'In progress' %}
+      <div class="text-warning">
+          <strong>
+              En curso 
+              <i class="fas fa-pen"></i>
+          </strong>
+      </div>
+  {% elif task.status == 'Waiting' %}
+      <div class="text-danger">
+          <strong>
+              Detenido
+              <i class="fas fa-snowflake"></i>
+          </strong>
+       </div>
+  {% elif task.status == 'Closed' %}
+      <div class="text-primary">
+          <strong>
+              Hecho
+              <i class="fas fa-check"></i>
+          </strong>
+      </div>
+  {% endif %}
+  <hr>
+  
+  
+  {% include 'edit_task_modal.html' with mtask=task form=form%}

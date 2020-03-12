@@ -114,7 +114,6 @@ def registrar_tareas_trabajadas(request):
 			'user'        : [str(request.user.id)]
 		}
 		form = RegisterTaskForm(args)
-		print(request.POST)
 
 		if form.is_valid():
 			form.save()
@@ -169,6 +168,9 @@ def reporte(request):
 @login_required
 def tareas(request):
     
+	#task edit forms:
+	taskWForms = []
+
 	# Query to obtain the user that is requesting his tasks
 	users = User.objects.filter(username=request.user.username)
 
@@ -189,12 +191,17 @@ def tareas(request):
 
 	all_tasks = Task.objects.filter().filter(user__in = users)
 
+	for task in all_tasks:
+		taskWForms.append([task, EditTaskForm(instance=task) ])
+		 
+	print(taskWForms)
 	args = {'done': tasks_done,
             'new': tasks_new,
             'inpro': tasks_ip,
             'waiting': tasks_waiting,
             'all': all_tasks,
-			'new_task_form' : form
+			'new_task_form' : form,
+			'tasks_w_forms' : taskWForms
             }
 
 	return render(request,'tareas.html', args)
@@ -202,14 +209,35 @@ def tareas(request):
 
 @login_required
 def editar_tarea(request,pk):
-    task = get_object_or_404(Task, id=pk)
+	task = get_object_or_404(Task, id=pk)
 
-    if request.method == 'POST':
-        form = EditTaskForm(request.POST, instance=task)
-        if form.is_valid():
-            form.save()
-            return redirect('tareas')  
-    else:
-        form = EditTaskForm(instance=task)
+	if request.POST.get('action') == 'post':
+		args = {
+			'name'        : request.POST.get('task_name'),
+			'description' : request.POST.get('task_description'),
+			'init_date'   : request.POST.get('task_init_date'),
+			'end_date'    : request.POST.get('task_end_date'),
+			'status'      : request.POST.get('end_init_date'),
+			'user'        : [str(request.user.id)]
+		}
+		form = EditTaskForm(args, instance=task)
 
-    return render(request, 'edit_task.html', {'tasks': task, 'form': form})
+		if form.is_valid():
+			form.save()
+			args['status'] = 'success'
+			args['errorMsg'] = 'Everything ok'
+			return JsonResponse(args)
+		else:
+			args['status'] = 'error'
+			args['errorMsg'] = 'Error de validación de campos'
+			return JsonResponse(args)
+
+	if request.method == 'POST':
+		form = EditTaskForm(request.POST, instance=task)
+		if form.is_valid():
+			form.save()
+			return redirect('tareas')  
+	else:
+		form = EditTaskForm(instance=task)
+
+	return render(request, 'edit_task.html', {'tasks': task, 'form': form})
