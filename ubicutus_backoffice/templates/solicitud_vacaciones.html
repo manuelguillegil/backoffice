@@ -1,99 +1,58 @@
-
-{%extends 'base_site.html' %}
+{% extends 'base_welcome_forms.html' %}
 {% load static %}
-
-{% block stylesheet %}
-<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
-
-{% endblock %}
+{% load widget_tweaks %}
 
 {% block title %}Solicitar Vacaciones{% endblock %}
 {% block pageTitle %}Solicitar Vacaciones{% endblock %}
-
-{% block content %}
-
-  <div class="bg-welcome">
-    <div class="container mt-0">
-    
-      <!-- Outer Row -->
-      <div class="row justify-content-center pt-1">
-    
-        <div class="col-xl-10 col-lg-12 col-md-9">
-    
-          <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-    
-              <!-- Nested Row within Card Body -->
-              <div class="row">
-                
-                <div class="col-lg-6 d-sm-none d-lg-block text-center container d-flex justify-content-between mh-100">
-
-                  <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
-                  </br>
-                  <img class="p-4 img-fluid" src="{% static 'img/beach.png' %}" alt="">
-                  <br>
-                  <small class="text-center p-2 ">
-                    Aquí podrás solicitar tus vacaciones.<br> Especifica el día en que esperas iniciarlas, 
-                    la fecha en que esperas terminarlas, y alguna observación que nosotros debamos tener en 
-                    cuenta.<br> ¡Así de simple!
-                  </small>
-
-                </div>
-                <div class="col-lg-6">
-                  <div class="p-5">
-                    {% block welcomeMsg %}
-                    <h1 class = "p-1 h2 text-gray-900 mb-3 text-center"> <strong>Solicitar Vacaciones </strong></h1>
-                    {% endblock %}
-                      <form class="form" action="#">
-                        <div class="form-group row">
-                          <label for="vacationdate_i" class="col-5 col-form-label">Fecha inicial</label>
-                          <div class="col-7">
-                            <input class="form-control form-control-user rounded-pill" type="date" id="vacationdate_i" name="vacationdate_i">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="vacationdate_f" class="col-5 col-form-label">Fecha final</label>
-                          <div class="col-7">
-                            <input class="form-control form-control-user rounded-pill" type="date" id="vacationdate_f" name="vacationdate_f">
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="remaining_days" class="col-5 col-form-label">Días restantes</label>
-                          <div class="col-7">
-                            <input class="form-control form-control-user rounded-pill" id="remaining_days" type="text" placeholder="Aquí la resta..." readonly>
-                          </div>
-                        </div>
-                        <div class="form-group row">
-                          <label for="info" class="col-5 col-form-label">Información adicional</label>
-                          <div class="col-7"><textarea class="form-control form-control-user rounded" rows="5" id="info" name="info"></textarea></div>
-                        </div>
-                        </br>
-                        <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Enviar Solicitud</button>
-                      </form>
-
-                      <form method="POST">
-        {% csrf_token %}
-        <div class = "form-group">
-            <p>
-            <h3>{{ form.as_p }}</h3>
-        </p>
-            <br>
-            <input type="submit" name="Subscribe" class = 'btn btn-primary btn-lg'>
-                </div>
-            </form>
-
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-    
-        </div>
-    
-      </div>
-    
-    </div>
-    </div>
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
 {% endblock %}
 
-  
+
+{% block welcomeMsg %}
+  <img class="p-4 img-fluid" src="{% static 'img/beach.png' %}" alt="">
+  <small class="text-center p-2 ">
+    Aquí podrás solicitar tus vacaciones.
+    Especifica el día en que esperas iniciarlas, 
+    la fecha en que esperas terminarlas, y alguna observación que nosotros debamos tener en 
+    cuenta.
+    ¡Así de simple!
+  </small>
+{% endblock %}
+
+{% block form_title %}
+<h1 class = "p-1 h2 text-gray-900 mb-3 text-center"> <strong>Solicitar Vacaciones </strong></h1>
+{% endblock %}
+
+{% block welcome_form %}
+<form class="user" name="sendVacation" id="sendVacation" novalidate method="POST">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="form-group row">
+    <label class="col-4 col-form-label"> {{ form.init_date.label_tag }}</label>
+    <div class="col-8">
+      {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: exampleInitDate"|attr:"placeholder: 2020-1-1" }}
+    </div>
+    {{ form.init_date.errors }}
+  </div>
+  <div class="form-group row">
+    <label class="col-4 col-form-label">{{ form.end_date.label_tag}}</label>
+    <div class="col-8">
+      {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: exampleEndDate"|attr:"placeholder: 2020-1-1" }}
+    </div>
+    {{ form.end_date.errors }}
+  </div>
+  <div class="form-group row">
+    <label class="col-8 col-form-label">Días restantes</label>
+    <div class="col-4">
+      <div class="form-control text-center rounded-pill p-1 margin-auto" id="remaining_days" readonly><h3 class="p-0"><strong>{{ remaining_days }}</strong></h3></div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <label class="col-form-label">{{ form.description.label_tag}}</label>
+    {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: exampleDesc"|attr:"placeholder: Tu información adicional aquí" }}
+    {{ form.description.errors }}
+  </div>
+  <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Enviar Solicitud</button>
+</form>
+{% endblock welcome_form %}

@@ -97,6 +97,23 @@ class EditTaskForm(forms.ModelForm):
 
 class RequestVacation(forms.ModelForm):
 
+    init_date = forms.DateField(
+        label="Fecha inicial",
+        required=True
+    )
+
+    end_date = forms.DateField(
+        label="Fecha final",
+        required=False
+    )
+
+    description = forms.CharField(
+        label="Información adicional",
+        max_length=1000,
+        widget=forms.Textarea,
+        required=True,
+    )
+
     class Meta:
         model = Vacation
         fields = ('init_date','end_date','description')
