@@ -1,5 +1,6 @@
 {% load static %}
 {% load widget_tweaks %}
+{% load bootstrap4 %}
 <!--
     Template variables:
     mid: modal id
@@ -9,7 +10,7 @@
 <div class="modal fade" id="{{mid}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog" role="document">
-  <div class="modal-content">
+  <div class="modal-content w-100">
     <div class="modal-header">
 
         <!--Modal title-->
@@ -25,44 +26,74 @@ aria-hidden="true">
 
     </div>
 
-    <div class="modal-body">
+    <div class="modal-body w-100">
         
             
-        <form class="user p-3" name="registerUser" id="registerTaskMod" novalidate method="POST">
+        <form class="user p-4" name="registerUser" id="registerTaskMod" novalidate method="POST" data-url="{% url 'registrar_tarea' %}">
             
             {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="form-group row">      
-                {{form.name.label_tag}}
-                {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea" }}
-                {{ form.name.errors }}
-            </div>
-            <div class="form-group row">
-                {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: taskDescript"|attr:"placeholder: Descripción" }}
-                {{ form.description.errors }}
-            </div>
-            <div class="form-group row">
-                {{ form.init_date.label_tag}}
-                {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: taskInitDate"|attr:"placeholder: 2020-1-1" }}
-                {{ form.init_date.errors }}
-            </div>
-            <div class="form-group row">
-                {{ form.end_date.label_tag}}
-                {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: taskEndDate"|attr:"placeholder: 2020-1-1" }}
-                {{ form.end_date.errors }}
-            </div>
-            <div class="form-group row">
-                {{ form.status.label_tag}}
-                {{ form.status|attr:"class: form-control dropdown rounded"|attr:"id: taskStatus" }}
-                {{ form.status.errors }}
-            </div>
-            <div class="form-group row">
-                {{ form.user.label_tag}}
-                {{ form.user|attr:"class: form-control dropdown rounded"|attr:"id: taskUser" }}
-                {{ form.user.errors }}
-            </div>
             
-            <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>
+            
+            <div class="row">
+                <!--Task name-->
+                <div class="form-group w-100">      
+                    {{ form.name.label_tag}}
+                    {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea" }}
+                    {{ form.name.errors }}
+                </div>
+            </div>    
+
+            <div class="row">
+                <div class="col m-1">
+                    <!--Init date-->
+                    <div class="form-group row">
+                        {{ form.init_date.label_tag}}
+                        {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: taskInitDate"|attr:"placeholder: 2020-1-1" }}
+                        {{ form.init_date.errors }}
+                    </div>
+                    <!--End date-->
+                    <div class="form-group row">
+                        {{ form.end_date.label_tag}}
+                        {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: taskEndDate"|attr:"placeholder: 2020-1-1" }}
+                        {{ form.end_date.errors }}
+                    </div>
+                </div>
+                
+                <div class="col m-1">
+                    <!--status-->
+                    <div class="form-group row m-auto">
+                        {{ form.status.label_tag}}
+                        {{ form.status|attr:"class: form-control dropdown rounded"|attr:"id: taskStatus" }}
+                        {{ form.status.errors }}
+                    </div>
+                </div>
+
+            </div>
+                {{ form.non_field_errors }}    
+                <div class="row">
+                    <!--Members-->
+                    <div class="form-group row">
+                        {{ form.user.label_tag}}
+                        {{ form.user|attr:"class: form-control dropdown rounded w-100"|attr:"id: taskUser" }}
+                        {{ form.user.errors }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--Description-->
+                    <div class="form-group row">
+                        {{ form.description.label_tag }}
+                        {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: taskDescript"|attr:"placeholder: Descripción" |attr:"rows: 3"}}
+                        {{ form.description.errors }}
+                    </div>
+                </div>
+                    
+                <div class="row">
+                    <!--submit-->
+                    <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>
+                </div>
+            
+            
         </form>
 
     </div>
@@ -74,8 +105,10 @@ aria-hidden="true">
     </div>
     <!-- Bootstrap core JavaScript -->
     <script src="{% static  'vendor/jquery/jquery.min.js' %}"></script>
-
+    
     <!--Custom scripts-->
+        <!--Custom django viarable declarations-->
+    <script> var dataUrl = '{% url "registrar_tarea" %}';</script>
     <script src="{% static 'js/taskModelForm.js' %}"></script>
   </div>
 </div>

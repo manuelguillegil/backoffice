@@ -1,9 +1,8 @@
 
-/* This code prevents the default submit from a form  modal for a new task*/
-
-$(document).ready(function(){
-    console.log('{% url "registrar_tarea" %}');
-});
+/* This code prevents the default submit from a form  modal for a new task.
+    then, it sends a POST request with the current form data to store a
+    new task without refresh
+*/
 
 $(document).on('submit', '#registerTaskMod',function(e){
 
@@ -11,23 +10,13 @@ $(document).on('submit', '#registerTaskMod',function(e){
     
     console.log($('#registerTaskMod').serialize());
 
+    console.log(dataUrl);
+
     $.ajax({
         type:'POST',
-        url:'http://127.0.0.1:8000/registrar_tareas/',
-        /** 
-        data:{
-			name        : $('#taskName').val(),
-			description : $('#taskDescript').val(),
-			init_date   : $('#taskInitDate').val(),
-			end_date    : $('#taskEndDate').val(),
-			status      : $('#taskStatus').val(),
-            user        : ["{{user.id}}"],
-            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-            action: 'post'
- 
-        },
-        */
-       data:  $('#registerTaskMod').serialize(),
+        url: dataUrl,
+        
+        data:  $('#registerTaskMod').serialize(),
         success:function(json){
             console.log(json);
         },
