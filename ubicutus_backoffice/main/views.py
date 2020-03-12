@@ -77,33 +77,11 @@ def dashboard(request):
             break
         hours_last_five_days += ((i.end_time - i.init_time).total_seconds())//3600
 
-    # Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
-    task_hours = {} #[[None,0] for i  in range(assigned_task + completed_task)]
-
-    time_intervals = TimeInterval.objects.filter(user=request.user)
-    #PK = 0
-    for i in time_intervals:
-        if(i.init_time==None):
-            i.init_time = datetime.now()
-        if(i.end_time==None):
-            i.end_time = datetime.now()
-        if i.task != None:
-            if i.task not in task_hours:
-                task_hours[i.task] = 0
-            #PK = i.task.pk
-            #assert( PK <= assigned_task + completed_task)
-            task_hours[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
-            #task_hours[ i.task.pk-1 ][0] = i.task
-            #task_hours[ i.task.pk-1 ][1] += ((i.end_time - i.init_time).total_seconds())//3600
-
-    #task_hours.sort(key = lambda x: x[1], reverse = True)
-    task_hours_top5 = sorted(task_hours.items(), key = lambda x: x[1], reverse = True)
-    task_hours_top5 = task_hours_top5[:5]
 
     # Top 5 tareas trabajadas mas recientemente, junto con su estatus
-    recent_tasks_top5 = TimeInterval.objects.filter(user=1)\
+    recent_tasks_top5 = TimeInterval.objects.filter(user=request.user)\
     .values('task').annotate(x=Max('end_time'))\
-    .order_by('-x').values('task','task__status')[:5]
+    .order_by('-x').values('task__name','task__status')[:5]
 
 
     #######################################################
@@ -112,7 +90,6 @@ def dashboard(request):
             'completed_task': completed_task,
             'assigned_task': assigned_task,
             'hours_last_five_days' : hours_last_five_days,
-            'task_hours_top5': task_hours_top5,
             'recent_tasks_top5' : recent_tasks_top5}
 
     return render(request, 'home.html', args)
@@ -156,6 +133,35 @@ def status_chart(request):
         data.append(0)
 
     
+    return JsonResponse(data = { 'labels': labels, 'data': data})
+
+# Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
+def task_hours_chart(request):
+    labels = []
+    data = []
+
+    task_hours_set = {}
+
+    time_intervals = TimeInterval.objects.filter(user=request.user)
+
+    for i in time_intervals:
+        if(i.init_time==None):
+            i.init_time = datetime.now()
+        if(i.end_time==None):
+            i.end_time = datetime.now()
+        if i.task != None:
+            if i.task not in task_hours_set:
+                task_hours_set[i.task] = 0
+
+            task_hours_set[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
+
+    task_hours_top5 = sorted(task_hours_set.items(), key = lambda x: x[1], reverse = True)
+    task_hours_top5 = task_hours_top5[:5]
+
+    for entry in task_hours_top5:
+        labels.append(entry[0].name)
+        data.append(entry[1])
+
     return JsonResponse(data = { 'labels': labels, 'data': data})
 
 ############################################################
