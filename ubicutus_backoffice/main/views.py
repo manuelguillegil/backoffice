@@ -189,11 +189,17 @@ def tareas(request):
 
 	all_tasks = Task.objects.filter().filter(user__in = users)
 
+	tasks_and_forms = []
+	for t in all_tasks:
+		tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
+
+
 	args = {'done': tasks_done,
             'new': tasks_new,
             'inpro': tasks_ip,
             'waiting': tasks_waiting,
             'all': all_tasks,
+            'tasksWForms' : tasks_and_forms,
 			'new_task_form' : form
             }
 
