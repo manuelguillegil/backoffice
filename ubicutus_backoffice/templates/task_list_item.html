@@ -1,0 +1,51 @@
+{% load static %}
+
+<!--
+    Variables required by this template:
+        mtask: the task refered by this item
+
+-->
+<div class="row">
+    <div class="col-11">
+      <h4 class="small font-weight-bold">{{ mtask.name }}</h4>
+    </div>
+    <!--
+    <div class="col-1">
+      <a class="nav-link p-0 black" href="{% url 'editar_tarea' task.id %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+    </div>
+    -->
+    <div class="col-1">
+        <div class="text-gray-800 btn"><i class="fas fa-pen" ></i></div>
+    </div>
+  </div>
+  
+  {% if mtask.status == 'New' %}
+      <div class="text-success">
+          <strong>
+              Nuevo 
+              <i class="fas fa-star"></i>
+          </strong>
+      </div>
+  {% elif mtask.status == 'In progress' %}
+      <div class="text-warning">
+          <strong>
+              En curso 
+              <i class="fas fa-pen"></i>
+          </strong>
+      </div>
+  {% elif mtask.status == 'Waiting' %}
+      <div class="text-danger">
+          <strong>
+              Detenido
+              <i class="fas fa-snowflake"></i>
+          </strong>
+       </div>
+  {% elif mtask.status == 'Closed' %}
+      <div class="text-primary">
+          <strong>
+              Hecho
+              <i class="fas fa-check"></i>
+          </strong>
+      </div>
+  {% endif %}
+  <hr>
