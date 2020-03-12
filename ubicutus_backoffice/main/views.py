@@ -271,6 +271,9 @@ def editar_tarea(request,pk):
 
     return render(request, 'edit_task.html', {'tasks': task, 'form': form})
 
+@login_required
+def contador(request):
+    return render(request,'my_time.html',{'variable':''})
 
 # UTILITIES FOR THE QUERIES
 def get_user(request):

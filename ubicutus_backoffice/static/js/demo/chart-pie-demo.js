@@ -14,8 +14,8 @@ $.ajax ({
         labels: data.labels,
         datasets: [{
           data: data.data,
-          backgroundColor: ['#db6388', '#1cc88a', '#f6c23e','#e74a3b'],
-          hoverBackgroundColor: ['#cf426d', '#17a673', '#d9ab38', '#ad271b'],
+          backgroundColor: ['#db6388', '#f6c23e', '#1cc88a','#e74a3b'],
+          hoverBackgroundColor: ['#cf426d', '#d9ab38', '#17a673', '#ad271b'],
           hoverBorderColor: "rgba(234, 236, 244, 1)",
         }],
       },

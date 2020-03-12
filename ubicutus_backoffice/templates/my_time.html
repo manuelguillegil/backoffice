@@ -1,15 +1,34 @@
-{% extends 'base_site.html' %}
+{% extends 'base_welcome_forms.html' %}
 {% load static %}
-{% block content %}
 
-<!-- Begin Page Content -->
-<div class="container-fluid">
+{% block title %} Contador {% endblock %}
+{% block pageTitle %} Contador {% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
 
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Mi tiempo {{ user_info }}</h1>
-
+{% block welcomeMsg %}
+<h1 class="p-4 h2 text-gray-900 mb-4"> <strong> ¡Cuenta tu tiempo! </strong> </h1>
+<div class="text-primary">
+  <i class="fas fa-stopwatch fa-10x"></i>
 </div>
-<!-- /.container-fluid -->
+<p class="p-4">Aquí podras contar el tiempo que has invertido en una tarea.</p>
+{% endblock %}
 
+{% block form_title %}
+<h1 class="p-0 h2 text-gray-900 mb-5"> <strong> Contador </strong> </h1>
+{% endblock %}
 
+{% block welcome_form %}
+  <div class="p-4 h2 text-gray-900 mb-4" id="showtm">0 min 0 seg 0</div>  
+
+  <div class="form">
+    <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="startChr()">Empezar </button>
+    <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="stopChr()">Detener</button>
+    <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="resetChr()">Resetear</button>
+  </div>
+{% endblock welcome_form %}
+
+{% block cscripts %} 
+  <script src="{%static  'js/clock_new.js' %}"></script>
 {% endblock %}
