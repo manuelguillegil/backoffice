@@ -100,12 +100,17 @@ def dashboard(request):
 
 # Nro de tareas agrupados por status
 def status_chart(request):
+    empty = 0
+
     labels = []
     data = []
 
     queryset = Task.objects.filter(user=request.user)\
     .values('status').annotate(task_count=Count('pk'))\
     .order_by('status')
+
+    if(not queryset):
+        empty = 1
 
     for entry in queryset:
         if entry['status'] == 'Closed':
@@ -135,16 +140,21 @@ def status_chart(request):
         data.append(0)
 
     
-    return JsonResponse(data = { 'labels': labels, 'data': data})
+    return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
 # Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
 def task_hours_chart(request):
+    empty = 0
+
     labels = []
     data = []
 
     task_hours_set = {}
 
     time_intervals = TimeInterval.objects.filter(user=request.user)
+
+    if(not time_intervals):
+        empty = 1
 
     for i in time_intervals:
         if(i.init_time==None):
@@ -164,9 +174,12 @@ def task_hours_chart(request):
         labels.append(entry[0].name)
         data.append(entry[1])
 
-    return JsonResponse(data = { 'labels': labels, 'data': data})
+    return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
+# Horas trabajadas durante la semana
 def hours_worked_chart(request):
+    empty = 0
+
     monday = 0
     tuesday = 0
     wedneday = 0
@@ -185,6 +198,9 @@ def hours_worked_chart(request):
         init_time__gte=st,
     )
 
+    if(not time_intervals):
+        empty = 1
+
     for time in time_intervals:
         hours = ((time.end_time - time.init_time).total_seconds())//3600
         
@@ -202,7 +218,7 @@ def hours_worked_chart(request):
     labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
     data = [monday, tuesday, wedneday, thursday, friday]
 
-    return JsonResponse(data = { 'labels': labels, 'data': data})
+    return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
 ############################################################
 
