@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block title %}Registro de Tareas{% endblock %}
-{% block page_title %} Registro de tareas {% endblock %}
+{% block pageTitle %} Registro de tareas {% endblock %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
 {% endblock %}
@@ -48,7 +48,7 @@
   </div>
   <div class="form-group row">
     {{ form.user.label_tag}}
-    {{ form.user|attr:"class: form-control dropdown rounded"|attr:"id: exampleStatus" }}
+    {{ form.user|attr:"class: form-control dropdown rounded"|attr:"id: exampleUser" }}
     {{ form.user.errors }}
   </div>
   <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>

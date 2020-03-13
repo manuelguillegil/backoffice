@@ -9,7 +9,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Resumen</h1>
+        <h1 class="h3 mb-0 text-gray-800">Resumen</h1> {{ status_tasks}}
         <!--
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
@@ -85,7 +85,7 @@
                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Tareas asignadas</div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{completed_task}}</div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{assigned_task}}</div>
                                 </div>
                             </div>
                         </div>
@@ -180,7 +180,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
+                        <canvas id="status-chart" data-url="{% url 'status-chart' %}"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
                         <span class="mr-2">
@@ -213,52 +213,40 @@
                     <h6 class="m-0 font-weight-bold text-primary">Tareas recientes</h6>
                 </div>
                 <div class="card-body">
-                    <!--Task-->
-                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
-                    <div class="text-danger">
-                        <strong>
-                            Detenido
-                            <i class="fas fa-snowflake"></i>
-                        </strong>
-                    </div>
-                    <hr>
-                    <!--Endtask-->
-
-                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                    <div class="text-warning">
-                        <strong>
-                            En curso
-                            <i class="fas fa-pen"></i>
-                        </strong>
-                    </div>
-                    <hr>
-                    
-                    <h4 class="small font-weight-bold">Crear vista login</h4>
-                    <div class="text-primary">
-                        <strong>
-                            Hecho 
-                            <i class="fas fa-check"></i>
-                        </strong>
-                    </div>
-                    <hr>
-
-                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
-                    <div class="text-warning">
-                        <strong>
-                            En curso
-                            <i class="fas fa-pen"></i>
-                        </strong>
-                    </div>
-                    <hr>
-
-                    <h4 class="small font-weight-bold">Reuniones</h4>
-                    <div class="text-primary">
-                        <strong>
-                            Hecho 
-                            <i class="fas fa-check"></i>
-                        </strong>
-                    </div>
-                    <hr>
+                    {% for task in recent_tasks_top5 %}
+                        <h4 class="small font-weight-bold">{{ task.task__name }}</h4>
+                        
+                        {% if task.task__status == 'New' %}
+                            <div class="text-success">
+                                <strong>
+                                    Nuevo 
+                                    <i class="fas fa-star"></i>
+                                </strong>
+                            </div>
+                        {% elif task.task__status == 'In progress' %}
+                            <div class="text-warning">
+                                <strong>
+                                    En curso 
+                                    <i class="fas fa-pen"></i>
+                                </strong>
+                            </div>
+                        {% elif task.task__status == 'Waiting' %}
+                            <div class="text-danger">
+                                <strong>
+                                    Detenido
+                                    <i class="fas fa-snowflake"></i>
+                                </strong>
+                            </div>
+                        {% elif task.task__status == 'Closed' %}
+                            <div class="text-primary">
+                                <strong>
+                                    Hecho
+                                    <i class="fas fa-check"></i>
+                                </strong>
+                            </div>
+                        {% endif %}
+                        <hr>
+                    {% endfor %}
 
                 </div>
             </div>
@@ -328,7 +316,7 @@
                 </div>
                 <div class="card-body small font-weight-bold">
                     <!-- chart: top 10 time consumming tasks -->
-                    <canvas id="hbar-chart" class="container-fluid"></canvas>
+                    <canvas id="task-hours-chart" data-url="{% url 'task-hours-chart' %}" class="container-fluid"></canvas>
                 </div>
             </div>
             

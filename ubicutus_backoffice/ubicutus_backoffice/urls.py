@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^registrar_hora/$', views.lista_tarea, name='lista_tareas'),
     url(r'^registrar_nueva_hora/(?P<pk>\d+)/$', views.registrar_nueva_hora, name='nueva_hora'),
     url(r'^editar_tarea/(?P<pk>\d+)/$', views.editar_tarea, name='editar_tarea'),
-
+    url(r'^contador/', views.contador, name="contador"),
     url(r'^reporte/$', views.reporte, name='reporte_falta'),
     url(r'^tareas/$', views.tareas, name='tareas'),
    
@@ -42,4 +42,8 @@ urlpatterns = [
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
    
     path('admin/', admin.site.urls),
+
+    # Views para pasarle la informacion a los graficos
+    path('status-chart/', views.status_chart, name='status-chart'),
+    path('task-hours-chart/', views.task_hours_chart, name='task-hours-chart'),
 ]
