@@ -165,6 +165,44 @@ def task_hours_chart(request):
 
     return JsonResponse(data = { 'labels': labels, 'data': data})
 
+def hours_worked_chart(request):
+    monday = 0
+    tuesday = 0
+    wedneday = 0
+    thursday = 0
+    friday = 0
+    
+    today = datetime.today()
+    day_of_week = today.weekday()
+    start_date = today - timedelta(days=day_of_week+1)
+    end_date = start_date + timedelta(days=7)
+    st = start_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    et = end_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    time_intervals = TimeInterval.objects.filter(
+        user=request.user, 
+        end_time__lte=et,  
+        init_time__gte=st,
+    )
+
+    for time in time_intervals:
+        hours = ((time.end_time - time.init_time).total_seconds())//3600
+        
+        if time.end_time.weekday() == 0:
+            monday += hours
+        elif time.end_time.weekday() == 1:
+            tuesday += hours
+        elif time.end_time.weekday() == 2:
+            wedneday += hours
+        elif time.end_time.weekday() == 3:
+            thursday += hours
+        elif time.end_time.weekday() == 4:
+            friday += hours
+    
+    labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
+    data = [monday, tuesday, wedneday, thursday, friday]
+
+    return JsonResponse(data = { 'labels': labels, 'data': data})
+
 ############################################################
 
 def hours(end_hour, start_hour):
