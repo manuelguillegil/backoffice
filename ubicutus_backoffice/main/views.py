@@ -321,6 +321,7 @@ def registrar_nueva_hora(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
         form = RegisterTimeInterval(request.POST)
+        
         init = form.data['init_time']
         end = form.data['end_time']
         time_interval = TimeInterval(init_time=init,end_time=end,
@@ -328,7 +329,7 @@ def registrar_nueva_hora(request, pk):
         try:
         	time_interval.full_clean()
         	time_interval.save()
-        	return redirect('tareas')
+        	return redirect('horas_trabajadas')
         except ValidationError:
         	form = RegisterTimeInterval()
     else:
