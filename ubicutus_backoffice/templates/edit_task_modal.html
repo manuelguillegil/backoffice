@@ -15,7 +15,7 @@ aria-hidden="true">
     <div class="modal-header">
 
         <!--Modal title-->
-      <h5 class="modal-title text-primary" id="exampleModalLabel">
+      <h5 class="modal-title text-primary editTaskModal" id="exampleModalLabel">
           <i class="fas fa-pen"></i>
           Editar tarea   
       </h5>
@@ -30,8 +30,8 @@ aria-hidden="true">
     <div class="modal-body w-100">
         
             soy el modal:  taskEditModal{{ taskId }}
-        <form method="POST">
-
+        <form method="POST" class="edit-task-mod-form form{{taskId}}" id="taskEditForm{{taskId}}" data-submit="submitEdit{{taskid}}">
+            mi id de form es taskEditForm{{taskId}}
             {% csrf_token %}
             {% for field in form %}
                 <div class="fieldWrapper">
@@ -49,7 +49,7 @@ aria-hidden="true">
             {% endfor %}
             <br>
             <div class="form-group text-center">
-                <button type="submit" class="btn btn-outline-al btn-xl">Save</button>
+                <button type="button" class="btn btn-outline-al btn-xl submitEdit btn{{taskid}}" id="submitEdit{{taskid}}">Save</button>
             </div>
         </form>
 
@@ -73,6 +73,8 @@ aria-hidden="true">
     <script> var dataUrl = '{% url "registrar_tarea" %}';</script>
     <script src="{% static 'js/taskModelForm.js' %}"></script>
     -->
+    <script src="{% static 'js/editTaskModelForm.js' %}"></script>
+
   </div>
 </div>
 </div>
