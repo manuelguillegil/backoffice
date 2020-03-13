@@ -386,7 +386,7 @@ def editar_tarea(request,pk):
     else:
         form = EditTaskForm(instance=task)
 
-    return render(request, 'edit_task.html', {'tasks': task, 'form': form})
+    return render(request, 'edit_task.html', {'task': task, 'form': form})
 
 @login_required
 def contador(request):
