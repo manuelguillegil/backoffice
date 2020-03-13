@@ -1,0 +1,58 @@
+{% load static %}
+
+<!--
+    Variables required by this template:
+        item_task: the task refered by this item
+-->
+
+
+<div class="row w-100">
+
+    <div class="col-11">
+        <div class="row ml-1">
+
+            <a href="#" class="" data-toggle="modal" data-target="#m{{item_task.id|stringformat:'i'}}" style="text-decoration:none;">
+                        <!--Title (color depending on the status)-->
+                            {% if item_task.status == 'New'%}
+                            
+                            <h5 class="text-success font-weight-bold float-left">{{ item_task.name }}</h5>
+                              
+                            {% elif item_task.status == 'In progress'%}
+                              
+                            <h5 class="text-warning font-weight-bold float-left">{{ item_task.name }}</h5>
+                
+                            {% elif item_task.status == 'Waiting'%}
+                
+                            <h5 class="text-danger font-weight-bold float-left">{{ item_task.name }}</h5>
+                            
+                            {% elif item_task.status == 'Closed' %}
+                            
+                            <h5 class="text-primary font-weight-bold float-left">{{ item_task.name }}</h5>
+                            {% else %}
+                            
+                            <h5 class="text-dark font-weight-bold float-left">{{ item_task.name }}</h5>
+                
+                            {% endif %}
+            </a>
+        </div>
+        <div class="row ml-1">
+        
+            <span class="small font-weight-italic">
+                {% if task.description|length >= 130 %}
+                  {{item_task.description|truncatechars:127}}...
+                {% elif item_task.description|length == 0 %}
+                  (Sin descripción)
+                {% else %}
+                  {{ item_task.description }}
+                {% endif %}
+            
+            </span>
+        </div>
+    </div>
+    <a class="nav-link p-0 black float-right" href="{% url 'editar_tarea' item_task.id %}">
+        <i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i>
+    </a>
+
+</div>
+<hr>
+{% include 'task_modal.html' with mod_task=item_task %}
