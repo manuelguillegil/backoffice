@@ -29,7 +29,8 @@
                                 <i class="fas fa-star"></i> Nuevo
                             </h6>
                         </div>
-                        <div class="btn text-light col-1" type="button" data-toggle="collapse" data-target="#newBody" aria-expanded="true" aria-controls="newBody">
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                             data-target="#newBody" aria-expanded="true" aria-controls="newBody">
                             <i class="fas fa-caret-down"></i>
                         </div>
                     </div>
@@ -158,49 +159,22 @@
         <!-- Task Cart -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Todas</h6>
+                <h6 class="m-0 font-weight-bold text-primary float-left margin-auto">Todas</h6>
+
+                <!--Add task button-->
+                <div class="btn float-right p-0" data-toggle="modal" data-target="#addTaskModal">
+                    <i class="fas fa-plus float-right"></i>
+                </div>
+                
+                {% include 'new_task_modal.html' with mid="addTaskModal" form=new_task_form%}
+                
             </div>
             <div class="card-body">
-                {% for task in all %}
-                    <div class="row">
-                      <div class="col-11">
-                        <h4 class="small font-weight-bold">{{ task.name }}</h4>
-                      </div>
-                      <div class="col-1">
-                        <a class="nav-link p-0 black" href="{% url 'editar_tarea' task.id %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
-                      </div>
-                    </div>
+                <script>
                     
-                    {% if task.status == 'New' %}
-                        <div class="text-success">
-                            <strong>
-                                Nuevo 
-                                <i class="fas fa-star"></i>
-                            </strong>
-                        </div>
-                    {% elif task.status == 'In progress' %}
-                        <div class="text-warning">
-                            <strong>
-                                En curso 
-                                <i class="fas fa-pen"></i>
-                            </strong>
-                        </div>
-                    {% elif task.status == 'Waiting' %}
-                        <div class="text-danger">
-                            <strong>
-                                Detenido
-                                <i class="fas fa-snowflake"></i>
-                            </strong>
-                         </div>
-                    {% elif task.status == 'Closed' %}
-                        <div class="text-primary">
-                            <strong>
-                                Hecho
-                                <i class="fas fa-check"></i>
-                            </strong>
-                        </div>
-                    {% endif %}
-                    <hr>
+                </script>
+                {% for pair in tasksWForms %}
+                    {% include 'task_list_item.html' with mtask=pair.0 mform=pair.1 %}
                 {% endfor %}
                 
             </div>

@@ -1,6 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
+<<<<<<< HEAD
+from django.http import HttpResponse
+from django.http import JsonResponse
+=======
 from django.http import HttpResponse, JsonResponse
 from django.core.serializers.json import json
+>>>>>>> 2a290fe5320f3f7faddb1ac421ea44aa526071c7
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Value, F, Max
 #from datetime import datetime, timedelta, weekday
@@ -10,6 +15,7 @@ from main.forms import RegisterTaskForm
 from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
+
 
 
 # Create your views here.
@@ -79,33 +85,11 @@ def dashboard(request):
             break
         hours_last_five_days += ((i.end_time - i.init_time).total_seconds())//3600
 
-    # Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
-    task_hours = {} #[[None,0] for i  in range(assigned_task + completed_task)]
-
-    time_intervals = TimeInterval.objects.filter(user=request.user)
-    #PK = 0
-    for i in time_intervals:
-        if(i.init_time==None):
-            i.init_time = datetime.now()
-        if(i.end_time==None):
-            i.end_time = datetime.now()
-        if i.task != None:
-            if i.task not in task_hours:
-                task_hours[i.task] = 0
-            #PK = i.task.pk
-            #assert( PK <= assigned_task + completed_task)
-            task_hours[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
-            #task_hours[ i.task.pk-1 ][0] = i.task
-            #task_hours[ i.task.pk-1 ][1] += ((i.end_time - i.init_time).total_seconds())//3600
-
-    #task_hours.sort(key = lambda x: x[1], reverse = True)
-    task_hours_top5 = sorted(task_hours.items(), key = lambda x: x[1], reverse = True)
-    task_hours_top5 = task_hours_top5[:5]
 
     # Top 5 tareas trabajadas mas recientemente, junto con su estatus
-    recent_tasks_top5 = TimeInterval.objects.filter(user=1)\
+    recent_tasks_top5 = TimeInterval.objects.filter(user=request.user)\
     .values('task').annotate(x=Max('end_time'))\
-    .order_by('-x').values('task','task__status')[:5]
+    .order_by('-x').values('task__name','task__status')[:5]
 
 
     #######################################################
@@ -114,7 +98,6 @@ def dashboard(request):
             'completed_task': completed_task,
             'assigned_task': assigned_task,
             'hours_last_five_days' : hours_last_five_days,
-            'task_hours_top5': task_hours_top5,
             'recent_tasks_top5' : recent_tasks_top5}
 
     return render(request, 'home.html', args)
@@ -158,6 +141,35 @@ def status_chart(request):
         data.append(0)
 
     
+    return JsonResponse(data = { 'labels': labels, 'data': data})
+
+# Top 5 tareas que mas horas han consumido, junto con su cantidad de horas
+def task_hours_chart(request):
+    labels = []
+    data = []
+
+    task_hours_set = {}
+
+    time_intervals = TimeInterval.objects.filter(user=request.user)
+
+    for i in time_intervals:
+        if(i.init_time==None):
+            i.init_time = datetime.now()
+        if(i.end_time==None):
+            i.end_time = datetime.now()
+        if i.task != None:
+            if i.task not in task_hours_set:
+                task_hours_set[i.task] = 0
+
+            task_hours_set[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
+
+    task_hours_top5 = sorted(task_hours_set.items(), key = lambda x: x[1], reverse = True)
+    task_hours_top5 = task_hours_top5[:5]
+
+    for entry in task_hours_top5:
+        labels.append(entry[0].name)
+        data.append(entry[1])
+
     return JsonResponse(data = { 'labels': labels, 'data': data})
 
 ############################################################
@@ -232,24 +244,48 @@ def consulta_horas_trabajadas(request):
 
 @login_required
 def registrar_tareas_trabajadas(request):
-    if request.method == "POST":
-        form = RegisterTaskForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('horas_trabajadas')
-    else:
-        form = RegisterTaskForm()
-    return render(request,'registrar_tarea.html',{'form':form})
+
+	if request.POST.get('action') == 'post':
+		args = {
+			'name'        : request.POST.get('task_name'),
+			'description' : request.POST.get('task_description'),
+			'init_date'   : request.POST.get('task_init_date'),
+			'end_date'    : request.POST.get('task_end_date'),
+			'status'      : request.POST.get('end_init_date'),
+			'user'        : [str(request.user.id)]
+		}
+		form = RegisterTaskForm(args)
+		print(request.POST)
+
+		if form.is_valid():
+			form.save()
+			args['status'] = 'success'
+			args['errorMsg'] = 'Everything ok'
+			return JsonResponse(args)
+		else:
+			args['status'] = 'error'
+			args['errorMsg'] = 'Error de validación de campos'
+			return JsonResponse(args)
+		
+	if request.method == "POST":
+		form = RegisterTaskForm(request.POST)
+		print(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('horas_trabajadas')
+	#If the task its been created on the fly (not by its own page)
+	else:
+		form = RegisterTaskForm()
+	return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
-    # Query to obtain the user that is requesting his tasks
-    users = User.objects.filter(username=request.user.username)
-    
-    #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+	# Query to obtain the user that is requesting his tasks
+	users = User.objects.filter(username=request.user.username)
 
-    return render(request,'lista_tareas.html',{'tasks':tasks_ip})
+	#Query to obtain all in progress tasks
+	tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+	return render(request,'lista_tareas.html',{'tasks':tasks_ip})
 
 
 @login_required
@@ -274,31 +310,41 @@ def reporte(request):
 @login_required
 def tareas(request):
     
-    # Query to obtain the user that is requesting his tasks
-    users = get_user(request)
+	# Query to obtain the user that is requesting his tasks
+	users = get_user(request)
 
-    #Query to obtain all new tasks
-    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
+	#Query to obtain all new tasks
+	tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
 
-    #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
+	#Query to obtain all in progress tasks
+	tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
 
-    #Query to obtain all waiting to be done tasks
-    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
+	#Query to obtain all waiting to be done tasks
+	tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
     
-    #Query to obtain all done tasks
-    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
+	#Query to obtain all done tasks
+	tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
 
-    all_tasks = Task.objects.filter().filter(user__in = users)
+	#Create task form
+	form = RegisterTaskForm()
 
-    args = {'done': tasks_done,
+	all_tasks = Task.objects.filter().filter(user__in = users)
+
+	tasks_and_forms = []
+	for t in all_tasks:
+		tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
+
+
+	args = {'done': tasks_done,
             'new': tasks_new,
             'inpro': tasks_ip,
             'waiting': tasks_waiting,
-            'all': all_tasks
+            'all': all_tasks,
+            'tasksWForms' : tasks_and_forms,
+			'new_task_form' : form
             }
 
-    return render(request,'tareas.html', args)
+	return render(request,'tareas.html', args)
 
 
 @login_required

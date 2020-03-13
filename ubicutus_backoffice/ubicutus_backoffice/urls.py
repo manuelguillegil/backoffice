@@ -43,5 +43,7 @@ urlpatterns = [
    
     path('admin/', admin.site.urls),
 
+    # Views para pasarle la informacion a los graficos
     path('status-chart/', views.status_chart, name='status-chart'),
+    path('task-hours-chart/', views.task_hours_chart, name='task-hours-chart'),
 ]

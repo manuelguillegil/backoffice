@@ -1,53 +1,74 @@
-// Here set the minutes, seconds, and tenths-of-second when you want the chronometer to stop
-// If all these values are set to 0, the chronometer not stop automatically
-var stmints = 0;
-var stseconds = 0;
-var stzecsec = 0;
+// Inicializamos las variables de las horas, minutos y segundos
+var seconds1 = 0;
+var mints1 = 0;
+var hours1 = 0;
 
-// function to be executed when the chronometer stops
-//function toAutoStop() {
-//alert('Vous avez stoppé le chronomètre');
-//}
+var seconds2 = 0;
+var mints2 = 0;
+var hours2 = 0;
 
-// the initial tenths-of-second, seconds, and minutes
-var zecsec = 0;
-var seconds = 0;
-var mints = 0;
-
+// Variable de control del cronometro
 var startchron = 0;
 
 function chronometer() {
     if(startchron == 1) {
-        seconds += 1;       // set tenths of a second
+        seconds1 += 1;       // seteamos los segundos
 
-        // set seconds
-        //if(zecsec > 9) {
-        //zecsec = 0;
-        //seconds += 1;
-        //}
-
-        // set minutes
-        if(seconds > 59) {
-            seconds = 0;
-            mints += 1;
+        // Verificaciones para actualizar los numeros
+        if(seconds1 > 9) {
+            seconds1 = 0;
+            seconds2 += 1;
         }
 
-        // adds data in #showtm
-        document.getElementById('showtm').innerHTML = mints+ ' min '+ seconds + ' sec ' ;
+        // set minutes
+        if(seconds2 > 5) {
+            seconds2 = 0;
+            mints1 += 1;
+        }
 
-        // if the chronometer reaches to the values for stop, calls whenChrStop(), else, auto-calls chronometer()
-        if(zecsec == stzecsec && seconds == stseconds && mints == stmints) toAutoStop();
-        else setTimeout("chronometer()", 1000);
+        if(mints1 > 9) {
+            mints1 = 0;
+            mints2 += 1;
+        }
+
+        if(mints2 > 5) {
+            mints2 = 0;
+            hours1 += 1;
+        }
+
+        if(hours1 > 9) {
+            hours1 = 0;
+            hours2 += 1;
+        }
+
+        // Se agrega la data en el front
+        document.getElementById('chrono').innerHTML = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
+
+        // Esperamos un tiempo y se vuelve a llamar a chronometer para seguir contando
+        setTimeout("chronometer()", 1000);
     }
 }
 
-function startChr() { startchron = 1; chronometer(); }      // starts the chronometer
-function stopChr() { startchron = 0; }                      // stops the chronometer
-function resetChr() {
-    zecsec = 0;  seconds = 0; mints = 0; startchron = 0; 
-    document.getElementById('showtm').innerHTML = mints+ ' min '+ seconds+ ' sec ' + zecsec ;
+// Inicia el cronometro
+function startChr() { 
+    startchron = 1; chronometer(); 
 }
-// start the chronometer, delete this line if you want to not automatically start the stopwatch
-//startChr();
 
-document.getElementById('showtm').value=seconds;
+// Detiene el cronometro
+function stopChr() { 
+    startchron = 0; 
+}
+
+// Resetea a los valores por defecto las variables
+function resetChr() {
+    hours2 = 0; 
+    hours1 = 0; 
+    mints2 = 0; 
+    mints1 = 0; 
+    seconds2 = 0; 
+    seconds1 = 0; 
+    
+    document.getElementById('chrono').innerHTML = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
+}
+
+document.getElementById('chrono').value = seconds1;
