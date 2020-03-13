@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from .forms import RegisterTimeInterval, EditTaskForm
+from django.forms import modelformset_factory
 
 
 
@@ -219,3 +220,9 @@ def editar_tarea(request,pk):
         form = EditTaskForm(instance=task)
 
     return render(request, 'edit_task.html', {'tasks': task, 'form': form})
+
+
+def miviewloca(request):
+	formset = modelformset_factory(Task, fields=('id','name', 'description', 'init_date', 'end_date') )
+	form = formset()
+	return render(request, 'mihtmlloco.html', {'form':form} )
