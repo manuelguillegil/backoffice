@@ -18,9 +18,9 @@
     <div class="row">
 
         <!-- Content Column -->
+        <!-- Task Card : New Task -->
         <div class="col-lg-6 mb-4">
 
-            <!-- Task Cart -->
             <div class="card shadow mb-4">
                 <div class="card-header bg-success py-2">
                     <div class="row">
@@ -37,21 +37,7 @@
                 </div>
                 <div class="card-body collapse show" id="newBody">
                     {% for task in new %}
-                    <a href="#" class="" data-toggle="modal" data-target="#m{{task.id|stringformat:'i'}}" style="text-decoration:none;">
-                        <h5 class="text-success font-weight-bold">{{ task.name }}</h5>
-                    </a>
-                    <span class="small font-weight-italic">
-                        {% if task.description|length >= 130 %}
-                          {{task.description|truncatechars:127}}...
-                        {% elif task.description|length == 0 %}
-                          (Sin descripción)
-                        {% else %}
-                          {{ task.description }}
-                        {% endif %}
-
-                    </span>
-                    <hr>
-                    {% include 'task_modal.html' with mod_task=task %}
+                        {% include 'task_item_list_wcontext.html' with item_task=task %}
                     {% empty %}
                     <span>
                         No hay nada que hacer aquí por ahora 
@@ -63,93 +49,96 @@
         </div>
 
         <!-- Content Column -->
+        <!-- Task Card : In progress Task -->
         <div class="col-lg-6 mb-4">
 
-            <!-- Task Cart -->
             <div class="card shadow mb-4">
-                <div class="card-header bg-warning py-3">
+                <div class="card-header bg-warning py-2">
                     <div class="row">
-                        <div class="col-11">
-                            <h6 class="m-0 font-weight-bold text-white">
-                                <i class="fas fa-pen"></i> En curso
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-white h-100">
+                                <i class="fas fa-pen"></i> En Curso
                             </h6>
                         </div>
-                        <div class="col-1">
-                            <div class="btn text-light">
-                                <i class="fas fa-caret-down"></i>
-                            </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                             data-target="#inproBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body collapse show" id="inproBody">
                     {% for task in inpro %}
-                    <h5 class="text-warning font-weight-bold">{{ task.name }}</h4>
-                    <span class="small font-weight-italic">
-                        {{ task.description }}
+                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                    {% empty %}
+                    <span>
+                        No hay nada que hacer aquí por ahora 
+                        <i class="fas fa-umbrella-beach mr-1"></i>
                     </span>
-                    <hr>
                     {% endfor %}
-
                 </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-
+        
         <!-- Content Column -->
-        <div class="col-lg-6 mb-4">
+         <!-- Task Card : Freezed Task -->
+       <div class="col-lg-6 mb-4">
 
-            <!-- Task Cart -->
             <div class="card shadow mb-4">
-                <div class="card-header bg-danger py-3">
-                    <h6 class="m-0 font-weight-bold text-white">
-                        <i class="fas fa-snowflake"></i> Detenido</h6>
+                <div class="card-header bg-danger py-2">
+                    <div class="row">
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-white h-100">
+                                <i class="fas fa-snowflake"></i> Detenido
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                            data-target="#freezeBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body collapse show" id="freezeBody">
                     {% for task in waiting %}
-                    <h5 class="text-danger font-weight-bold">{{ task.name }}</h4>
-                    <span class="small font-weight-italic">
-                        {{ task.description }}
+                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                    {% empty %}
+                    <span>
+                        No hay nada que hacer aquí por ahora 
+                        <i class="fas fa-umbrella-beach mr-1"></i>
                     </span>
-                    <hr>
                     {% endfor %}
                 </div>
             </div>
         </div>
 
         <!-- Content Column -->
-        <div class="col-lg-6 mb-4">
-
-            <!-- Task Cart -->
+       <!-- Task Card : Done Task -->
+       <div class="col-lg-6 mb-4">
             <div class="card shadow mb-4">
-                <div class="card-header bg-primary py-3">
-                    <h6 class="m-0 font-weight-bold text-white">
-                        <i class="fas fa-check"></i> Hecho</h6>
-                </div>
-                <div class="card-body">
-                    {% for task in done %}
+                <div class="card-header bg-primary py-2">
                     <div class="row">
-                      <div class="col-11">
-                        <h4 class="small font-weight-bold">
-                          <a href="#" class="" data-toggle="modal" data-target="#{{task.id}}"></a>
-                            {{ task.name }}
-                          </a>
-                        </h4>
-                      </div>
-                      <div class="col-1">
-                        <a class="nav-link p-0 black" href="{% url 'profile' %}">
-                            <i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i>
-                        </a>
-                      </div>
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-white h-100">
+                                <i class="fas fa-check"></i> Hecho
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                            data-target="#doneBody" aria-expanded="true" aria-controls="doneBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
                     </div>
-                    <span class="small font-weight-italic">
-                        {{ task.description}}
+                </div>
+                <div class="card-body collapse show" id="doneBody">
+                    {% for task in done %}
+                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                    {% empty %}
+                    <span>
+                        No hay nada que hacer aquí por ahora 
+                        <i class="fas fa-umbrella-beach mr-1"></i>
                     </span>
-                    <hr>
-                    {% include "task_modal.html"  with mod_task=task  %}
                     {% endfor %}
-
                 </div>
             </div>
         </div>
@@ -157,22 +146,29 @@
     <div class="row">
         <div class="col-lg-12 mb-4">
         <!-- Task Cart -->
+        <!-- all -->
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary float-left margin-auto">Todas</h6>
+            <div class="card-header py-2 d-flex align-items-center">
+                
+                <h6 class="m-0 font-weight-bold text-primary margin-auto mr-auto">Todas</h6>
+
+                <div class="btn p-0 mx-4" type="button" data-toggle="collapse" 
+                    data-target="#allBody" aria-expanded="true" aria-controls="allBody">
+                    <i class="fas fa-caret-down"></i>
+                </div>
 
                 <!--Add task button-->
-                <div class="btn float-right p-0" data-toggle="modal" data-target="#addTaskModal">
+                <div class="btn p-0" data-toggle="modal" data-target="#addTaskModal">
                     <i class="fas fa-plus float-right"></i>
                 </div>
+                
                 
                 {% include 'new_task_modal.html' with mid="addTaskModal" form=new_task_form%}
                 
             </div>
-            <div class="card-body">
-                <script>
-                    
-                </script>
+
+            <div class="card-body collapse show" id="allBody">
+                
                 {% for pair in tasksWForms %}
                     {% include 'task_list_item.html' with mtask=pair.0 mform=pair.1 %}
                 {% endfor %}

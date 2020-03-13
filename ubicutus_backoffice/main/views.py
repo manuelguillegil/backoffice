@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from .forms import RegisterTimeInterval, EditTaskForm
+from django.core.exceptions import ValidationError
 
 
 
@@ -237,37 +238,13 @@ def adelanto(request):
 @login_required
 def consulta_horas_trabajadas(request):
     ## Por los momentos solo hacer get de todas las horas trabajadas
-    time_intervals = TimeInterval.objects.filter(user=request.user)
-    time_intervals_dummie = [{
-        'id': 10,
-        'init_time': '10/03/2020 05:00',
-        'end_time': '11/03/2020 05:00',
-        'task_id': 10,
-        'user_id': 1
-    },
-    {
-        'id': 11,
-        'init_time': '10/03/2020 05:00',
-        'end_time': '11/03/2020 05:00',
-        'task_id': 7,
-        'user_id': 2
-    },
-    {
-        'id': 12,
-        'init_time': '10/03/2020 05:00',
-        'end_time': '11/03/2020 05:00',
-        'task_id': 9,
-        'user_id': 3
-    }]
+    time_i = TimeInterval.objects.filter(user=request.user)
+    time_intervals = []
+    for t in time_i:
+    	time_intervals.append([t,Task.objects.get(id=t.task_id)])
 
-    task_dummie = {
-        'id': 10,
-        'name': 'Backoffice - Frontend',
-        'description': 'Desarrollar Backoffice',
-        'date': '11/03/2020 05:00',
-        'progress': 'CLOSED'
-    }
-    return render(request,'consulta_horas.html',{'time_intervals':time_intervals_dummie, 'tasks': task_dummie})
+ 
+    return render(request,'consulta_horas.html',{'time_intervals':time_intervals})
 
 @login_required
 def registrar_tareas_trabajadas(request):
@@ -320,12 +297,17 @@ def registrar_nueva_hora(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
         form = RegisterTimeInterval(request.POST)
-        if form.is_valid():
-            time_interval = form.save(commit=False)
-            time_interval.task_id = task
-            time_interval.user_id = request.user
-            time_interval.save()
-            return redirect('tareas')
+        
+        init = form.data['init_time']
+        end = form.data['end_time']
+        time_interval = TimeInterval(init_time=init,end_time=end,
+        	task=task,user=request.user)
+        try:
+        	time_interval.full_clean()
+        	time_interval.save()
+        	return redirect('horas_trabajadas')
+        except ValidationError:
+        	form = RegisterTimeInterval()
     else:
         form = RegisterTimeInterval()
     return render(request,'registrar_nueva_hora.html',{'form':form})
