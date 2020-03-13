@@ -150,6 +150,7 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
+                        <h6 id="hwsEmpty" class="m-0 font-weight-bold text-primary">Trabajo durante la última semana</h6>
                         <canvas id="hours-worked-chart" data-url="{% url 'hours-worked-chart' %}"></canvas>
                     </div>
                 </div>
@@ -246,6 +247,8 @@
                             </div>
                         {% endif %}
                         <hr>
+                    {% empty %}
+                      <h6 class="m-0 font-weight-bold text-primary">¿Todavía no tienes tareas? ¿Qué esperas?</h6>
                     {% endfor %}
 
                 </div>

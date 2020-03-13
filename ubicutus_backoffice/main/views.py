@@ -165,7 +165,10 @@ def task_hours_chart(request):
 
     return JsonResponse(data = { 'labels': labels, 'data': data})
 
+# Horas trabajadas durante la semana
 def hours_worked_chart(request):
+    empty = 0
+
     monday = 0
     tuesday = 0
     wedneday = 0
@@ -184,6 +187,9 @@ def hours_worked_chart(request):
         init_time__gte=st,
     )
 
+    if(not time_intervals):
+        empty = 1
+
     for time in time_intervals:
         hours = ((time.end_time - time.init_time).total_seconds())//3600
         
@@ -201,7 +207,7 @@ def hours_worked_chart(request):
     labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
     data = [monday, tuesday, wedneday, thursday, friday]
 
-    return JsonResponse(data = { 'labels': labels, 'data': data})
+    return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
 ############################################################
 
