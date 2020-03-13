@@ -1,11 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-<<<<<<< HEAD
-from django.http import HttpResponse
-from django.http import JsonResponse
-=======
 from django.http import HttpResponse, JsonResponse
 from django.core.serializers.json import json
->>>>>>> 2a290fe5320f3f7faddb1ac421ea44aa526071c7
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Value, F, Max
 #from datetime import datetime, timedelta, weekday
