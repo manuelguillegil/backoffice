@@ -146,11 +146,22 @@
                             <a class="dropdown-item" href="#">Something else here</a>
                         </div>
                     </div>
+                    
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
-                        <h6 id="hwsEmpty" class="m-0 font-weight-bold text-primary text-center">Es momento de empezar a trabajar. ¡Buena suerte!</h6>
+                        <!--Empty placeholder-->
+                        <div id="hwsEmpty p-2">
+
+                            <div class="w-100 text-center">
+                                <i class="fas fa-chart-area fa-sm fa-fw fa-10x text-gray-400 text-center"></i>
+                            </div>
+                            <h6 class="m-0 font-weight-bold text-primary text-center">
+                                Es momento de empezar a trabajar. ¡Buena suerte!
+                            </h6>
+                            
+                        </div>
                         <canvas id="hours-worked-chart" data-url="{% url 'hours-worked-chart' %}"></canvas>
                     </div>
                 </div>
@@ -181,7 +192,12 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
-                        <h6 id="tasksEmpty" class="m-0 font-weight-bold text-primary text-center">Placeholder</h6>
+                        <div id="tasksEmpty">
+                            <div class="w-100 text-center">
+                                <i class="fas fa-chart-pie fa-sm fa-fw fa-10x text-gray-400 text-center"></i>
+                            </div>
+                            <h6 class="m-0 font-weight-bold text-primary text-center my-2">Aun no hay tareas que contar</h6>
+                        </div>
                         <canvas id="status-chart" data-url="{% url 'status-chart' %}"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
@@ -320,7 +336,13 @@
                 </div>
                 <div class="card-body small font-weight-bold">
                     <!-- chart: top 10 time consumming tasks -->
-                    <h6 id="thEmpty" class="m-0 font-weight-bold text-primary text-center">Placeholder</h6>
+                    <div id="thEmpty m-auto">
+                        <div class="w-100 text-center">
+                            <i class="fas fa-chart-bar fa-sm fa-fw fa-10x text-gray-400 text-center"></i>
+                        </div>
+                        <h6 class="m-0 font-weight-bold text-primary text-center">Aún no has invertido tiempo en ninguna tarea</h6>
+
+                    </div>
                     <canvas id="task-hours-chart" data-url="{% url 'task-hours-chart' %}" class="container-fluid"></canvas>
                 </div>
             </div>
