@@ -33,6 +33,7 @@ class UserProfile(models.Model):
         choices=Position,
         default=REQSTUDENT,
     )
+    remaining_vac_days = models.IntegerField(default=30)
 
 class  Task(models.Model):
 
@@ -58,6 +59,13 @@ class TimeInterval(models.Model):
     end_time = models.DateTimeField(blank=True, null=True, default=None)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     task = models.ForeignKey(Task,on_delete=models.CASCADE)
+
+class Vacation(models.Model):
+    init_date = models.DateTimeField(blank=True, null=True, default=None)
+    end_date = models.DateTimeField(blank=True, null=True, default=None)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    description = models.TextField(max_length=1000, default='')
+    aproved = models.BooleanField(default=False)
 
 ######### Relations
 

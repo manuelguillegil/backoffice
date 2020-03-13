@@ -7,8 +7,11 @@ from django.db.models import Sum, Count, Value, F, Max
 from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
-from .forms import RegisterTimeInterval, EditTaskForm
 from django.core.exceptions import ValidationError
+from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation
+from ubicutus_backoffice.settings import EMAIL_HOST_USER
+from django.core.mail import send_mail
+
 
 
 
@@ -229,7 +232,27 @@ def hours(end_hour, start_hour):
 
 @login_required
 def vacaciones(request):
-    return render(request,'solicitud_vacaciones.html',{'variable':''})
+
+    user = request.user
+    profile = user.userprofile
+
+    if request.method == 'POST':
+        form = RequestVacation(request.POST)
+        if form.is_valid():
+            vacation = form.save(commit = False)
+            subject = 'Solicitud de vacaciones de {}'.format(str(user.username))
+            message = vacation.description
+            recepient = 'neilvillamizar@gmail.com' #Arreglar
+            send_mail(subject,
+            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            return redirect('dashboard')
+    else:
+        form = RequestVacation()
+
+    args = {'form' : form,
+            'remaining_days' : profile.remaining_vac_days }
+
+    return render(request,'solicitud_vacaciones.html',args)
 
 @login_required
 def adelanto(request):
