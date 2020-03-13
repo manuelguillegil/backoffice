@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import password_validation
 from django.forms.models import inlineformset_factory
 from accounts.models import *
+from django.forms.widgets import *
 
 class RegisterTaskForm(forms.ModelForm):
     name = forms.CharField(
@@ -70,24 +71,25 @@ class RegisterTaskForm(forms.ModelForm):
 class RegisterTimeInterval(forms.ModelForm):
     init_time = forms.DateTimeField(
         required=True,
-        widget=forms.DateInput(attrs={'class': "form-control form-control-user",
+        widget=forms.DateTimeInput(attrs={'class': "form-control form-control-user",
         'id': 'task-id',
         'placeholder': 'Fecha de inicio',
-        'type': 'date'
+        'type': 'datetime-local'
         }),
         )
     end_time = forms.DateTimeField(
         required=True,
-        widget=forms.DateInput(attrs={'class': "form-control form-control-user",
+        widget=forms.DateTimeInput(attrs={'class': "form-control form-control-user",
         'id': 'task-id',
         'placeholder': 'Fecha de fin',
-        'type': 'date'
+        'type': 'datetime-local'
         }),
-    )
+        )
+
 
     class Meta:
         model = TimeInterval
-        fields = ['init_time', 'end_time', 'task']
+        fields = ['init_time', 'end_time']
 
 class EditTaskForm(forms.ModelForm):
     class Meta:
