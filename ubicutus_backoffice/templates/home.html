@@ -9,7 +9,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Resumen</h1>
+        <h1 class="h3 mb-0 text-gray-800">Resumen</h1> {{ status_tasks}}
         <!--
         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
@@ -39,11 +39,11 @@
 
         <!-- working hours (this year) -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-success shadow h-100 py-2">
+            <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Horas trabajadas (En Total)
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Horas trabajadas (En Total)
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800215"> {{worked_hours_total}} </div>
                         </div>
@@ -57,14 +57,35 @@
 
         <!-- Completed tasks -->
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-info shadow h-100 py-2">
+            <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tareas completadas</div>
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Tareas completadas</div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
                                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{completed_task}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Number of tasks available for me-->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Tareas asignadas</div>
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{assigned_task}}</div>
                                 </div>
                             </div>
                         </div>
@@ -75,10 +96,10 @@
                 </div>
             </div>
         </div>
-
-        <!-- clock card  -->
+        <!--
+        <-- clock card  ->
         <div class="col-xl-3 col-md-6 mb-4">
-            <!--Aquí hay que poner la dirección del reloj-->
+            <--Aquí hay que poner la dirección del reloj->
             <a href="" style="text-decoration: none;">
                 <div class="border-left-primary shadow h-100 py-2 btn-primary rounded">
                     <div class="card-body">
@@ -98,6 +119,7 @@
                 </div>
             </a>
         </div>
+        -->
     </div>
 
     <!-- Content Row -->
@@ -128,7 +150,8 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
-                        <canvas id="myAreaChart"></canvas>
+                        <h6 id="hwsEmpty" class="m-0 font-weight-bold text-primary text-center">Es momento de empezar a trabajar. ¡Buena suerte!</h6>
+                        <canvas id="hours-worked-chart" data-url="{% url 'hours-worked-chart' %}"></canvas>
                     </div>
                 </div>
             </div>
@@ -158,7 +181,8 @@
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-pie pt-4 pb-2">
-                        <canvas id="myPieChart"></canvas>
+                        <h6 id="tasksEmpty" class="m-0 font-weight-bold text-primary text-center">Placeholder</h6>
+                        <canvas id="status-chart" data-url="{% url 'status-chart' %}"></canvas>
                     </div>
                     <div class="mt-4 text-center small">
                         <span class="mr-2">
@@ -191,52 +215,42 @@
                     <h6 class="m-0 font-weight-bold text-primary">Tareas recientes</h6>
                 </div>
                 <div class="card-body">
-                    <!--Task-->
-                    <h4 class="small font-weight-bold">Crear las tablas de la base</h4>
-                    <div class="text-danger">
-                        <strong>
-                            Detenido
-                            <i class="fas fa-snowflake"></i>
-                        </strong>
-                    </div>
-                    <hr>
-                    <!--Endtask-->
-
-                    <h4 class="small font-weight-bold">Limpiar los datos</h4>
-                    <div class="text-warning">
-                        <strong>
-                            En curso
-                            <i class="fas fa-pen"></i>
-                        </strong>
-                    </div>
-                    <hr>
-                    
-                    <h4 class="small font-weight-bold">Crear vista login</h4>
-                    <div class="text-primary">
-                        <strong>
-                            Hecho 
-                            <i class="fas fa-check"></i>
-                        </strong>
-                    </div>
-                    <hr>
-
-                    <h4 class="small font-weight-bold"> Escribir los documentos</h4>
-                    <div class="text-warning">
-                        <strong>
-                            En curso
-                            <i class="fas fa-pen"></i>
-                        </strong>
-                    </div>
-                    <hr>
-
-                    <h4 class="small font-weight-bold">Reuniones</h4>
-                    <div class="text-primary">
-                        <strong>
-                            Hecho 
-                            <i class="fas fa-check"></i>
-                        </strong>
-                    </div>
-                    <hr>
+                    {% for task in recent_tasks_top5 %}
+                        <h4 class="small font-weight-bold">{{ task.task__name }}</h4>
+                        
+                        {% if task.task__status == 'New' %}
+                            <div class="text-success">
+                                <strong>
+                                    Nuevo 
+                                    <i class="fas fa-star"></i>
+                                </strong>
+                            </div>
+                        {% elif task.task__status == 'In progress' %}
+                            <div class="text-warning">
+                                <strong>
+                                    En curso 
+                                    <i class="fas fa-pen"></i>
+                                </strong>
+                            </div>
+                        {% elif task.task__status == 'Waiting' %}
+                            <div class="text-danger">
+                                <strong>
+                                    Detenido
+                                    <i class="fas fa-snowflake"></i>
+                                </strong>
+                            </div>
+                        {% elif task.task__status == 'Closed' %}
+                            <div class="text-primary">
+                                <strong>
+                                    Hecho
+                                    <i class="fas fa-check"></i>
+                                </strong>
+                            </div>
+                        {% endif %}
+                        <hr>
+                    {% empty %}
+                      <h6 class="m-0 font-weight-bold text-primary text-center">¿Todavía no tienes tareas? ¿Qué esperas?</h6>
+                    {% endfor %}
 
                 </div>
             </div>
@@ -306,7 +320,8 @@
                 </div>
                 <div class="card-body small font-weight-bold">
                     <!-- chart: top 10 time consumming tasks -->
-                    <canvas id="hbar-chart" class="container-fluid"></canvas>
+                    <h6 id="thEmpty" class="m-0 font-weight-bold text-primary text-center">Placeholder</h6>
+                    <canvas id="task-hours-chart" data-url="{% url 'task-hours-chart' %}" class="container-fluid"></canvas>
                 </div>
             </div>
             

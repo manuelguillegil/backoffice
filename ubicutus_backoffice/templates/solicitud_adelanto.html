@@ -1,15 +1,85 @@
-{% extends 'base_site.html' %}
+
+{%extends 'base_site.html' %}
 {% load static %}
-{% block content %}
 
-<!-- Begin Page Content -->
-<div class="container-fluid">
-
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Solicitud de adelantos o préstamos</h1>
-
-</div>
-<!-- /.container-fluid -->
-
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
 
 {% endblock %}
+
+{% block title %}Solicitar Vacaciones{% endblock %}
+{% block pageTitle %}Solicitar Vacaciones{% endblock %}
+
+{% block content %}
+
+  <div class="bg-welcome">
+    <div class="container mt-0">
+    
+      <!-- Outer Row -->
+      <div class="row justify-content-center pt-1">
+    
+        <div class="col-xl-10 col-lg-12 col-md-9">
+    
+          <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+    
+              <!-- Nested Row within Card Body -->
+              <div class="row">
+                
+                <div class="col-lg-6 d-sm-none d-lg-block text-center container d-flex justify-content-between mh-100">
+
+                  <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
+                  </br>
+                  <img class="p-4 img-fluid" src="{% static 'img/pig.png' %}" alt="">
+                  <br>
+                  <small class="text-center p-2 ">
+                    Aquí podrás solicitar préstamos o adelantos de capital.<br> Especifica el monto, una justificación y la fecha de cobro es opcional.<br> ¡Así de simple!
+                  </small>
+
+                </div>
+                <div class="col-lg-6">
+                  <div class="p-5">
+                    {% block welcomeMsg %}
+                    <h1 class = "p-1 h2 text-gray-900 mb-3 text-center"> <strong>Solicitar Préstamo </strong></h1>
+                    {% endblock %}
+                    <br><br>
+                      <form class="form" action="#">
+                        <div class="form-group row">
+                          <label for="loan_amount" class="col-5 col-form-label">Monto</label>
+                          <div class="col-5">
+                            <input class="form-control form-control-user rounded-pill" type="text" placeholder="Ej. 150000" id="loan_amount" name="loan_amount">
+                          </div>
+                          <div class="col-2">Bs</div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="info" class="col-5 col-form-label">Justificación</label>
+                          <div class="col-7"><textarea class="form-control form-control-user rounded" rows="5" id="info" name="info"></textarea></div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="loan_date" class="col-5 col-form-label">Fecha de pago (opcional)</label>
+                          <div class="col-7">
+                            <input class="form-control form-control-user rounded-pill" type="date" id="loan_date" name="loan_date">
+                          </div>
+                        </div>
+                        </br>
+                        
+                        <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Enviar Solicitud</button>
+                      </form>
+
+
+
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+    
+        </div>
+    
+      </div>
+    
+    </div>
+    </div>
+{% endblock %}
+
+  

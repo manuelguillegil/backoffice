@@ -1,0 +1,58 @@
+{% load static %}
+
+<!--
+    Variables required by this template:
+        mtask: the task refered by this item
+        mform: form to be rendered by the modal
+
+-->
+<div class="row">
+    <div class="col-11">
+      <h4 class="small font-weight-bold">{{ mtask.name }}</h4>
+    </div>
+    
+    <div class="col-1">
+      <a class="nav-link p-0 black" href="{% url 'editar_tarea' mtask.id %}"><i class="fas fa-fw fa-cog" style="color: #3c3c3c"></i></a>
+    </div>
+    
+    <!--Este botón no va a estar presente para el segundo sprint, pero lo estará en el tercero-->
+    <div class="col-1 d-none">
+        <div class="text-gray-800 btn p-0" data-toggle="modal" data-target="#taskEditModal{{ mtask.id|stringformat:'i'}}" >
+            <i class="fas fa-pen" ></i>
+            
+        </div>
+        
+    </div>
+  </div>
+  
+  {% if mtask.status == 'New' %}
+      <div class="text-success">
+          <strong>
+              Nuevo 
+              <i class="fas fa-star"></i>
+          </strong>
+      </div>
+  {% elif mtask.status == 'In progress' %}
+      <div class="text-warning">
+          <strong>
+              En curso 
+              <i class="fas fa-pen"></i>
+          </strong>
+      </div>
+  {% elif mtask.status == 'Waiting' %}
+      <div class="text-danger">
+          <strong>
+              Detenido
+              <i class="fas fa-snowflake"></i>
+          </strong>
+       </div>
+  {% elif mtask.status == 'Closed' %}
+      <div class="text-primary">
+          <strong>
+              Hecho
+              <i class="fas fa-check"></i>
+          </strong>
+      </div>
+  {% endif %}
+  <hr>
+  {% include 'edit_task_modal.html' with taskId=mtask.id|stringformat:'i' form=mform%}

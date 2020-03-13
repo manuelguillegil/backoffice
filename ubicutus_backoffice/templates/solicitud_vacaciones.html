@@ -4,6 +4,7 @@
 
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+
 {% endblock %}
 
 {% block title %}Solicitar Vacaciones{% endblock %}
@@ -12,10 +13,10 @@
 {% block content %}
 
   <div class="bg-welcome">
-    <div class="container">
+    <div class="container mt-0">
     
       <!-- Outer Row -->
-      <div class="row justify-content-center">
+      <div class="row justify-content-center pt-1">
     
         <div class="col-xl-10 col-lg-12 col-md-9">
     
@@ -25,18 +26,23 @@
               <!-- Nested Row within Card Body -->
               <div class="row">
                 
-                <div class="col-lg-6 d-none d-lg-block text-center container d-flex justify-content-between mh-100">
+                <div class="col-lg-6 d-sm-none d-lg-block text-center container d-flex justify-content-between mh-100">
 
                   <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
-                </br>
-              </br>
-                    <img class="p-4 img-fluid" src="https://i.ya-webdesign.com/images/beach-png-1.png" alt="">
-                  
+                  </br>
+                  <img class="p-4 img-fluid" src="{% static 'img/beach.png' %}" alt="">
+                  <br>
+                  <small class="text-center p-2 ">
+                    Aquí podrás solicitar tus vacaciones.<br> Especifica el día en que esperas iniciarlas, 
+                    la fecha en que esperas terminarlas, y alguna observación que nosotros debamos tener en 
+                    cuenta.<br> ¡Así de simple!
+                  </small>
+
                 </div>
                 <div class="col-lg-6">
                   <div class="p-5">
                     {% block welcomeMsg %}
-                    <h1 class = "p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Solicitar Vacaciones </strong></h1>
+                    <h1 class = "p-1 h2 text-gray-900 mb-3 text-center"> <strong>Solicitar Vacaciones </strong></h1>
                     {% endblock %}
                       <form class="form" action="#">
                         <div class="form-group row">
@@ -59,7 +65,7 @@
                         </div>
                         <div class="form-group row">
                           <label for="info" class="col-5 col-form-label">Información adicional</label>
-                          <div class="col-7"><textarea class="form-control form-control-user rounded-pill" rows="5" id="info" name="info"></textarea></div>
+                          <div class="col-7"><textarea class="form-control form-control-user rounded" rows="5" id="info" name="info"></textarea></div>
                         </div>
                         </br>
                         <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Enviar Solicitud</button>

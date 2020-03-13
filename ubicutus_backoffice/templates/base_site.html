@@ -70,7 +70,7 @@
 
       <!-- Heading -->
       <div class="sidebar-heading">
-        Interface
+        Interfaz
       </div>
 
       <li class="nav-item">
@@ -106,15 +106,22 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'reporte_falta' %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFalla" aria-expanded="true" aria-controls="collapseFalla">
           <i class="far fa-bell"></i>
           <span>Reporte faltas o incidencias laborales</span>
         </a>
+
+        <div id="collapseFalla" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="{% url 'reporte_falta' %}"><i class="fas fa-bell"></i> Faltas e Incidencias</a>
+          </div>
+        </div>
+
       </li>
 
       <!-- time-counting section button -->
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'tareas' %}">
+        <a class="nav-link" href="{% url 'contador' %}">
           <i class="fas fa-stopwatch"></i>
           <!--Aqui falta poner el url hacia la vista del reloj @TODO-->
           <span href="">Contar mi tiempo</span>
@@ -215,93 +222,78 @@
           </form>
           -->
           <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ml-auto d-lg-flex align-items-center">
 
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-            <li class="nav-item dropdown no-arrow d-sm-none">
+            
               <!--
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-search fa-fw"></i>
               </a>
               -->
-              <!-- Dropdown - Messages -->
-              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                aria-labelledby="searchDropdown">
-                <form class="form-inline mr-auto w-100 navbar-search">
-                  <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                      aria-label="Search" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                      </button>
-                    </div>
+
+            <!-- Nav item - clock control buttons -->
+              <li class="nav-item mx-1">
+                <a href="#">
+                  <div class="col text-primary text-center">
+                    <i class="fas fa-stopwatch fa-lg"></i>
+                    <br>
+                    <small class=" d-xs-none d-sm-none">Tiempo</small>
                   </div>
-                </form>
-              </div>
+                </a>
+              </li>
+
+            <li class="nav-item mx-1 mt-2">
+            
+              
+                <h4 class="text-gray-700">
+                  00:00:00
+                </h4>
+              
+              
             </li>
 
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header">
-                  Alertas
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-bell text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">Febrero 27, 2020</div>
-                    <span class="font-weight-bold">No te pierdas lo nuevo de Ubi BackOffice!</span>
-                  </div>
+            <li class="nav-item mx-1">
+            
+              <div class="nav-item no-arrow mx-1">
+                <a class="nav-link text-gray-5" href="#">
+                  <i class="fas fa-play fa-fw"></i>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-bell text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">Febrero 26, 2020</div>
-                    ¿Ya terminaste tu última tarea?
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">Enero 29, 2020</div>
-                    Bienvenido!
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Mostrar todas las alertas</a>
               </div>
+              
             </li>
 
-            <!-- Nav Item - Messages -->
+            <li class="nav-item ">
+            
+              <div class="nav-item no-arrow">
+                <a class="nav-link text-gray-5" href="#">
+                  <i class="fas fa-pause fa-fw"></i>
+                </a>
+              </div>
+              
+            </li>
+
+            <li class="nav-item">
+            
+              <div class="nav-item dropdown no-arrow">
+                <a class="nav-link  text-gray-5" href="#">
+                  <i class="fas fa-stop fa-fw"></i>
+                </a>
+              </div>
+              
+            </li>
+
+            <!--
+            <!- Nav Item - Messages ->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-envelope fa-fw"></i>
-                <!-- Counter - Messages -->
+                <!- Counter - Messages ->
                 <span class="badge badge-danger badge-counter">7</span>
               </a>
-              <!-- Dropdown - Messages -->
+              <!- Dropdown - Messages ->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="messagesDropdown">
                 <h6 class="dropdown-header">
@@ -339,14 +331,14 @@
                 <a class="dropdown-item text-center small text-gray-500" href="#">Leer más mensajes</a>
               </div>
             </li>
-
+            -->
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{% block username %}{{user.first_name}} {{user.last_name}}{% endblock %}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small d-sm-none">{% block username %}{{user.first_name}} {{user.last_name}}{% endblock %}</span>
                 <img class="img-profile rounded-circle" src="{% static 'img/default-user.png' %}">
               </a>
               <!-- Dropdown - User Information -->
@@ -482,6 +474,9 @@
   <!-- Page level plugins -->
   <script src="{%static  'vendor/chart.js/Chart.min.js' %}"></script>
 
+
+  <!--Clock code-->
+  <script src="{% static 'js/clock.js' %}"></script>
   <!-- Page level custom scripts -->
   {% block cscripts %} 
   {% endblock %}
