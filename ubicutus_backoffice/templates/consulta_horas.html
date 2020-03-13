@@ -16,34 +16,14 @@
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
+            {% for p in time_intervals%}
             <tr>
-              <th>ID</th>
-              <th>Inicio</th>
-              <th>Fin</th>
-              <th>Tarea</th>
-            </tr>
-          </thead>
-          <tfoot>
-            <tr>
-              <th>ID</th>
-              <th>Inicio</th>
-              <th>Fin</th>
-              <th>Tarea</th>
-            </tr>
-          </tfoot>
-          <tbody>
-            <tr>
-              <td>0</td>
-              <td>03/03/2020 01:00:00</td>
-              <td>08/10/2020 05:00:00</td>
-              <td>Estructura del Backoffice</td>
-            </tr>
-            {% for time in time_intervals%}
-            <tr>
-              <td>{{time.id}}</td>
-              <td>{{time.init_time}}</td>
-              <td>{{time.end_time}}</td>
-              <td>{{time.task_id}}</td>
+              <td>hola</td>
+              <td>{{p.0.id}}</td>
+              <td>{{p.0.init_time}}</td>
+              <td>{{p.0.end_time}}</td>
+              <td>{{p.1.name}}</td>
+              <td>{{p.1.description}}</td>
             </tr>
             {% endfor %}
           </tbody>
