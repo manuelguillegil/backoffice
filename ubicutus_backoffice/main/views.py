@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from .forms import RegisterTimeInterval, EditTaskForm
+from django.core.exceptions import ValidationError
 
 
 
@@ -304,12 +305,16 @@ def registrar_nueva_hora(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
         form = RegisterTimeInterval(request.POST)
-        if form.is_valid():
-            time_interval = form.save(commit=False)
-            time_interval.task_id = task
-            time_interval.user_id = request.user
-            time_interval.save()
-            return redirect('tareas')
+        init = form.data['init_time']
+        end = form.data['end_time']
+        time_interval = TimeInterval(init_time=init,end_time=end,
+        	task=task,user=request.user)
+        try:
+        	time_interval.full_clean()
+        	time_interval.save()
+        	return redirect('tareas')
+        except ValidationError:
+        	form = RegisterTimeInterval()
     else:
         form = RegisterTimeInterval()
     return render(request,'registrar_nueva_hora.html',{'form':form})
