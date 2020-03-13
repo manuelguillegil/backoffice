@@ -125,7 +125,7 @@
                             </h6>
                         </div>
                         <div class="btn text-light col-1" type="button" data-toggle="collapse" 
-                            data-target="#doneBody" aria-expanded="true" aria-controls="newBody">
+                            data-target="#doneBody" aria-expanded="true" aria-controls="doneBody">
                             <i class="fas fa-caret-down"></i>
                         </div>
                     </div>
@@ -146,22 +146,29 @@
     <div class="row">
         <div class="col-lg-12 mb-4">
         <!-- Task Cart -->
+        <!-- all -->
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary float-left margin-auto">Todas</h6>
+            <div class="card-header py-2 d-flex align-items-center">
+                
+                <h6 class="m-0 font-weight-bold text-primary margin-auto mr-auto">Todas</h6>
+
+                <div class="btn p-0 mx-4" type="button" data-toggle="collapse" 
+                    data-target="#allBody" aria-expanded="true" aria-controls="allBody">
+                    <i class="fas fa-caret-down"></i>
+                </div>
 
                 <!--Add task button-->
-                <div class="btn float-right p-0" data-toggle="modal" data-target="#addTaskModal">
+                <div class="btn p-0" data-toggle="modal" data-target="#addTaskModal">
                     <i class="fas fa-plus float-right"></i>
                 </div>
+                
                 
                 {% include 'new_task_modal.html' with mid="addTaskModal" form=new_task_form%}
                 
             </div>
-            <div class="card-body">
-                <script>
-                    
-                </script>
+
+            <div class="card-body collapse show" id="allBody">
+                
                 {% for pair in tasksWForms %}
                     {% include 'task_list_item.html' with mtask=pair.0 mform=pair.1 %}
                 {% endfor %}
