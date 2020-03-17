@@ -52,7 +52,7 @@ class  Task(models.Model):
         choices=Status.choices,
         default=Status.NEW,
     )
-    user = models.ManyToManyField(User)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
 
 class TimeInterval(models.Model):
     init_time = models.DateTimeField(default=datetime.now)
@@ -66,12 +66,6 @@ class Vacation(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     description = models.TextField(max_length=1000, default='')
     aproved = models.BooleanField(default=False)
-
-######### Relations
-
-class UserTaskAssignRelation(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
-    task = models.ForeignKey(Task,on_delete=models.CASCADE)
 
 
 ######### signals

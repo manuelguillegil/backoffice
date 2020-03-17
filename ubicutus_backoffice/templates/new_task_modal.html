@@ -71,15 +71,6 @@ aria-hidden="true">
             </div>
                 {{ form.non_field_errors }}    
                 <div class="row">
-                    <!--Members-->
-                    <div class="form-group row">
-                        {{ form.user.label_tag}}
-                        {{ form.user|attr:"class: form-control dropdown rounded w-100"|attr:"id: taskUser" }}
-                        {{ form.user.errors }}
-                    </div>
-                </div>
-
-                <div class="row">
                     <!--Description-->
                     <div class="form-group row">
                         {{ form.description.label_tag }}

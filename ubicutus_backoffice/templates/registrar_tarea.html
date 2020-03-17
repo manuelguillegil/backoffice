@@ -46,11 +46,6 @@
     {{ form.status|attr:"class: form-control dropdown rounded"|attr:"id: exampleStatus" }}
     {{ form.status.errors }}
   </div>
-  <div class="form-group row">
-    {{ form.user.label_tag}}
-    {{ form.user|attr:"class: form-control dropdown rounded"|attr:"id: exampleUser" }}
-    {{ form.user.errors }}
-  </div>
   <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>
 </form>
 {% endblock welcome_form %}

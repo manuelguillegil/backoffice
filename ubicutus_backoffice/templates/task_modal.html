@@ -56,15 +56,6 @@
                         {{mod_task.description}}
                     </div>
                     <br>
-                    <strong>Integrantes:</strong> <br>
-                    <ul class="list-unstyled">
-                        {% for usr in mod_task.user.all %}
-                        <li>{{ usr.first_name|capfirst }}  {{ usr.last_name|capfirst }} ({{usr.username}})</li>
-                        {% empty %}
-                        <li>¿Hola? ¿Hay alguien?</li>
-                        {% endfor %}
-                    </ul>
-
                 </div>
             </div>
             

@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth import password_validation
 from .models import UserProfile
-#CAMBIAR USERNAME PARA QUE SEA EL EMAIL Y PASAR EL REGISTER A ACCOUNTS
+
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(
         label='first_name',

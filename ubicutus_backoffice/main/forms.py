@@ -35,38 +35,11 @@ class RegisterTaskForm(forms.ModelForm):
         label='Status', 
         required=True,
         choices=Task.Status.choices,
-    ) 
-
-    user = forms.ModelMultipleChoiceField(
-        label="Integrante",
-        queryset=User.objects.all().exclude(username='bo_admin'),
     )
 
     class Meta:
         model = Task
-        fields = ('name', 'description', 'init_date', 'end_date', 'status', 'user')
-
-    def __init__(self, *args, **kwargs):
-        if kwargs.get('instance'):
-            initial = kwargs.setdefault('initial', {})
-            initial['user'] = [t.pk for t in kwargs['instance'].user.all()]
-        forms.ModelForm.__init__(self, *args, **kwargs)
-    
-    def save(self, commit=True):
-        instance = forms.ModelForm.save(self, False)
-
-        old_save_m2m = self.save_m2m
-        def save_m2m():
-            old_save_m2m()
-            instance.user.clear()
-            instance.user.add(*self.cleaned_data['user'])
-        
-        self.save_m2m = save_m2m
-
-        instance.save()
-        self.save_m2m()
-        
-        return instance
+        fields = ('name', 'description', 'init_date', 'end_date', 'status')
 
 class RegisterTimeInterval(forms.ModelForm):
     init_time = forms.DateTimeField(

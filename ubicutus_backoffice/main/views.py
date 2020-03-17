@@ -264,7 +264,7 @@ def consulta_horas_trabajadas(request):
     time_i = TimeInterval.objects.filter(user=request.user)
     time_intervals = []
     for t in time_i:
-    	time_intervals.append([t,Task.objects.get(id=t.task_id)])
+        time_intervals.append([t,Task.objects.get(id=t.task_id)])
 
  
     return render(request,'consulta_horas.html',{'time_intervals':time_intervals})
@@ -272,47 +272,49 @@ def consulta_horas_trabajadas(request):
 @login_required
 def registrar_tareas_trabajadas(request):
 
-	if request.POST.get('action') == 'post':
-		args = {
-			'name'        : request.POST.get('task_name'),
-			'description' : request.POST.get('task_description'),
-			'init_date'   : request.POST.get('task_init_date'),
-			'end_date'    : request.POST.get('task_end_date'),
-			'status'      : request.POST.get('end_init_date'),
-			'user'        : [str(request.user.id)]
-		}
-		form = RegisterTaskForm(args)
-		print(request.POST)
+    if request.POST.get('action') == 'post':
+        args = {
+            'name'        : request.POST.get('task_name'),
+            'description' : request.POST.get('task_description'),
+            'init_date'   : request.POST.get('task_init_date'),
+            'end_date'    : request.POST.get('task_end_date'),
+            'status'      : request.POST.get('end_init_date'),
+            'user'        : [str(request.user.id)]
+        }
+        form = RegisterTaskForm(args)
+        print(request.POST)
 
-		if form.is_valid():
-			form.save()
-			args['status'] = 'success'
-			args['errorMsg'] = 'Everything ok'
-			return JsonResponse(args)
-		else:
-			args['status'] = 'error'
-			args['errorMsg'] = 'Error de validación de campos'
-			return JsonResponse(args)
-		
-	if request.method == "POST":
-		form = RegisterTaskForm(request.POST)
-		print(request.POST)
-		if form.is_valid():
-			form.save()
-			return redirect('horas_trabajadas')
-	#If the task its been created on the fly (not by its own page)
-	else:
-		form = RegisterTaskForm()
-	return render(request,'registrar_tarea.html',{'form':form})
+        if form.is_valid():
+            form.save()
+            args['status'] = 'success'
+            args['errorMsg'] = 'Everything ok'
+            return JsonResponse(args)
+        else:
+            args['status'] = 'error'
+            args['errorMsg'] = 'Error de validación de campos'
+            return JsonResponse(args)
+        
+    if request.method == "POST":
+        form = RegisterTaskForm(request.POST)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            return redirect('horas_trabajadas')
+    #If the task its been created on the fly (not by its own page)
+    else:
+        form = RegisterTaskForm()
+    return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
-	# Query to obtain the user that is requesting his tasks
-	users = User.objects.filter(username=request.user.username)
+    # Query to obtain the user that is requesting his tasks
+    users = User.objects.filter(username=request.user.username)
 
-	#Query to obtain all in progress tasks
-	tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
-	return render(request,'lista_tareas.html',{'tasks':tasks_ip})
+    #Query to obtain all in progress tasks
+    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+    return render(request,'lista_tareas.html',{'tasks':tasks_ip})
 
 
 @login_required
@@ -324,13 +326,13 @@ def registrar_nueva_hora(request, pk):
         init = form.data['init_time']
         end = form.data['end_time']
         time_interval = TimeInterval(init_time=init,end_time=end,
-        	task=task,user=request.user)
+            task=task,user=request.user)
         try:
-        	time_interval.full_clean()
-        	time_interval.save()
-        	return redirect('horas_trabajadas')
+            time_interval.full_clean()
+            time_interval.save()
+            return redirect('horas_trabajadas')
         except ValidationError:
-        	form = RegisterTimeInterval()
+            form = RegisterTimeInterval()
     else:
         form = RegisterTimeInterval()
     return render(request,'registrar_nueva_hora.html',{'form':form})
@@ -342,41 +344,41 @@ def reporte(request):
 @login_required
 def tareas(request):
     
-	# Query to obtain the user that is requesting his tasks
-	users = get_user(request)
+    # Query to obtain the user that is requesting his tasks
+    users = get_user(request)
 
-	#Query to obtain all new tasks
-	tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
+    #Query to obtain all new tasks
+    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
 
-	#Query to obtain all in progress tasks
-	tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
+    #Query to obtain all in progress tasks
+    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
 
-	#Query to obtain all waiting to be done tasks
-	tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
+    #Query to obtain all waiting to be done tasks
+    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
     
-	#Query to obtain all done tasks
-	tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
+    #Query to obtain all done tasks
+    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
 
-	#Create task form
-	form = RegisterTaskForm()
+    #Create task form
+    form = RegisterTaskForm()
 
-	all_tasks = Task.objects.filter().filter(user__in = users)
+    all_tasks = Task.objects.filter().filter(user__in = users)
 
-	tasks_and_forms = []
-	for t in all_tasks:
-		tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
+    tasks_and_forms = []
+    for t in all_tasks:
+        tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
 
 
-	args = {'done': tasks_done,
+    args = {'done': tasks_done,
             'new': tasks_new,
             'inpro': tasks_ip,
             'waiting': tasks_waiting,
             'all': all_tasks,
             'tasksWForms' : tasks_and_forms,
-			'new_task_form' : form
+            'new_task_form' : form
             }
 
-	return render(request,'tareas.html', args)
+    return render(request,'tareas.html', args)
 
 
 @login_required
