@@ -314,6 +314,11 @@ def lista_tarea(request):
 
     #Query to obtain all in progress tasks
     tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+
+    if request.method == 'POST':
+        task = request.POST.get('list-hours')
+        return redirect('nueva_hora', task)
+
     return render(request,'lista_tareas.html',{'tasks':tasks_ip})
 
 

@@ -32,10 +32,12 @@ var $hoursWorkedChart = $("#hours-worked-chart");
 $.ajax ({
     url:$hoursWorkedChart.data("url"),
     success: function (data) {
+        console.log(data.data);
         if(data.empty == 1) {
             $('#hwsEmpty').show();
         } else {
             $('#hwsEmpty').hide();
+            console.log(data.data);
             var ctx = $hoursWorkedChart[0].getContext("2d");
             var myLineChart = new Chart(ctx, {
             type: 'line',

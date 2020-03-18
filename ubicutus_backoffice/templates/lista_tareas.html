@@ -22,11 +22,25 @@
 
 {% block form_title %} <strong>Tareas</strong> {% endblock %}
 {% block welcome_form %}
-  {% for task in tasks %}
-  <a href="{% url 'nueva_hora' task.id %}" class="form-control form-control-user">
-      <li>
-          {{task.name}}
+  <!--
+  <ul class="list-group">
+    {% for task in tasks %}
+      <li class="list-group-item">
+        <a href="{% url 'nueva_hora' task.id %}"> {{task.name}} </a>
       </li>
-  </a>
-  {% endfor %}
+    {% endfor %}
+  </ul>-->
+
+  <form class="user" method="POST">
+    {% csrf_token %}
+    <select name="list-hours" class="form-control">
+      <option value="" selected>Ninguna</option>
+      {% for task in tasks %}
+      <option value="{{ task.id }}">{{ task.name }}</option>
+      {% endfor %}
+    </select>
+    <div class="p-3">
+      <button type="submit" value="Select" class="btn btn-primary btn-user btn-block" id="sendHour">Seleccionar Tarea</button>
+    </div>
+  </form>
 {% endblock welcome_form %}
