@@ -92,3 +92,22 @@ class RequestVacation(forms.ModelForm):
     class Meta:
         model = Vacation
         fields = ('init_date','end_date','description')
+
+class RequestAdvancement(forms.ModelForm):
+
+    quantity = forms.CharField(
+        label="Cantidad ($)",
+        max_length=60,
+        required= True,
+    )
+
+    description = forms.CharField(
+        label="Información adicional",
+        max_length=1000,
+        widget=forms.Textarea,
+        required=True,
+    )
+
+    class Meta:
+        model = Advancement
+        fields = ('init_date','end_date','description')

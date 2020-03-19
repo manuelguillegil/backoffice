@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from django.core.exceptions import ValidationError
-from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation
+from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 
@@ -256,7 +256,25 @@ def vacaciones(request):
 
 @login_required
 def adelanto(request):
-    return render(request,'solicitud_adelanto.html',{'variable':''})
+    user = request.user
+    profile = user.userprofile
+
+    if request.method == 'POST':
+        form = RequestAdvancement(request.POST)
+        if form.is_valid():
+            advancement = form.save(commit = False)
+            subject = 'Solicitud de adelanto de {}'.format(str(user.username))
+            message = advancement.description
+            recepient = 'manuelguillermogil@gmail.com' #Arreglar
+            send_mail(subject,
+            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            return redirect('dashboard')
+    else:
+        form = RequestAdvancement()
+
+    args = {'form' : form }
+
+    return render(request,'solicitud_adelanto.html',args)
 
 @login_required
 def consulta_horas_trabajadas(request):
