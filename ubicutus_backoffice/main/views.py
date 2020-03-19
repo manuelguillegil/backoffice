@@ -11,8 +11,7 @@ from django.core.exceptions import ValidationError
 from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement, RequestReport
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
-
-
+from datetime import datetime
 
 
 # Create your views here.
@@ -348,7 +347,10 @@ def registrar_nueva_hora(request, pk):
         
         init = form.data['init_time']
         end = form.data['end_time']
-        time_interval = TimeInterval(init_time=init,end_time=end,
+        init_obj = datetime.strptime(init, '%d/%m/%Y %H:%M')
+        end_obj = datetime.strptime(end, '%d/%m/%Y %H:%M')
+
+        time_interval = TimeInterval(init_time=init_obj,end_time=end_obj,
             task=task,user=request.user)
         try:
             time_interval.full_clean()

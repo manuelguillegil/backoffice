@@ -1,72 +1,62 @@
-{% extends 'base_site.html' %}
+{% extends 'base_welcome_forms.html' %}
 {% load static %}
-{% block content %}
+{% load widget_tweaks %}
 
-<!-- Begin Page Content -->
-<div class="container-fluid">
+{% block title %}Registro de Horas Trabajadas{% endblock %}
+{% block pageTitle %} Registro de Horas Trabajadas {% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
 
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Registro de Horas Trabajadas</h1>
 
-  <div class="bg-welcome">
-    <div class="container">
+{% block welcomeMsg %}
+<div class="row d-flex justify-content-center align-items-center" style="font-size: 150px; color: #C83764">
+  <div>
+    <i class="far fa-clock"></i>
+  </div>
+</div>
+{% endblock %}
 
-      <!-- Outer Row -->
-      <div class="row justify-content-center">
+{% block form_title %}
+<strong> Registrar hora </strong>
+{% endblock %}
 
-        <div class="col-xl-10 col-lg-12 col-md-9">
-
-          <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-
-              <!-- Nested Row within Card Body -->
-              <div class="row">
-
-                <div class="col-lg-6 d-none d-lg-block text-center container d-flex justify-content-between mh-100">
-                  <div class="row">
-                    <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
-                  </div>
-                  <div class="row d-flex justify-content-center align-items-center" style="font-size: 150px; color: #C83764">
-                    <div>
-                      <i class="far fa-clock"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="p-5">
-                    {% block welcomeMsg %}
-                    <h1 class="p-4 h2 text-gray-900 mb-4 center" style="font-size:2vw;"> <strong>Registrar hora
-                      </strong></h1>
-                    {% endblock %}
-
-                    <form lass="user" name="registerTimeInterval" id="registerTimeInterval" novalidate method="POST">
-                      {% csrf_token %}
-                      {{ form.non_field_errors }}
-                      <div class="form-group row">
-                        <label for="vacationdate_i" class="col-3 col-form-label">Fecha inicial</label>
-                        <div class="col-sm-9 mb-3 mb-sm-0">
-                          {{ form.init_time.errors }}
-                          {{ form.init_time }}
-                        </div>
-                        <label for="vacationdate_i" class="col-3 col-form-label">Fecha final</label>
-                        <div class="col-sm-9">
-                          {{ form.end_time.errors }}
-                          {{ form.end_time }}
-                        </div>
-                      </div>
-                      <button type="submit"
-                        class="col-12 btn btn-primary btn-user btn-block rounded-pill">Registrar</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+{% block welcome_form %}
+<form class="user" name="registerTimeInterval" id="registerTimeInterval" novalidate method="POST">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="form-group row">
+    <div class="col-3 col-form-label">
+      {{ form.init_time.label_tag }}
+    </div>
+    <div class="col-sm-9 mb-3 mb-sm-0">
+      {{ form.init_time.errors }}
+      {{ form.init_time|attr:"class: form-control form-control-user"|attr:"type:text"|attr:"placeholder: 1/1/2020 10:00" }}
     </div>
   </div>
-  <!-- /.container-fluid -->
+  <div class="form-group row">
+    <div class="col-3 col-form-label">
+      {{ form.end_time.label_tag }}
+    </div>
+    <div class="col-sm-9">
+      {{ form.end_time.errors }}
+      {{ form.end_time|attr:"class: form-control form-control-user"|attr:"type:text"|attr:"placeholder: 1/1/2020 10:00" }}
+    </div>
+  </div>
+  <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Registrar</button>
+</form>
+{% endblock welcome_form %}
 
+{% block cscripts %} 
+  <link rel="stylesheet" type="text/css" href="/static/css/jquery.datetimepicker.css"/ >
+  <script src="/static/js/jquery_date/jquery.js"></script>
+  <script src="/static/js/jquery_date/jquery.datetimepicker.full.min.js"></script>
 
-  {% endblock %}
+  <script>
+    jQuery('#initDate').datetimepicker({format:'d/m/Y H:i'});
+  </script>
+
+  <script>
+    jQuery('#endDate').datetimepicker({format:'d/m/Y H:i'});
+  </script>
+{% endblock %}
