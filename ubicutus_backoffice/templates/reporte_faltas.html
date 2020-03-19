@@ -1,107 +1,40 @@
-
-{% extends 'base_site.html' %}
+{% extends 'base_welcome_forms.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
+{% block title %}Solicitar Vacaciones{% endblock %}
+{% block pageTitle %}Solicitar Vacaciones{% endblock %}
 {% block stylesheet %}
 <link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
-
-{% endblock %}
-{% block content %}
-
-
-<div class="container-fluid">
-
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Reporte de faltas o incidencias laborales</h1>
-
-</div>
-
-  <div class="bg-welcome">
-    <div class="container mt-0">
-    
-      <!-- Outer Row -->
-      <div class="row justify-content-center pt-1">
-    
-        <div class="col-xl-10 col-lg-12 col-md-9">
-    
-          <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-    
-              <!-- Nested Row within Card Body -->
-              <div class="row">
-                
-                <div class="col-lg-6 d-sm-none d-lg-block text-center container d-flex justify-content-between mh-100">
-
-                  <img class="p-4 img-fluid" src="{% static 'img/ubicutus-logo_preview.png' %}" alt="">
-                  </br>
-                  <img class="p-4 img-fluid" src="{% static 'img/injury.png' %}" alt="">
-                  <br>
-                  <small class="text-center p-2 ">
-                    En este formulario podras justificar tus faltas
-                  </small>
-
-                </div>
-                <div class="col-lg-6">
-                  <div class="p-5">
-                    {% block welcomeMsg %}
-                    <h1 class = "p-1 h2 text-gray-900 mb-3 text-center"> <strong>Reportar Falta o Incidente</strong></h1>
-                    {% endblock %}
-                      <form class="form" action="#">
-                        <div class="form-group row">
-                          <label for="injurydate_i" class="col-5 col-form-label">Dia de falta:</label>
-                          <div class="col-7">
-                            <input class="form-control form-control-user rounded-pill" type="date" id="injurydate_i" name="injurydate_i">
-                          </div>
-                        </div>
-                        
-                        <div class="form-group row">
-                          <label for="info" class="col-5 col-form-label">Motivo:</label>
-                          <div class="col-7"><textarea class="form-control form-control-user rounded" rows="5" id="info" name="info"></textarea></div>
-                        </div>
-                        </br>
-
-                        <p>Adjunta un justificativo (opcional)</p>
-
-						<div class="input-group">
-						  <div class="input-group-prepend">
-						    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-						  </div>
-						  <div class="custom-file">
-						    <input type="file" class="custom-file-input" id="inputGroupFile01"
-						      aria-describedby="inputGroupFileAddon01">
-						    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-						  </div>
-						</div>
-
-						<br></br>
-
-                        <button type="submit" class="col-12 btn btn-primary btn-user btn-block rounded-pill">Enviar Reporte</button>
-
-                      </form>
-
-                </div>
-              </div>
-            </div>
-          </div>
-    
-        </div>
-    
-      </div>
-    
-    </div>
-    </div>
 {% endblock %}
 
-  
 
+{% block welcomeMsg %}
+<img class="p-4 img-fluid" src="{% static 'img/injury.png' %}" alt="">
+<small class="text-center p-2 ">
+</small>
+{% endblock %}
 
+{% block form_title %}
+<h1 class="p-1 h2 text-gray-900 mb-3 text-center"> <strong>Reportar falta</strong></h1>
+{% endblock %}
 
-
-
-
-
-
-<!-- Begin Page Content -->
-
-<!-- /.container-fluid -->
-
+{% block welcome_form %}
+<form class="user" name="sendVacation" id="sendVacation" novalidate method="POST">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div class="form-group row">
+    <label class="col-5 col-form-label"> {{ form.date.label_tag }}</label>
+    <div class="col-7">
+      {{ form.date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: exampleInitDate"|attr:"placeholder: 2020-1-1" }}
+    </div>
+    {{ form.date.errors }}
+  </div>
+  <div class="form-group row">
+    <label class="col-form-label">{{ form.description.label_tag}}</label>
+    {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: exampleDesc"|attr:"placeholder: Tu información adicional aquí" }}
+    {{ form.description.errors }}
+  </div>
+  <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Enviar Solicitud</button>
+</form>
+{% endblock welcome_form %}

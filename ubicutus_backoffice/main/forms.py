@@ -110,4 +110,22 @@ class RequestAdvancement(forms.ModelForm):
 
     class Meta:
         model = Advancement
-        fields = ('init_date','end_date','description')
+        fields = ('quantity','description')
+
+class RequestReport(forms.ModelForm):
+
+    date = forms.DateField(
+        label="Día de falta",
+        required=True
+    )
+
+    description = forms.CharField(
+        label="Motivo",
+        max_length=1000,
+        widget=forms.Textarea,
+        required=True,
+    )
+
+    class Meta:
+        model = Report
+        fields = ('date','description')

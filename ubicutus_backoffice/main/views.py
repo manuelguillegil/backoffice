@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from django.core.exceptions import ValidationError
-from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement
+from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement, RequestReport
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 
@@ -362,7 +362,25 @@ def registrar_nueva_hora(request, pk):
 
 @login_required
 def reporte(request):
-    return render(request,'reporte_faltas.html',{'variable':''})
+    user = request.user
+    profile = user.userprofile
+
+    if request.method == 'POST':
+        form = RequestReport(request.POST)
+        if form.is_valid():
+            report = form.save(commit = False)
+            subject = 'Reporte de falta de {}'.format(str(user.username))
+            message = str(report.date) + ' : ' + str(report.description)
+            recepient = 'manuelguillermogil@gmail.com' #Arreglar
+            send_mail(subject,
+            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            return redirect('dashboard')
+    else:
+        form = RequestReport()
+
+    args = {'form' : form }
+
+    return render(request,'reporte_faltas.html',args)
 
 @login_required
 def tareas(request):
