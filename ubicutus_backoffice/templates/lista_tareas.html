@@ -10,10 +10,9 @@
 {% endblock %}
 
 {% block welcomeMsg %}
-<div class="row d-flex justify-content-center align-items-center"
-    style="font-size: 150px; color: #C83764">
+<div class="row d-flex justify-content-center align-items-center text-primary">
     <div>
-        <i class="far fa-clock"></i>
+        <i class="far fa-clock fa-10x"></i>
     </div>
 </div>
 <h1 class="p-2 h2 text-gray-900"> <strong> ¡Registra tus horas! </strong> </h1>
@@ -33,10 +32,13 @@
 
   <form class="user" method="POST">
     {% csrf_token %}
-    <select name="list-hours" class="form-control">
-      <option value="" selected>Ninguna</option>
+    <select name="list-hours" id="task-select" class="form-control">
+      <option  id="optNone" value="-1" selected>Ninguna</option>
       {% for task in tasks %}
-      <option value="{{ task.id }}">{{ task.name }}</option>
+      <option value="{{ task.id }}" id="opt{{task.id}}" data-tname="{{task.name}}" data-tdescrp="{{task.description}}"
+      data-indate="{{task.init_date}}" data-endate="{{task.end_date}}" data-status="{{task.status}}" >
+         {{ task.name }}
+      </option>
       {% endfor %}
     </select>
     <div class="p-3">
@@ -44,3 +46,53 @@
     </div>
   </form>
 {% endblock welcome_form %}
+
+{% block welcome_links %}
+
+<div class="" id="noTask">
+  <small>(No hay ninguna tarea seleccionda)</small>
+</div>
+
+<div id="taskSelected" class="d-none">
+  <h4 id="task-title">Título</h5><br>
+  
+  <h6>Descripción: </h6><br>
+  <p class="border" id="task-description">
+    descripción de la task
+  </p>
+
+  <h6>Deadlines:</h6>
+  <ul>
+    <li id="task-init-date">Fecha de inicio</li>
+    <li id="task-end-date">fecha de finalización</li>
+  </ul>
+
+  <!--new badge-->
+  <span class="badge-success p-2 rounded d-none" id="status-new">
+    Nuevo
+    <i class="fas fa-star"></i>
+  </span>
+  <!--in-prog badge-->
+  <span class="badge-warning p-2 rounded d-none" id="status-in-prog">
+    En curso
+    <i class="fas fa-pen"></i>
+  </span>
+  <!--done badge-->
+  <span class="badge-primary p-2 rounded d-none" id="status-done">
+    Hecho
+    <i class="fas fa-check"></i>
+  </span>
+  <!--Freez badge-->
+  <span class="badge-danger p-2 rounded d-none" id="status-freeze">
+    Detenido
+    <i class="fas fa-snowflake"></i>
+  </span>
+</div>
+
+{% endblock %}
+
+
+<!--Custom scripts-->
+{% block cscripts %}
+<script src="{% static 'js/select_task_form.js' %}"></script>
+{% endblock %}
