@@ -3,7 +3,6 @@
     then, it sends a POST request with the current form data to store a
     new task without refresh
 */
-
 $(document).on('submit', '#registerTaskMod',function(e){
 
     e.preventDefault();
@@ -27,3 +26,6 @@ $(document).on('submit', '#registerTaskMod',function(e){
 });
 
 
+$(document).ready(function(){
+
+});

@@ -4,16 +4,28 @@ var currentStatus = null;
 
 
 $(document).ready(function(){
-    
     var select = $('#task-select');
+    
+    
+    //Form validation handler 
+    $('#select-task-form').submit(function(e){
+        var $taskField = $('#task-select');
+        resetMsgs();
+        if($taskField.val()==-1){
+            e.preventDefault();
+            noTaskMsg();
+        }
+    });
+
 
     //The task description starts hidden
-
     select.change(function(e){
         var options = e.target.options;
         var currentOpt = options[options.selectedIndex];
         var noTaskMsg = $('#noTask');
         var taskInfo = $('#taskSelected');
+
+        resetMsgs();
 
         //if selected task is no-task
         if(currentOpt.value == '-1'){
@@ -34,6 +46,8 @@ $(document).ready(function(){
 
         console.log(currentOpt.value=='-1');
     });
+
+    
     
 });
 
@@ -66,4 +80,16 @@ function updateTaskInfo(opt){
 
     statusBadges[currentOpt.data("status")].removeClass("d-none");
     currentStatus = statusBadges[currentOpt.data("status")];
+}
+
+//Hides every validation message
+function resetMsgs(){
+    var $noTaskSelected = $('#no-task-alert');
+    $noTaskSelected.addClass('d-none');
+}
+
+//Show the no-task-msg
+function noTaskMsg(){
+    var $noTaskSelected = $('#no-task-alert');
+    $noTaskSelected.removeClass('d-none');
 }

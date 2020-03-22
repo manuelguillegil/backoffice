@@ -38,7 +38,7 @@ aria-hidden="true">
                 <!--Task name-->
                 <div class="form-group w-100">      
                     {{ form.name.label_tag}}
-                    {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea" }}
+                    {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea"|attr:"required" }}
                     {{ form.name.errors }}
                 </div>
             </div>    
@@ -84,6 +84,9 @@ aria-hidden="true">
                     <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>
                 </div>
             
+                <div class="alert-warning alert my-3" id="alert-add-warning">Asegúrese de llenar los campos correctamente</div>
+                <div class="alert-success alert my-3" id="alert-add-success">La tarea ha sido añadida correctamente</div>
+                <div class=" alert-danger alert my-3"  id="alert-add-error">Su tarea no pudo ser añadida correctamente.</div>
             
         </form>
 
