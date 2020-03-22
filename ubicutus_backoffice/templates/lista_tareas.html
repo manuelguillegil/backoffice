@@ -10,27 +10,29 @@
 {% endblock %}
 
 {% block welcomeMsg %}
-<div class="row d-flex justify-content-center align-items-center text-primary">
-    <div>
-        <i class="far fa-clock fa-10x"></i>
-    </div>
+<div class="d-sm-none d-xs-none d-lg-block d-xl-block">
+  <div class="row d-xl-flex d-lg-flex d-sm-block d-xs-block justify-content-center align-items-center text-primary">
+      <div>
+          <i class="far fa-clock fa-10x d-sm-none d-xs-none d-lg-block d-xl-block"></i>
+      </div>
+  </div>
+  <div class="row d-block text-center">
+    <h1 class="p-2 h2 text-gray-900"> <strong> ¡Registra tus horas! </strong> </h1>
+    
+    <p class="px-4">
+      Aquí podras registrar las horas que has trabajado en tus tareas. Escoge una tarea a la 
+      que desees asignarle un intervalo de tiempo.
+    </p>
+  </div>
 </div>
-<h1 class="p-2 h2 text-gray-900"> <strong> ¡Registra tus horas! </strong> </h1>
-<p class="p-4">Aquí podras registrar las horas que has trabajado en tus tareas.</p>
 {% endblock %}
 
 {% block form_title %} <strong>Tareas</strong> {% endblock %}
 {% block welcome_form %}
-  <!--
-  <ul class="list-group">
-    {% for task in tasks %}
-      <li class="list-group-item">
-        <a href="{% url 'nueva_hora' task.id %}"> {{task.name}} </a>
-      </li>
-    {% endfor %}
-  </ul>-->
 
-  <form class="user" method="POST">
+  <small>Aquí podras registrar las horas que has trabajado en tus tareas. Escoge una tarea a la 
+    que desees asignarle un intervalo de tiempo.</small>
+  <form class="user" method="POST" id="select-task-form">
     {% csrf_token %}
     <select name="list-hours" id="task-select" class="form-control">
       <option  id="optNone" value="-1" selected>Ninguna</option>
@@ -42,7 +44,8 @@
       {% endfor %}
     </select>
     <div class="p-3">
-      <button type="submit" value="Select" class="btn btn-primary btn-user btn-block" id="sendHour">Seleccionar Tarea</button>
+      <button type="submit" value="Select" class="btn btn-primary btn-user btn-block" id="sendHour">Asignar Hora</button>
+      <div class="alert-warning alert d-none mt-4" id="no-task-alert"> Debe escoger una tarea válida </div>
     </div>
   </form>
 {% endblock welcome_form %}
@@ -54,14 +57,14 @@
 </div>
 
 <div id="taskSelected" class="d-none">
-  <h4 id="task-title">Título</h5><br>
+  <h4 id="task-title" class="font-weight-bold text-gray-800">Título</h5><br>
   
-  <h6>Descripción: </h6><br>
-  <p class="border" id="task-description">
+  <h6 class="font-weight-bold my-1">Descripción:</h6>
+  <p class="border p-3" id="task-description">
     descripción de la task
   </p>
 
-  <h6>Deadlines:</h6>
+  <h6 class="font-weight-bold">Deadlines:</h6>
   <ul>
     <li id="task-init-date">Fecha de inicio</li>
     <li id="task-end-date">fecha de finalización</li>
