@@ -379,12 +379,22 @@ def reporte(request):
     if request.method == 'POST':
         form = RequestReport(request.POST)
         if form.is_valid():
+            date = form.data['date']
+            description = form.data['description']
+            aproved = 0
+            reportObject = Report(user=request.user, date = date, description = description)
+            advancementForm = form.save(commit = False)
             report = form.save(commit = False)
             subject = 'Reporte de falta de {}'.format(str(user.username))
             message = str(report.date) + ' : ' + str(report.description)
             recepient = 'manuelguillermogil@gmail.com' #Arreglar
             send_mail(subject,
             message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            try:
+                reportObject.full_clean()
+                reportObject.save()
+            except ValidationError:
+                form = RequestReport()
             return redirect('dashboard')
     else:
         form = RequestReport()
