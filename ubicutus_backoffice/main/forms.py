@@ -43,21 +43,16 @@ class RegisterTaskForm(forms.ModelForm):
 
 class RegisterTimeInterval(forms.ModelForm):
     init_time = forms.DateTimeField(
+        label="Fecha Inicial",
         required=True,
-        widget=forms.DateTimeInput(attrs={'class': "form-control form-control-user",
-        'id': 'task-id',
-        'placeholder': 'Fecha de inicio',
-        'type': 'datetime-local'
-        }),
-        )
+        widget=forms.DateTimeInput(attrs={"id" : 'initDate'})
+    )
+
     end_time = forms.DateTimeField(
+        label="Fecha Final",
         required=True,
-        widget=forms.DateTimeInput(attrs={'class': "form-control form-control-user",
-        'id': 'task-id',
-        'placeholder': 'Fecha de fin',
-        'type': 'datetime-local'
-        }),
-        )
+        widget=forms.DateTimeInput(attrs={"id" : 'endDate'})
+    )
 
 
     class Meta:

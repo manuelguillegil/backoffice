@@ -11,8 +11,7 @@ from django.core.exceptions import ValidationError
 from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement, RequestReport
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
-
-
+from datetime import datetime
 
 
 # Create your views here.
@@ -262,12 +261,21 @@ def adelanto(request):
     if request.method == 'POST':
         form = RequestAdvancement(request.POST)
         if form.is_valid():
-            advancement = form.save(commit = False)
+            quantity = form.data['quantity']
+            description = form.data['description']
+            aproved = 0
+            advancement = Advancement(user=request.user, quantity = quantity, description = description, aproved = aproved)
+            advancementForm = form.save(commit = False)
             subject = 'Solicitud de adelanto de {}'.format(str(user.username))
-            message = advancement.description
+            message = advancementForm.description
             recepient = 'manuelguillermogil@gmail.com' #Arreglar
             send_mail(subject,
             message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            try:
+                advancement.full_clean()
+                advancement.save()
+            except ValidationError:
+                form = RequestAdvancement()
             return redirect('dashboard')
     else:
         form = RequestAdvancement()
@@ -348,7 +356,10 @@ def registrar_nueva_hora(request, pk):
         
         init = form.data['init_time']
         end = form.data['end_time']
-        time_interval = TimeInterval(init_time=init,end_time=end,
+        init_obj = datetime.strptime(init, '%d/%m/%Y %H:%M')
+        end_obj = datetime.strptime(end, '%d/%m/%Y %H:%M')
+
+        time_interval = TimeInterval(init_time=init_obj,end_time=end_obj,
             task=task,user=request.user)
         try:
             time_interval.full_clean()

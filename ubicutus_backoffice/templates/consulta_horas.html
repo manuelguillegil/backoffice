@@ -1,21 +1,33 @@
-{% extends 'base_site.html' %}
+{% extends 'base_welcome_forms.html' %}
 {% load static %}
+
+{% block title %}Consulta de Horas Trabajadas{% endblock %}
+{% block pageTitle %} Consulta de Horas Trabajadas {% endblock %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/welcome-stylesheet.css' %}">
+{% endblock %}
+
+
 {% block content %}
-
-<!-- Begin Page Content -->
+<div class="bg-welcome">
 <div class="container-fluid">
-  <!-- Page Heading -->
-  <h1 class="h3 mb-4 text-gray-800">Consulta de Horas Trabajadas</h1>
-
+  <div class="row justify-content-center ">
   <!-- DataTales Example -->
-  <div class="card shadow mb-4">
+  <div class="card shadow mb-4 mt-4">
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Total de horas trabajadas</h6>
+      <h3 class="m-0 font-weight-bold text-primary text-center">Total de horas trabajadas</h3>
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
+            <tr>
+              <td class="text-center"><strong>Id intervalo</strong></td>
+              <td class="text-center"><strong>Fecha inicial</strong></td>
+              <td class="text-center"><strong>Fecha Final</strong></td>
+              <td class="text-center"><strong>Nombre Tarea</strong></td>
+              <td class="text-center"><strong>Descripción</strong></td>
+            </tr>
             {% for p in time_intervals%}
             <tr>
               <td>{{p.0.id}}</td>
@@ -30,11 +42,8 @@
       </div>
     </div>
   </div>
+  </div>
 
 </div>
-
-
-<!-- /.container-fluid -->
-
-
+</div>
 {% endblock %}
