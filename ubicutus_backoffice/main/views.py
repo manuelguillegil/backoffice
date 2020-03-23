@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from accounts.models import *
 from main.forms import RegisterTaskForm
 from django.core.exceptions import ValidationError
-from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement, RequestReport
+from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestAdvancement, RequestReport, TaskId
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 from datetime import datetime
@@ -261,12 +261,21 @@ def adelanto(request):
     if request.method == 'POST':
         form = RequestAdvancement(request.POST)
         if form.is_valid():
-            advancement = form.save(commit = False)
+            quantity = form.data['quantity']
+            description = form.data['description']
+            aproved = 0
+            advancement = Advancement(user=request.user, quantity = quantity, description = description, aproved = aproved)
+            advancementForm = form.save(commit = False)
             subject = 'Solicitud de adelanto de {}'.format(str(user.username))
-            message = advancement.description
+            message = advancementForm.description
             recepient = 'manuelguillermogil@gmail.com' #Arreglar
             send_mail(subject,
             message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            try:
+                advancement.full_clean()
+                advancement.save()
+            except ValidationError:
+                form = RequestAdvancement()
             return redirect('dashboard')
     else:
         form = RequestAdvancement()
@@ -306,7 +315,6 @@ def registrar_tareas_trabajadas(request):
     #If the task its been created on the fly (not by its own page)
     else:
         form = RegisterTaskForm()
-    return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
@@ -314,7 +322,7 @@ def lista_tarea(request):
     users = User.objects.filter(username=request.user.username)
 
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users)
+    tasks_ip = Task.objects.filter(user__in = users)
 
     if request.method == 'POST':
         task = request.POST.get('list-hours')
@@ -354,12 +362,22 @@ def reporte(request):
     if request.method == 'POST':
         form = RequestReport(request.POST)
         if form.is_valid():
+            date = form.data['date']
+            description = form.data['description']
+            aproved = 0
+            reportObject = Report(user=request.user, date = date, description = description)
+            advancementForm = form.save(commit = False)
             report = form.save(commit = False)
             subject = 'Reporte de falta de {}'.format(str(user.username))
             message = str(report.date) + ' : ' + str(report.description)
             recepient = 'manuelguillermogil@gmail.com' #Arreglar
             send_mail(subject,
             message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            try:
+                reportObject.full_clean()
+                reportObject.save()
+            except ValidationError:
+                form = RequestReport()
             return redirect('dashboard')
     else:
         form = RequestReport()
@@ -426,6 +444,55 @@ def editar_tarea(request,pk):
 def contador(request):
     return render(request,'my_time.html',{'variable':''})
 
+@login_required
+def eliminar_tarea(request):
+    if request.method == 'POST':
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            Task.objects.filter(id=pk).delete()
+            return JsonResponse({'status':'success'})
+        else:
+            return jsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+def archivar_tarea(request):
+    if request.method == 'POST':
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            obj = Task.objects.get(id=pk)
+            obj.archived = True
+            obj.save()
+            return JsonResponse({'status':'success'})
+        else:
+            return jsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+def desarchivar_tarea(request):
+    if request.method == 'POST':
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            obj = Task.objects.get(id=pk)
+            obj.archived = False
+            obj.save()
+            return JsonResponse({'status':'success'})
+        else:
+            return jsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+
+
+
+
 # UTILITIES FOR THE QUERIES
 def get_user(request):
     return User.objects.filter(username=request.user.username)
+

@@ -53,6 +53,7 @@ class  Task(models.Model):
         default=Status.NEW,
     )
     user = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
+    archived = models.BooleanField(default=False)
 
 class TimeInterval(models.Model):
     init_time = models.DateTimeField(default=datetime.now)
@@ -68,18 +69,16 @@ class Vacation(models.Model):
     aproved = models.BooleanField(default=False)
 
 class Advancement(models.Model):
-    init_date = models.DateTimeField(blank=True, null=True, default=None)
-    end_date = models.DateTimeField(blank=True, null=True, default=None)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=30)
     description = models.TextField(max_length=1000, default='')
     aproved = models.BooleanField(default=False)
 
 class Report(models.Model):
-    init_date = models.DateTimeField(blank=True, null=True, default=None)
-    end_date = models.DateTimeField(blank=True, null=True, default=None)
+    date = models.DateTimeField(blank=True, null=True, default=None)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     description = models.TextField(max_length=1000, default='')
-    aproved = models.BooleanField(default=False)
+
 
 ######### signals
 
