@@ -461,7 +461,7 @@ def contador(request):
     return render(request,'my_time.html',{'variable':''})
 
 @login_required
-def eliminar_tarea(request,):
+def eliminar_tarea(request):
     if request.method == 'POST':
         form = TaskId(request.POST)
         pk = form.data['task_id']
@@ -473,6 +473,38 @@ def eliminar_tarea(request,):
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
+
+def archivar_tarea(request):
+    if request.method == 'POST':
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            obj = Task.objects.get(id=pk)
+            obj.archived = True
+            obj.save()
+            return JsonResponse({'status':'success'})
+        else:
+            return jsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+def desarchivar_tarea(request):
+    if request.method == 'POST':
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            obj = Task.objects.get(id=pk)
+            obj.archived = False
+            obj.save()
+            return JsonResponse({'status':'success'})
+        else:
+            return jsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+
 
 
 
