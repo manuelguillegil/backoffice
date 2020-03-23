@@ -58,7 +58,9 @@
                     <br>
                 </div>
             </div>
-            
+            <div class="alert alert-success d-none" id="succMsg{{mod_task.id}}">La tarea fue eliminada exitosamente. Refresca la página para observar cambios</div>
+            <div class="alert alert-danger d-none" id="errMsg{{mod_task.id}}">La tarea no pudo ser eliminada</div>
+            <div class="alert alert-warning d-none" id="warnMsg{{mod_task.id}}">Esta tarea no puede ser eliminada.</div>
         </div>
         <div class="modal-footer flex-fill">
           <a href="#" class="btn float-left delete-btn" id="delete-task-btn{{mod_task.id}}" data-id="{{mod_task.id}}">
@@ -97,19 +99,20 @@
       var timeToDelete = 2000; //total time to pass
       var timeInterval = timeToDelete/3;  //time to wait between updates
       var relativeTime = 1;//an int from 1 to 100
+      var $progressBarVal = $('#progress-bar-val{{mod_task.id}}');
+      var $progressBar = $('#progress-bar{{mod_task.id}}');
+      var $deleteBtn = $('#delete-task-btn{{mod_task.id}}');
+      var deleted = false;
       
-      $deleteBtn = $('#delete-task-btn{{mod_task.id}}');
       $deleteBtn.click(console.log($deleteBtn));
       
       $deleteBtn.on('mousedown touchstart',function(e){    
-          console.log($(this).attr('id')  );
+          resetMsgs();
           showBar();
           timerId = setInterval(timeHandler,timeInterval);
           
       }).bind('mouseup mouseleave touchend', function() {
-          hideBar()
-            //clearInterval(timerId);
-            console.log("pasó: " + timePassed);
+            hideBar()
             timePassed = 0;
             clearInterval(timerId);
             updateBarProgress(0);
@@ -119,37 +122,84 @@
       function timeHandler(){
         if(timePassed>=timeToDelete){
           clearInterval(timerId);
+          hideBar()
+          updateBarProgress(0);
           deleteTask();
           timePassed = 0;
         }
           timePassed += timeInterval;
-          console.log((timePassed/timeToDelete)*100);
-          updateBarProgress((timePassed/timeToDelete)*100 );
+          updateBarProgress((timePassed/timeToDelete)*100);
           
       }
 
       function deleteTask(){
-        alert("Tarea eliminada")
+        if (deleted){
+          raiseWarn();
+          return false;
+        }
+
+        var reqData = {
+          csrfmiddlewaretoken:'{{csrf_token}}',
+          task_id:'{{mod_task.id}}'
+        }  
+        var delUrl = "{% url 'eliminar_tarea' %}"
+      
+        console.log(reqData);
+        $.ajax({
+          type:'POST',
+          url : delUrl,
+          data:reqData,
+          success:function(json){
+            if(json.status=='success'){
+              $deleteBtn.addClass('disabled');
+              raiseSucc();
+              deleted = true;
+            }
+            else if(json.status=='error'){
+              raiseErr();
+            }
+            else{
+              alert("Respuesta indefinida");
+              console.log(json);
+            }
+          },
+          error:function(xhr, errmsg, err){
+            raiseErr();
+            console.log(errmsg)
+          },
+          dataType:'json'
+        });
       }
       
       //Updates the bar progress to the given number
       function updateBarProgress(num){
-        var $progressBarVal = $('#progress-bar-val{{mod_task.id}}');
         var roundedNum = Math.floor(num);
-
         $progressBarVal.css("width", roundedNum + "%").attr('aria-valuenow', roundedNum);
       }
 
       function showBar(){
-          var $progressBar = $('#progress-bar{{mod_task.id}}');
           $progressBar.removeClass('invisible');
       }
 
       function hideBar(){
-          var $progressBar = $('#progress-bar{{mod_task.id}}');
           $progressBar.addClass('invisible');
       }
 
+      function resetMsgs(){
+        $('#errMsg{{mod_task.id}}').addClass('d-none');
+        $('#warnMsg{{mod_task.id}}').addClass('d-none');
+        $('#succMsg{{mod_task.id}}').addClass('d-none');
+      }
+
+      function raiseErr(){
+        $('#errMsg{{mod_task.id}}').removeClass('d-none');
+      }
+      function raiseWarn(){
+        $('#warnMsg{{mod_task.id}}').removeClass('d-none');
+      }
+      function raiseSucc(){
+        $('#succMsg{{mod_task.id}}').removeClass('d-none');
+      }
 
     });
 

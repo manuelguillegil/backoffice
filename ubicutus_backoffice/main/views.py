@@ -410,6 +410,9 @@ def tareas(request):
     all_tasks = Task.objects.filter().filter(user__in = users)
 
     tasks_and_forms = []
+
+    delete_form = TaskId()
+
     for t in all_tasks:
         tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
 
@@ -420,7 +423,8 @@ def tareas(request):
             'waiting': tasks_waiting,
             'all': all_tasks,
             'tasksWForms' : tasks_and_forms,
-            'new_task_form' : form
+            'new_task_form' : form,
+            'delete_form' : delete_form
             }
 
     return render(request,'tareas.html', args)
@@ -447,13 +451,14 @@ def contador(request):
 @login_required
 def eliminar_tarea(request):
     if request.method == 'POST':
+        print("me llegó un post")
         form = TaskId(request.POST)
         pk = form.data['task_id']
         if ( Task.objects.filter(id=pk).exists() ):
             Task.objects.filter(id=pk).delete()
             return JsonResponse({'status':'success'})
         else:
-            return jsonResponse({'status':'error'})
+            return JsonResponse({'status':'error'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
@@ -468,7 +473,7 @@ def archivar_tarea(request):
             obj.save()
             return JsonResponse({'status':'success'})
         else:
-            return jsonResponse({'status':'error'})
+            return JsonResponse({'status':'error'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
@@ -483,7 +488,7 @@ def desarchivar_tarea(request):
             obj.save()
             return JsonResponse({'status':'success'})
         else:
-            return jsonResponse({'status':'error'})
+            return JsonResponse({'status':'error'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
