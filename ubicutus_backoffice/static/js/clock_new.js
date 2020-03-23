@@ -7,11 +7,18 @@ var seconds2 = 0;
 var mints2 = 0;
 var hours2 = 0;
 
+// Estados del reloj
+const states = {
+    WAITING : 0,
+    COUNTING : 1,
+    PAUSED : 2,
+}
+
 // Variable de control del cronometro
-var startchron = 0;
+var startchron = states.WAITING;
 
 function chronometer() {
-    if(startchron == 1) {
+    if(startchron == states.COUNTING) {
         seconds1 += 1;       // seteamos los segundos
 
         // Verificaciones para actualizar los numeros
@@ -51,16 +58,22 @@ function chronometer() {
 
 // Inicia el cronometro
 function startChr() { 
-    startchron = 1; chronometer(); 
+    if(startchron != states.COUNTING){
+
+        startchron = states.COUNTING; 
+        chronometer(); 
+    }
 }
 
 // Detiene el cronometro
 function stopChr() { 
-    startchron = 0; 
+    startchron = states.PAUSED; 
 }
 
 // Resetea a los valores por defecto las variables
 function resetChr() {
+    startchron = states.WAITING;
+    
     hours2 = 0; 
     hours1 = 0; 
     mints2 = 0; 
