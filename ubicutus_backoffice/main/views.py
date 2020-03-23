@@ -289,27 +289,7 @@ def consulta_horas_trabajadas(request):
 @login_required
 def registrar_tareas_trabajadas(request):
 
-    if request.POST.get('action') == 'post':
-        args = {
-            'name'        : request.POST.get('task_name'),
-            'description' : request.POST.get('task_description'),
-            'init_date'   : request.POST.get('task_init_date'),
-            'end_date'    : request.POST.get('task_end_date'),
-            'status'      : request.POST.get('end_init_date'),
-            'user'        : [str(request.user.id)]
-        }
-        form = RegisterTaskForm(args)
-        print(request.POST)
-
-        if form.is_valid():
-            form.save()
-            args['status'] = 'success'
-            args['errorMsg'] = 'Everything ok'
-            return JsonResponse(args)
-        else:
-            args['status'] = 'error'
-            args['errorMsg'] = 'Error de validación de campos'
-            return JsonResponse(args)
+    
         
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
@@ -318,7 +298,11 @@ def registrar_tareas_trabajadas(request):
             instance = form.save(commit=False)
             instance.user = request.user
             instance.save()
-            return redirect('horas_trabajadas')
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error'})
+
+
     #If the task its been created on the fly (not by its own page)
     else:
         form = RegisterTaskForm()

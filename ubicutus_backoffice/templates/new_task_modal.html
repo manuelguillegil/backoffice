@@ -38,7 +38,7 @@ aria-hidden="true">
                 <!--Task name-->
                 <div class="form-group w-100">      
                     {{ form.name.label_tag}}
-                    {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea"|attr:"required" }}
+                    {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea"|attr:"required:true" }}
                     {{ form.name.errors }}
                 </div>
             </div>    
@@ -48,13 +48,13 @@ aria-hidden="true">
                     <!--Init date-->
                     <div class="form-group row">
                         {{ form.init_date.label_tag}}
-                        {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: taskInitDate"|attr:"placeholder: 2020-1-1" }}
+                        {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id:taskInitDate"|attr:"placeholder: 2020-1-1"|attr:"required:true" }}
                         {{ form.init_date.errors }}
                     </div>
                     <!--End date-->
                     <div class="form-group row">
                         {{ form.end_date.label_tag}}
-                        {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: taskEndDate"|attr:"placeholder: 2020-1-1" }}
+                        {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id:taskEndDate"|attr:"placeholder: 2020-1-1"|attr:"required:true" }}
                         {{ form.end_date.errors }}
                     </div>
                 </div>
@@ -63,7 +63,7 @@ aria-hidden="true">
                     <!--status-->
                     <div class="form-group row m-auto">
                         {{ form.status.label_tag}}
-                        {{ form.status|attr:"class: form-control dropdown rounded"|attr:"id: taskStatus" }}
+                        {{ form.status|attr:"class: form-control dropdown rounded"|attr:"id: taskStatus"|attr:"required:true" }}
                         {{ form.status.errors }}
                     </div>
                 </div>
@@ -74,7 +74,7 @@ aria-hidden="true">
                     <!--Description-->
                     <div class="form-group row">
                         {{ form.description.label_tag }}
-                        {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: taskDescript"|attr:"placeholder: Descripción" |attr:"rows: 3"}}
+                        {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: taskDescript"|attr:"placeholder: Descripción" |attr:"rows: 3"|attr:"required:true"}}
                         {{ form.description.errors }}
                     </div>
                 </div>
@@ -84,9 +84,9 @@ aria-hidden="true">
                     <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>
                 </div>
             
-                <div class="alert-warning alert my-3" id="alert-add-warning">Asegúrese de llenar los campos correctamente</div>
-                <div class="alert-success alert my-3" id="alert-add-success">La tarea ha sido añadida correctamente</div>
-                <div class=" alert-danger alert my-3"  id="alert-add-error">Su tarea no pudo ser añadida correctamente.</div>
+                <div class="alert-warning alert my-3" id="alert-add-warning">Asegúrese de llenar los campos correctamente. Debe añadir nombre y descripción</div>
+                <div class="alert-success alert my-3" id="alert-add-success">La tarea ha sido añadida correctamente. Refresque la página para observar cambios</div>
+                <div class=" alert-danger alert my-3" id="alert-add-error">Su tarea no pudo ser añadida correctamente.</div>
             
         </form>
 
