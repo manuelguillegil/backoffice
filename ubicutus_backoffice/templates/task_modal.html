@@ -1,4 +1,4 @@
-
+{% load static %}
 <!--
     Variables de este template:
         mod_task: la task cuyos datos están siendo mostrados en este template
@@ -60,8 +60,14 @@
             </div>
             
         </div>
-        <div class="modal-footer">
-
+        <div class="modal-footer flex-fill">
+          <a href="#" class="btn float-left delete-btn" id="delete-task-btn{{mod_task.id}}" data-id="{{mod_task.id}}">
+            <i class="text-danger fas fa-trash"></i>
+          </a>
+          <div class="progress w-100 invisible" id="progress-bar{{mod_task.id}}">
+            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" 
+                   aria-valuemin="0" aria-valuemax="100" id="progress-bar-val{{mod_task.id}}"></div>  
+          </div>
           {% if mod_task.status == 'New'%}
             <button class="btn btn-success" type="button" data-dismiss="modal">Cerrar</button>
           {% elif mod_task.status == 'In progress'%}
@@ -74,9 +80,79 @@
             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
           {% endif %}
 
-
-
         </div>
       </div>
     </div>
   </div>
+
+
+  <!-- Jquery -->
+  <script src="{%static  'vendor/jquery/jquery.min.js' %}"></script>
+  <!--Custom script-->
+  <script>
+    $("m{{mod_task.id|stringformat:'i'}}").ready(function(){
+
+      var timerId = 0; //timeInterval object id
+      var timePassed = 0; //Time passed
+      var timeToDelete = 1000; //total time to pass
+      var timeInterval = 100;  //time to wait between updates
+      var relativeTime = 1;//an int from 1 to 100
+      
+      $deleteBtn = $('#delete-task-btn{{mod_task.id}}');
+      $deleteBtn.click(console.log($deleteBtn));
+      
+      $deleteBtn.on('mousedown touchstart',function(e){    
+          console.log($(this).attr('id')  );
+          showBar();
+          timerId = setInterval(timeHandler,timeInterval);
+          
+      }).bind('mouseup mouseleave touchend', function() {
+          hideBar()
+            //clearInterval(timerId);
+            console.log("pasó: " + timePassed);
+            timePassed = 0;
+            clearInterval(timerId);
+            updateBarProgress(0);
+          });
+      
+      // Helper functions
+      function timeHandler(){
+          timePassed += timeInterval;
+          updateBarProgress( 2.1*(timePassed/timeToDelete)*100 );
+          if(timePassed>=timeToDelete){
+            clearInterval(timerId);
+            deleteTask();
+            timePassed = 0;
+          }
+          
+      }
+
+      function deleteTask(){
+          alert("Tarea eliminada");
+      }
+      
+      //Updates the bar progress to the given number
+      function updateBarProgress(num){
+        var $progressBarVal = $('#progress-bar-val{{mod_task.id}}');
+        var roundedNum = Math.floor(num);
+
+        $progressBarVal.css("width", roundedNum + "%").attr('aria-valuenow', roundedNum);
+      }
+
+      function showBar(){
+          var $progressBar = $('#progress-bar{{mod_task.id}}');
+          $progressBar.removeClass('invisible');
+      }
+
+      function hideBar(){
+          var $progressBar = $('#progress-bar{{mod_task.id}}');
+          $progressBar.addClass('invisible');
+      }
+
+
+    });
+
+
+
+  </script>
+  

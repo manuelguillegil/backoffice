@@ -48,6 +48,7 @@ $(document).on('submit', '#registerTaskMod',function(e){
             else{
                 console.log('Undefined response received');
             }
+            $sendTask.attr('disabled', false);
         },
         error : function(xhr,errmsg,err) {
             //console.log(xhr.status + ": " + xhr.responseText);

@@ -37,7 +37,9 @@ aria-hidden="true">
             <div class="row">
                 <!--Task name-->
                 <div class="form-group w-100">      
-                    {{ form.name.label_tag}}
+                    <div class="font-weight-bold text-gray-700">
+                        {{ form.name.label_tag}}
+                    </div>
                     {{ form.name|attr:"class: form-control form-control-user"|attr:"id: taskName"|attr:"placeholder: Nombre Tarea"|attr:"required:true" }}
                     {{ form.name.errors }}
                 </div>
@@ -47,13 +49,17 @@ aria-hidden="true">
                 <div class="col m-1">
                     <!--Init date-->
                     <div class="form-group row">
-                        {{ form.init_date.label_tag}}
+                        <div class="font-weight-bold text-gray-700">
+                            {{ form.init_date.label_tag}}
+                        </div>
                         {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id:taskInitDate"|attr:"placeholder: 2020-1-1"|attr:"required:true" }}
                         {{ form.init_date.errors }}
                     </div>
                     <!--End date-->
                     <div class="form-group row">
-                        {{ form.end_date.label_tag}}
+                        <div class="font-weight-bold text-gray-700">
+                            {{ form.end_date.label_tag}}
+                        </div>
                         {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id:taskEndDate"|attr:"placeholder: 2020-1-1"|attr:"required:true" }}
                         {{ form.end_date.errors }}
                     </div>
@@ -62,18 +68,21 @@ aria-hidden="true">
                 <div class="col m-1">
                     <!--status-->
                     <div class="form-group row m-auto">
-                        {{ form.status.label_tag}}
+                        <div class="font-weight-bold text-gray-700">
+                            {{ form.status.label_tag}}
+                        </div>
                         {{ form.status|attr:"class: form-control dropdown rounded"|attr:"id: taskStatus"|attr:"required:true" }}
                         {{ form.status.errors }}
                     </div>
                 </div>
-
             </div>
                 {{ form.non_field_errors }}    
                 <div class="row">
                     <!--Description-->
                     <div class="form-group row">
-                        {{ form.description.label_tag }}
+                        <div class="font-weight-bold text-gray-700">
+                            {{ form.description.label_tag }}
+                        </div>
                         {{ form.description|attr:"class: form-control form-control-plaintext"|attr:"id: taskDescript"|attr:"placeholder: Descripción" |attr:"rows: 3"|attr:"required:true"}}
                         {{ form.description.errors }}
                     </div>
