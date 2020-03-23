@@ -53,6 +53,7 @@ class  Task(models.Model):
         default=Status.NEW,
     )
     user = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
+    archived = models.BooleanField(default=False)
 
 class TimeInterval(models.Model):
     init_time = models.DateTimeField(default=datetime.now)
