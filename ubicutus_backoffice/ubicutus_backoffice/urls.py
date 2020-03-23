@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^contador/', views.contador, name="contador"),
     url(r'^reporte/$', views.reporte, name='reporte_falta'),
     url(r'^tareas/$', views.tareas, name='tareas'),
+    url(r'^eliminar_tarea/$', views.eliminar_tarea, name='eliminar_tarea' ),
    
     path('accounts/',include('accounts.urls')),
    

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>nose</title>
+</head>
+<body style="background-color:red;">
+	<h1>hola</h1>
+    <form method="POST"> 
+    	{% csrf_token %}
+    	{{ form.as_p }}
+    	<button type="submit" class="btn btn-outline-al btn-xl">Save</button>
+    </form>
+</body>
+</html>

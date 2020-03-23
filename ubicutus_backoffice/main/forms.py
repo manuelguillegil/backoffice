@@ -124,3 +124,6 @@ class RequestReport(forms.ModelForm):
     class Meta:
         model = Report
         fields = ('date','description')
+
+class TaskId(forms.Form):
+    task_id = forms.IntegerField()
