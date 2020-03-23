@@ -94,8 +94,8 @@
 
       var timerId = 0; //timeInterval object id
       var timePassed = 0; //Time passed
-      var timeToDelete = 1000; //total time to pass
-      var timeInterval = 100;  //time to wait between updates
+      var timeToDelete = 2000; //total time to pass
+      var timeInterval = timeToDelete/3;  //time to wait between updates
       var relativeTime = 1;//an int from 1 to 100
       
       $deleteBtn = $('#delete-task-btn{{mod_task.id}}');
@@ -117,18 +117,19 @@
       
       // Helper functions
       function timeHandler(){
+        if(timePassed>=timeToDelete){
+          clearInterval(timerId);
+          deleteTask();
+          timePassed = 0;
+        }
           timePassed += timeInterval;
-          updateBarProgress( 2.1*(timePassed/timeToDelete)*100 );
-          if(timePassed>=timeToDelete){
-            clearInterval(timerId);
-            deleteTask();
-            timePassed = 0;
-          }
+          console.log((timePassed/timeToDelete)*100);
+          updateBarProgress((timePassed/timeToDelete)*100 );
           
       }
 
       function deleteTask(){
-          alert("Tarea eliminada");
+        alert("Tarea eliminada")
       }
       
       //Updates the bar progress to the given number
