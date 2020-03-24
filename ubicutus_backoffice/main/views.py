@@ -57,10 +57,10 @@ def dashboard(request):
         worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
     # Tareas completadas
-    completed_task = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users).count()
+    completed_task = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users).filter(archived=False).count()
     
     # Tareas asignadas
-    assigned_task = Task.objects.filter(user__in = users)\
+    assigned_task = Task.objects.filter(user__in = users).filter(archived=False)\
     .exclude(status=Task.Status.CLOSED).count()
     
     # Horas trabajadas durante los ultimos 5 dias trabajados
@@ -107,7 +107,7 @@ def status_chart(request):
     labels = []
     data = []
 
-    queryset = Task.objects.filter(user=request.user)\
+    queryset = Task.objects.filter(user=request.user).filter(archived=False)\
     .values('status').annotate(task_count=Count('pk'))\
     .order_by('status')
 
@@ -322,7 +322,7 @@ def lista_tarea(request):
     users = User.objects.filter(username=request.user.username)
 
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(user__in = users)
+    tasks_ip = Task.objects.filter(user__in = users).filter(archived=False)
 
     if request.method == 'POST':
         task = request.POST.get('list-hours')
@@ -393,28 +393,31 @@ def tareas(request):
     users = get_user(request)
 
     #Query to obtain all new tasks
-    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
+    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(archived=False).filter(user__in = users) 
 
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
+    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(archived=False).filter(user__in = users) 
 
     #Query to obtain all waiting to be done tasks
-    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
+    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(archived=False).filter(user__in = users) 
     
     #Query to obtain all done tasks
-    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
+    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(archived=False).filter(user__in = users)
 
     #Create task form
     form = RegisterTaskForm()
 
-    all_tasks = Task.objects.filter().filter(user__in = users)
+    all_tasks = Task.objects.filter(archived=False).filter(user__in = users)
 
     tasks_and_forms = []
 
     delete_form = TaskId()
 
+    archive_form = TaskId()
+
+    # ARREGLAR ESTOOOoOoO
     for t in all_tasks:
-        tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
+        tasks_and_forms.append( [ t , EditTaskForm()] )
 
 
     args = {'done': tasks_done,
@@ -425,12 +428,13 @@ def tareas(request):
             'tasksWForms' : tasks_and_forms,
             'new_task_form' : form,
             'delete_form' : delete_form,
+            'archive_form' : archive_form,
             'edit_task_form' : EditTaskForm()
             }
 
     return render(request,'tareas.html', args)
 
-
+# NO USAR EESTE
 @login_required
 def editar_tarea(request,pk):
     task = get_object_or_404(Task, id=pk)
@@ -444,6 +448,30 @@ def editar_tarea(request,pk):
         form = EditTaskForm(instance=task)
 
     return render(request, 'edit_task.html', {'task': task, 'form': form})
+
+@login_required
+def editar_tarea_new(request):
+    users = get_user(request)
+
+    if request.method == 'POST':
+        form = EditTaskForm(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
+            obj = Task.objects.get(id=pk)
+            obj.name = form.data['name']
+            obj.description = form.data['description']
+            obj.init_date = form.data['init_date']
+            obj.end_date = form.data['end_date']
+            obj.status = form.data['status']
+            obj.save()
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error'})
+    else:
+        form = EditTaskForm()
+
+    return render(request, 'edit_task_new.html', {'form': form})
+
 
 @login_required
 def contador(request):
@@ -460,7 +488,7 @@ def eliminar_tarea(request):
             Task.objects.filter(id=pk).delete()
             return JsonResponse({'status':'success'})
         else:
-            return JsonResponse({'status':'error'})
+            return JsonResponse({'status':'error la tarea no existe'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
@@ -477,7 +505,7 @@ def archivar_tarea(request):
             obj.save()
             return JsonResponse({'status':'success'})
         else:
-            return JsonResponse({'status':'error'})
+            return JsonResponse({'status':'error la tarea no existe'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
@@ -494,7 +522,7 @@ def desarchivar_tarea(request):
             obj.save()
             return JsonResponse({'status':'success'})
         else:
-            return JsonResponse({'status':'error'})
+            return JsonResponse({'status':'error la tarea no existe'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
