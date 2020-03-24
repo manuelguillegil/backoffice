@@ -50,17 +50,32 @@
                         <li><strong>Desde: </strong> {{mod_task.init_date}} <br></li>
                         <li><strong>Hasta: </strong> {{mod_task.end_date}} <br></li>
                     </ul>
-                    
-                    <strong>Descripción:</strong>
-                    <div class="container border p-2 justify-content-center">
-                        {{mod_task.description}}
-                    </div>
-                    <br>
                 </div>
-            </div>
+                <div class="col">
+                    <a href="#" class="btn float-right" aria-label="Archivar-tarea" id="archive-btn{{mod_task.id}}">
+                    <i class="fas fa-folder"></i>
+                  </a>
+                  <br>  
+                </div>
+            </div> 
+              <div class="row px-4">
+                <strong>Descripción:</strong>
+                <div class="container border p-2 justify-content-center">
+                    {{mod_task.description}}
+                </div>
+              </div>
+            <!--Delete alerts-->
             <div class="alert alert-success d-none" id="succMsg{{mod_task.id}}">La tarea fue eliminada exitosamente. Refresca la página para observar cambios</div>
             <div class="alert alert-danger d-none" id="errMsg{{mod_task.id}}">La tarea no pudo ser eliminada</div>
             <div class="alert alert-warning d-none" id="warnMsg{{mod_task.id}}">Esta tarea no puede ser eliminada.</div>
+            <!-- Archive alerts: -->
+            <div class="alert alert-info my-2 d-none" id="info-msg-archive{{mod_task.id}}">Archivar la tarea le permitirá almacenarla y 
+              no se mostrará más ni aquí ni en sus resumenes. Presione otra vez para confirmar.
+            </div>
+            <div class="alert alert-success my-2 d-none" id="succ-msg-archive{{mod_task.id}}">Tarea archivada exitosamente</div>
+            <div class="alert alert-warning my-2 d-none" id="warn-msg-archive{{mod_task.id}}">Esta tarea no puede ser archivada</div>
+            <div class="alert alert-danger my-2 d-none" id="err-msg-archive{{mod_task.id}}">No se pudo archivar la tarea</div>
+
         </div>
         <div class="modal-footer flex-fill">
           <a href="#" class="btn float-left delete-btn" id="delete-task-btn{{mod_task.id}}" data-id="{{mod_task.id}}">
@@ -93,7 +108,7 @@
   <!--Custom script-->
   <script>
     $("m{{mod_task.id|stringformat:'i'}}").ready(function(){
-
+      /// Delete variables ///
       var timerId = 0; //timeInterval object id
       var timePassed = 0; //Time passed
       var timeToDelete = 2000; //total time to pass
@@ -103,6 +118,11 @@
       var $progressBar = $('#progress-bar{{mod_task.id}}');
       var $deleteBtn = $('#delete-task-btn{{mod_task.id}}');
       var deleted = false;
+      ///////////////////////////////
+      /// Archive Variables ///
+      var archiveCounter = 0;
+      var $archiveBtn = $('#archive-btn{{mod_task.id}}');
+      //////////////////////////////
       
       $deleteBtn.click(console.log($deleteBtn));
       
@@ -144,7 +164,7 @@
         }  
         var delUrl = "{% url 'eliminar_tarea' %}"
       
-        console.log(reqData);
+        //console.log(reqData);
         $.ajax({
           type:'POST',
           url : delUrl,
@@ -170,7 +190,65 @@
           dataType:'json'
         });
       }
-      
+      ///// Archive code  /////
+      $archiveBtn.click(function(e){
+        e.preventDefault();
+        resetArchMsgs();
+        if(archiveCounter == 0){
+          archiveCounter += 1;
+          raiseInfoArch();
+        }
+        else if(archiveCounter == 1){
+          resetArchMsgs();
+          archiveTask();
+        }
+        else if(archiveCounter == 2){
+          raiseWarn();
+        }
+        else{
+          console.log("Undefined behavior on task archive");
+        }
+      });
+
+
+      function archiveTask(){
+        resetArchMsgs();
+        var archUrl = '{% url "archivar_tarea" %}'
+        
+        var archData = {
+          csrfmiddlewaretoken:'{{csrf_token}}',
+          task_id:'{{mod_task.id}}'
+        }
+
+        $archiveBtn.addClass('disabled');
+
+        $.ajax({
+          type:'POST',
+          url:archUrl,
+          data:archData,
+          success:function(json){
+            if(json.error == 'success'){
+              archiveCounter += 1;
+              raiseSuccArch();
+            }
+            else{
+              archiveCounter = 0;
+              $archiveBtn.removeClass('disabled');
+              raiseErrArch();
+            }
+          },
+          error:function(xhr, errmsg, err){
+            archiveCounter = 0;
+            $archiveBtn.removeClass('disabled');
+            raiseErrArch();
+            console.log(errmsg);
+          },
+          dataType:'json'
+        });
+
+      }
+
+      ///// Aux functions /////:
       //Updates the bar progress to the given number
       function updateBarProgress(num){
         var roundedNum = Math.floor(num);
@@ -184,7 +262,7 @@
       function hideBar(){
           $progressBar.addClass('invisible');
       }
-
+      /// Delete msgs
       function resetMsgs(){
         $('#errMsg{{mod_task.id}}').addClass('d-none');
         $('#warnMsg{{mod_task.id}}').addClass('d-none');
@@ -199,6 +277,29 @@
       }
       function raiseSucc(){
         $('#succMsg{{mod_task.id}}').removeClass('d-none');
+      }
+      //Archive msgs:
+      function resetArchMsgs(){
+        $('#info-msg-archive{{mod_task.id}}').addClass('d-none');
+        $('#succ-msg-archive{{mod_task.id}}').addClass('d-none');
+        $('#err-msg-archive{{mod_task.id}}').addClass('d-none');
+        $('#warn-msg-archive{{mod_task.id}}').addClass('d-none');
+      }
+
+      function raiseInfoArch(){
+        $('#info-msg-archive{{mod_task.id}}').removeClass('d-none');
+      }
+
+      function raiseSuccArch(){
+        $('#succ-msg-archive{{mod_task.id}}').removeClass('d-none');
+      }
+
+      function raiseErrArch(){
+        $('#err-msg-archive{{mod_task.id}}').removeClass('d-none');
+      }
+
+      function raiseWarnArch(){
+        $('#warn-msg-archive{{mod_task.id}}').removeClass('d-none');
       }
 
     });
