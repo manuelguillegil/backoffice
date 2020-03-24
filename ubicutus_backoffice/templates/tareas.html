@@ -169,9 +169,9 @@
             <div class="card-body collapse show" id="allBody">
                 
                 {% for pair in tasksWForms %}
-                    {% include 'task_list_item.html' with mtask=pair.0 mform=pair.1 %}
+                    {% include 'task_list_item.html' with mtask=pair.0 modal="edit-task-modal" %}
                 {% endfor %}
-                
+                {% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
             </div>
             </div>
         </div>
@@ -179,4 +179,6 @@
 </div>
 
 
+
 {% endblock %}
+

@@ -50,4 +50,6 @@ urlpatterns = [
     path('status-chart/', views.status_chart, name='status-chart'),
     path('task-hours-chart/', views.task_hours_chart, name='task-hours-chart'),
     path('hours-worked-chart/', views.hours_worked_chart, name='hours-worked-chart'),
+
+    path('clock-view/', views.clock_view , name='clock-view'),
 ]

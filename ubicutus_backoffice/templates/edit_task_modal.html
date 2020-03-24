@@ -3,11 +3,11 @@
 {% load bootstrap4 %}
 <!--
     Template variables:
+    mid: modals id
     form: a task creation form
-    taskId: task related to this form
 -->
 
-<div class="modal fade" id="taskEditModal{{ taskId }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="{{mid}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
 aria-hidden="true">
 <div class="modal-dialog" role="document">
     
@@ -29,27 +29,64 @@ aria-hidden="true">
 
     <div class="modal-body w-100">
         
-            soy el modal:  taskEditModal{{ taskId }}
-        <form method="POST" class="edit-task-mod-form form{{taskId}}" id="taskEditForm{{taskId}}" data-submit="submitEdit{{taskid}}">
-            mi id de form es taskEditForm{{taskId}}
+            
+        <form method="POST" class="edit-task-mod-form" id="task-edit-form" data-submit="submitEdit">
             {% csrf_token %}
-            {% for field in form %}
+            
                 <div class="fieldWrapper">
-                <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
-                    {{ field.label_tag }} 
-                    
-                    {{ field |attr:"class:form-control"|attr:"placeholder:Information"|attr:"style: background-color: rgba(233, 229, 200, 0.5)" }}
-                    
-                    {% if field.help_text %}
-                    <p class="help-block">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                    <strong class="help-block text-danger">{{ field.errors }}</strong>
+                    <!--Name field-->
+                    <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
+                        {{ form.name.label_tag }}         
+                        {{ form.name |attr:"class:form-control"|attr:"placeholder:Nombre de la tarea"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-name" }}
+                        {% if form.name.help_text %}
+                        <p class="help-block">{{ form.name.help_text|safe }}</p>
+                        {% endif %}
+                        <strong class="help-block text-danger">{{ form.name.errors }}</strong>
+                    </div>
+
+                    <!--Description Field-->
+                    <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
+                        {{ form.description.label_tag }}         
+                        {{ form.description |attr:"class:form-control"|attr:"placeholder:Descripcion de la tarea"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-description"|attr:"rows:4"}}
+                        {% if form.description.help_text %}
+                        <p class="help-block">{{ form.description.help_text|safe }}</p>
+                        {% endif %}
+                        <strong class="help-block text-danger">{{ form.description.errors }}</strong>
+                    </div>
+
+                    <!--Initial date Field-->
+                    <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
+                        {{ form.init_date.label_tag }}         
+                        {{ form.init_date |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-init-date" }}
+                        {% if form.init_date.help_text %}
+                        <p class="help-block">{{ form.init_date.help_text|safe }}</p>
+                        {% endif %}
+                        <strong class="help-block text-danger">{{ form.init_date.errors }}</strong>
+                    </div>
+
+                    <!--Final date Field-->
+                    <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
+                        {{ form.end_date.label_tag }}         
+                        {{ form.end_date |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-end-date" }}
+                        {% if form.end_date.help_text %}
+                        <p class="help-block">{{ form.end_date.help_text|safe }}</p>
+                        {% endif %}
+                        <strong class="help-block text-danger">{{ form.end_date.errors }}</strong>
+                    </div>
+
+                    <!--Status Field-->
+                    <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
+                        {{ form.status.label_tag }}         
+                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-status" }}
+                        {% if form.status.help_text %}
+                        <p class="help-block">{{ form.status.help_text|safe }}</p>
+                        {% endif %}
+                        <strong class="help-block text-danger">{{ form.status.errors }}</strong>
+                    </div>
                 </div>
-                </div>
-            {% endfor %}
             <br>
             <div class="form-group text-center">
-                <button type="button" class="btn btn-outline-al btn-xl submitEdit btn{{taskid}}" id="submitEdit{{taskid}}">Save</button>
+                <button type="button" class="btn btn-outline-al btn-xl submitEdit" id="submitEdit">Save</button>
             </div>
         </form>
 
@@ -62,18 +99,37 @@ aria-hidden="true">
     </div>
     <!-- Bootstrap core JavaScript -->
     <script src="{% static  'vendor/jquery/jquery.min.js' %}"></script>
+    
+    <!--Custom scripts-->
     <script>
         $(document).ready(function(){
-            console.log("existo y mi id es: "+ '{{ taskId }}taskEditModal');
+            var currentTaskId = null;
+            var $form = $('#task-edit-form');
+
+            $form.submit(function(e){
+                //var url = 
+                e.preventDefault();
+                
+            });
+
+            //Sets the current task to be edited
+            $('.modal-edit-trigger').click(function (e){
+                updateEditForm($(this));
+            });
+
+            // Given the dom item that contains the task data, updates the content of this
+            // form with such data
+            function updateEditForm(el){
+                //Set the default form values
+                $('#edit-task-name').val(el.data("tname"));
+                $('#edit-task-description').val(el.data("tdescript"));
+                $('#edit-task-init-date').val(el.data("tinitdate"));
+                $('#edit-task-end-date').val(el.data("tenddate"));
+                $('#edit-task-status').val(el.data("status"));
+                currentTaskId = el.data("tid");
+            }
         });
     </script>
-    <!--Custom scripts-->
-        <!--Custom django viarable declarations-->
-    <!--
-    <script> var dataUrl = '{% url "registrar_tarea" %}';</script>
-    <script src="{% static 'js/taskModelForm.js' %}"></script>
-    -->
-    <script src="{% static 'js/editTaskModelForm.js' %}"></script>
 
   </div>
 </div>
