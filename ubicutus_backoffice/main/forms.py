@@ -62,7 +62,7 @@ class RegisterTimeInterval(forms.ModelForm):
 class EditTaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ('name', 'description', 'init_date', 'end_date', 'status')
+        fields = ('id','name', 'description', 'init_date', 'end_date', 'status')
 
 
 class RequestVacation(forms.ModelForm):

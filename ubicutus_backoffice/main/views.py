@@ -432,16 +432,14 @@ def tareas(request):
 
 
 @login_required
-def editar_tarea(request,pk):
-    task = get_object_or_404(Task, id=pk)
-
+def editar_tarea(request):
     if request.method == 'POST':
-        form = EditTaskForm(request.POST, instance=task)
+        form = EditTaskForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('tareas')  
     else:
-        form = EditTaskForm(instance=task)
+        form = EditTaskForm()
 
     return render(request, 'edit_task.html', {'task': task, 'form': form})
 
@@ -451,11 +449,12 @@ def contador(request):
 
 @login_required
 def eliminar_tarea(request):
+    users = get_user(request)
     if request.method == 'POST':
         print("me llegó un post")
         form = TaskId(request.POST)
         pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
             Task.objects.filter(id=pk).delete()
             return JsonResponse({'status':'success'})
         else:
@@ -464,11 +463,13 @@ def eliminar_tarea(request):
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
+@login_required
 def archivar_tarea(request):
+    users = get_user(request)
     if request.method == 'POST':
         form = TaskId(request.POST)
         pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
             obj = Task.objects.get(id=pk)
             obj.archived = True
             obj.save()
@@ -479,11 +480,13 @@ def archivar_tarea(request):
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
+@login_required
 def desarchivar_tarea(request):
+    users = get_user(request)
     if request.method == 'POST':
         form = TaskId(request.POST)
         pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
             obj = Task.objects.get(id=pk)
             obj.archived = False
             obj.save()
