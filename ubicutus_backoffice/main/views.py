@@ -12,6 +12,7 @@ from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestA
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 from datetime import datetime
+from django.template import RequestContext
 
 
 # Create your views here.
@@ -493,9 +494,147 @@ def desarchivar_tarea(request):
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
+##################### PERSISTENT CLOCK #######################################################
 
+#### me copie esto de la view "eliminar_tarea" que esta arriba
 
+@login_required
+def clock_play(request):
+    if request.method == 'POST':
 
+    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
+        loQueMePasan = ClockData(request.POST)
+
+        request.session['current_task'] = loQueMePasan.data['task']
+        request.session['last_init_time'] = datetime.now()
+        request.session['status'] = 'COUNTING'
+
+        ## y ahora que el reloj de alguna forma use los valores hours, mins y sec 1 y 2 como
+        ## valores iniciales 
+
+    #########################################################################################    
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            Task.objects.filter(id=pk).delete()
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+@login_required
+def clock_pause(request):
+    if request.method == 'POST':
+
+    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
+        loQueMePasan = ClockData(request.POST)
+
+        cur_task = loQueMePasan.data['task']
+        init_time = loQueMePasan.data['time']
+        interval = TimeInterval(init_time, datetime.now(), request.user, cur_task)
+        interval.save()
+
+        del request.session['last_init_time'] # elimino last_init_time y queda None
+        request.session['status'] = 'PAUSED'
+        request.session['counter_hours1'] = loQueMePasan.data['hour1']
+        request.session['counter_hours2'] = loQueMePasan.data['hour2']
+        request.session['counter_mins1'] = loQueMePasan.data['min1']
+        request.session['counter_mins2'] = loQueMePasan.data['min2']
+        request.session['counter_sec1'] = loQueMePasan.data['sec1']
+        request.session['counter_sec2'] = loQueMePasan.data['sec2']
+
+        ## ya se deberian haber guardado los datos, se queda pausado el crono
+
+    ######################################################################################### 
+        
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            Task.objects.filter(id=pk).delete()
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+@login_required
+def clock_stop(request):
+    if request.method == 'POST':
+
+    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
+
+        loQueMePasan = ClockData(request.POST)
+
+        cur_task = loQueMePasan.data['task']
+        init_time = loQueMePasan.data['time']
+        interval = TimeInterval(init_time, datetime.now(), request.user, cur_task)
+        interval.save()
+
+        del request.session['last_init_time'] # elimino last_init_time y queda None
+        del request.session['current_task']
+        request.session['status'] = 'WAITING'
+        request.session['counter_hours1'] = 0
+        request.session['counter_hours2'] = 0
+        request.session['counter_mins1'] = 0
+        request.session['counter_mins2'] = 0
+        request.session['counter_sec1'] = 0
+        request.session['counter_sec2'] = 0
+
+        ## ya se deberian haber guardado los datos, se queda pausado el crono
+
+    ######################################################################################### 
+        
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            Task.objects.filter(id=pk).delete()
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+@login_required
+def clock_page_change(request):
+    if request.method == 'POST':
+
+    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
+
+        loQueMePasan = ClockData(request.POST)
+
+        # 2 casos: SI el pana se esta saliendo de backoffice
+        #               entonces guarda el beta en la base de datos: (asumo que si te sales la sesion se cierra sola)
+        cur_task = loQueMePasan.data['task']
+        init_time = loQueMePasan.data['time']
+        interval = TimeInterval(init_time, datetime.now(), request.user, cur_task)
+        interval.save()
+
+        # SINO entonces guarda la informacion del counter en las session vars:
+        request.session['counter_hours1'] = loQueMePasan.data['hour1']
+        request.session['counter_hours2'] = loQueMePasan.data['hour2']
+        request.session['counter_mins1'] = loQueMePasan.data['min1']
+        request.session['counter_mins2'] = loQueMePasan.data['min2']
+        request.session['counter_sec1'] = loQueMePasan.data['sec1']
+        request.session['counter_sec2'] = loQueMePasan.data['sec2']
+
+    ######################################################################################### 
+        
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).exists() ):
+            Task.objects.filter(id=pk).delete()
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error'})
+    else:
+        form = TaskId()
+        return render(request, 'delete_task.html', {'form': form})
+
+#######################################
 
 # UTILITIES FOR THE QUERIES
 def get_user(request):
