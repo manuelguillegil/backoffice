@@ -225,17 +225,17 @@
             <li class="nav-item mx-1 mt-2">
             
               
-                <h4 class="text-gray-700">
-                  00:00:00
+                <h4 class="text-gray-700" id="chrono">
+                  {{ clock }}
                 </h4>
               
               
             </li>
-
+            
             <li class="nav-item mx-1">
             
               <div class="nav-item no-arrow mx-1">
-                <a class="nav-link text-gray-5" href="#">
+                <a class="nav-link text-gray-5" onclick="startChr( '{{ clock }}')">
                   <i class="fas fa-play fa-fw"></i>
                 </a>
               </div>
@@ -245,7 +245,7 @@
             <li class="nav-item ">
             
               <div class="nav-item no-arrow">
-                <a class="nav-link text-gray-5" href="#">
+                <a class="nav-link text-gray-5" onclick="stopChr()">
                   <i class="fas fa-pause fa-fw"></i>
                 </a>
               </div>
@@ -255,7 +255,7 @@
             <li class="nav-item">
             
               <div class="nav-item dropdown no-arrow">
-                <a class="nav-link  text-gray-5" href="#">
+                <a class="nav-link  text-gray-5" onclick="resetChr()">
                   <i class="fas fa-stop fa-fw"></i>
                 </a>
               </div>
@@ -408,8 +408,10 @@
 
   <!--Clock code-->
   <script src="{% static 'js/clock.js' %}"></script>
+  <script src="{%static  'js/clock_new.js' %}"></script>
+
   <!-- Page level custom scripts -->
-  {% block cscripts %} 
+  {% block cscripts %}
   {% endblock %}
 </body>
 

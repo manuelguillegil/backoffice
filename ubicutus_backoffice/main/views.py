@@ -12,7 +12,7 @@ from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestA
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 from datetime import datetime
-
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 @login_required
@@ -494,9 +494,14 @@ def desarchivar_tarea(request):
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
+@csrf_exempt
+def clock_view(request):
+    if request.method == 'POST':
+        request.session['clock'] = request.POST['clock']
+        request.session.save()
+        message = 'Clock succesfully updated'
 
-
-
+    return HttpResponse(message)
 
 # UTILITIES FOR THE QUERIES
 def get_user(request):
