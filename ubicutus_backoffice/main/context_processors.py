@@ -1,12 +1,23 @@
 def clock_variable(request):
     clock = '00:00:00'
-    
-    if 'clock' not in request.session:
-        request.session['clock'] = clock
-        request.session.save()
-    else:
-        clock = request.session['clock']
+
+    clock = request.session.get('clock', clock)
+    request.session['clock'] = clock
+    request.session.save()
+
+    clock_status = request.session.get('clock_status', 0)
+    request.session['clock_status'] = clock_status
+    request.session.save()
+
+    clock_last_init = request.session.get('clock_last_init')
+    if(clock_last_init!=None): request.session['clock_last_init'] = clock_last_init
+    request.session.save()
+
+    clock_task = request.session.get('clock_task')
+    if(clock_task!=None): request.session['clock_task'] = clock_task
+    request.session.save()
     
     return {
-        'clock': clock
+        'clock': clock,
+        'clock_status' : clock_status,
     }
