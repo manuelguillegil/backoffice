@@ -498,8 +498,9 @@ def desarchivar_tarea(request):
 def clock_view(request):
     if request.method == 'POST':
         request.session['clock'] = request.POST['clock']
+        request.session['clock_status'] = request.POST['clock_status']
         request.session.save()
-        message = 'Clock succesfully updated'
+        message = 'Clock succesfully updated: '+ request.session['clock']
 
     return HttpResponse(message)
 

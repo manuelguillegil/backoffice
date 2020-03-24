@@ -33,7 +33,15 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
-
+  <script type="text/javascript">
+    function auto_start_clock(){
+      if({{clock_status}} == 1){
+        console.log("auto start: "+'{{clock}}')
+        startChr('{{clock}}');
+      }
+    }
+    window.onload = auto_start_clock;
+  </script>
 </head>
 
 <body id="page-top">
@@ -235,7 +243,7 @@
             <li class="nav-item mx-1">
             
               <div class="nav-item no-arrow mx-1">
-                <a class="nav-link text-gray-5" onclick="startChr( '{{ clock }}')">
+                <a class="nav-link text-gray-5" onclick="startChr( '{{ request.session.clock }}')">
                   <i class="fas fa-play fa-fw"></i>
                 </a>
               </div>
@@ -407,7 +415,6 @@
 
 
   <!--Clock code-->
-  <script src="{% static 'js/clock.js' %}"></script>
   <script src="{%static  'js/clock_new.js' %}"></script>
 
   <!-- Page level custom scripts -->
