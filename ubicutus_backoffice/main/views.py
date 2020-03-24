@@ -424,7 +424,8 @@ def tareas(request):
             'all': all_tasks,
             'tasksWForms' : tasks_and_forms,
             'new_task_form' : form,
-            'delete_form' : delete_form
+            'delete_form' : delete_form,
+            'edit_task_form' : EditTaskForm()
             }
 
     return render(request,'tareas.html', args)
