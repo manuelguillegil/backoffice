@@ -536,7 +536,17 @@ def clock_view(request):
 
     return HttpResponse(message)
 
+
+def tareas_archivadas(request):
+    users = get_user(request)
+    arch_tasks = Task.objects.filter(archived=True).filter(user__in = users)
+    args = {'arch_tasks' : arch_tasks}
+    return render(request, 'archived_task.html', args)
+
+
+
 # UTILITIES FOR THE QUERIES
 def get_user(request):
     return User.objects.filter(username=request.user.username)
+
 
