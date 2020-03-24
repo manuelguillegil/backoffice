@@ -222,19 +222,27 @@
 
         $archiveBtn.addClass('disabled');
 
+        console.log(archData);
+
         $.ajax({
           type:'POST',
           url:archUrl,
           data:archData,
           success:function(json){
-            if(json.error == 'success'){
+            if(json.status == 'success'){
               archiveCounter += 1;
               raiseSuccArch();
+              console.log(json);
             }
-            else{
+            else if (json.status == 'error'){
               archiveCounter = 0;
               $archiveBtn.removeClass('disabled');
               raiseErrArch();
+            }
+            else{
+              raiseWarn();
+              console.log("Undefined response: ");
+              console.log(json);
             }
           },
           error:function(xhr, errmsg, err){
