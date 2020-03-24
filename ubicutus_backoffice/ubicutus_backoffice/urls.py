@@ -22,13 +22,14 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 # PURGAR URLS PLSSSSSSSSS
 urlpatterns = [
-    url(r'^$', LoginView.as_view(), name='login'),
+    url(r'^$', views.dashboard, name='home'),
+    url(r'^dashboard/$', LoginView.as_view(), name='login'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^profile/$', views_account.profile, name='profile'),
     url(r'^vacaciones/$', views.vacaciones, name='vacaciones'),
     url(r'^adelanto/$', views.adelanto, name='adelanto'),
     url(r'^horas_trabajadas/$', views.consulta_horas_trabajadas, name='horas_trabajadas'),
-    url(r'^registrar_tareas/$', views.registrar_tareas_trabajadas, name='registrar_tarea'),
+    url(r'^registrar_tareas/$', views.registrar_tareas_trabajadas_render, name='registrar_tarea'),
     url(r'^registrar_hora/$', views.lista_tarea, name='lista_tareas'),
     url(r'^registrar_nueva_hora/(?P<pk>\d+)/$', views.registrar_nueva_hora, name='nueva_hora'),
     url(r'^editar_tarea/(?P<pk>\d+)/$', views.editar_tarea, name='editar_tarea'),

@@ -315,6 +315,29 @@ def registrar_tareas_trabajadas(request):
     #If the task its been created on the fly (not by its own page)
     else:
         form = RegisterTaskForm()
+    
+@login_required
+def registrar_tareas_trabajadas_render(request):
+
+    
+        
+    if request.method == "POST":
+        form = RegisterTaskForm(request.POST)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            return redirect('tareas')
+        else:
+            return redirect('registrar_tarea')
+
+
+    #If the task its been created on the fly (not by its own page)
+    else:
+        form = RegisterTaskForm()
+    
+    return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
