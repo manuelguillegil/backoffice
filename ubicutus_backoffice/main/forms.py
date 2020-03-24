@@ -59,10 +59,38 @@ class RegisterTimeInterval(forms.ModelForm):
         model = TimeInterval
         fields = ['init_time', 'end_time']
 
-class EditTaskForm(forms.ModelForm):
-    class Meta:
-        model = Task
-        fields = ('name', 'description', 'init_date', 'end_date', 'status')
+class EditTaskForm(forms.Form):
+    task_id = forms.IntegerField()
+
+    name = forms.CharField(
+        label="Nombre",
+        max_length=60,
+        required= True,
+    )
+
+    description = forms.CharField(
+        label="Descripción",
+        max_length=1000,
+        widget=forms.Textarea,
+        required=True,
+    )
+
+    init_date = forms.DateField(
+        label="Fecha de inicio",
+        required=True
+    )
+
+    end_date = forms.DateField(
+        label="Fecha de finalización",
+        required=False
+    )
+
+    status = forms.ChoiceField(
+        label='Status', 
+        required=True,
+        choices=Task.Status.choices,
+    )
+
 
 
 class RequestVacation(forms.ModelForm):

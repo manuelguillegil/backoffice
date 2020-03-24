@@ -52,4 +52,8 @@ urlpatterns = [
     path('hours-worked-chart/', views.hours_worked_chart, name='hours-worked-chart'),
 
     path('clock-view/', views.clock_view , name='clock-view'),
+
+    url(r'^edit_task/$', views.editar_tarea_new, name='editar_tarea_new'),
+    url(r'^tareas_archivadas/$', views.tareas_archivadas, name='tareas_archivadas')
+
 ]
