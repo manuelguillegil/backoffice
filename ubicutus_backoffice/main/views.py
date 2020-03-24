@@ -432,14 +432,16 @@ def tareas(request):
 
 
 @login_required
-def editar_tarea(request):
+def editar_tarea(request,pk):
+    task = get_object_or_404(Task, id=pk)
+
     if request.method == 'POST':
-        form = EditTaskForm(request.POST)
+        form = EditTaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
             return redirect('tareas')  
     else:
-        form = EditTaskForm()
+        form = EditTaskForm(instance=task)
 
     return render(request, 'edit_task.html', {'task': task, 'form': form})
 
