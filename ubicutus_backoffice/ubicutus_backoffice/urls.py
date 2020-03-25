@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'^eliminar_tarea/$', views.eliminar_tarea, name='eliminar_tarea'),
     url(r'^archivar_tarea/$', views.archivar_tarea, name='archivar_tarea'),
     url(r'^desarchivar_tarea/$', views.desarchivar_tarea, name='desarchivar_tarea'),
+    url(r'^nueva_tarea/$', views.registrar_tareas_trabajadas_render, name='nueva_tarea'),
+
 
     path('accounts/',include('accounts.urls')),
    
