@@ -568,6 +568,23 @@ def tareas_archivadas(request):
     return render(request, 'archived_task.html', args)
 
 
+def obtener_valores(request):
+    if request.method == 'POST':
+        pk = request.POST.task_id
+        obj = Task.objects.get(task_id)
+        args = {
+                'success' : 'yes',
+                'name' : obj.name,
+                'description' : obj.description,
+                'init_date' : obj.init_date,
+                'end_date' : obj.end_date,
+                'status' : obj.status
+               }
+        return JsonResponse(args)
+    else:
+        return JsonResponse({'success':'no'})
+
+
 
 # UTILITIES FOR THE QUERIES
 def get_user(request):
