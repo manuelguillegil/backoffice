@@ -580,7 +580,11 @@ def clock_view(request):
 def tareas_archivadas(request):
     users = get_user(request)
     arch_tasks = Task.objects.filter(archived=True).filter(user__in = users)
-    args = {'arch_tasks' : arch_tasks}
+    args = {
+        'arch_tasks' : arch_tasks,
+        'edit_task_form' : EditTaskForm(),
+        'dearch_task_form' : TaskId()
+    }
     return render(request, 'archived_task.html', args)
 
 
