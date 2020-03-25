@@ -130,11 +130,11 @@
                                     <td class="text-center"><strong>Horas</strong></td>
                                     <td class="text-center"><strong>Mes</strong></td>
                                   </tr>
-                                  {% for p in hours_in_this_month%}
+                                  {% for p in hours_in_this_year%}
                                   <tr>
                                     <td>{{p.0.user}}</td>
                                     <td>{{p.0.end_time}}-{{p.0.init_time}}</td>
-                                    <td>{{p.0.end_time}}-{{p.0.init_time}}</td>
+                                    <td>{{p.0.init_time.month}}</td>
                                   </tr>
                                   {% endfor %}
                                 </tbody>
