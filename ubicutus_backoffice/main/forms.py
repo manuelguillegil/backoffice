@@ -78,13 +78,13 @@ class EditTaskForm(forms.Form):
     init_date = forms.DateTimeField(
         label="Fecha de inicio",
         required=True,
-        widget=forms.DateTimeInput(attrs={"id" : 'initDate','type':'date'})
+        widget=forms.DateTimeInput(attrs={'type':'date'})
     )
 
     end_date = forms.DateTimeField(
         label="Fecha de finalización",
         required=False,
-        widget=forms.DateTimeInput(attrs={"id" : 'endDate','type':'date'})
+        widget=forms.DateTimeInput(attrs={'type':'date'})
     )
 
     status = forms.ChoiceField(
