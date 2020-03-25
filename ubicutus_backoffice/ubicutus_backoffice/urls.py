@@ -23,7 +23,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 # PURGAR URLS PLSSSSSSSSS
 urlpatterns = [
     url(r'^$', views.dashboard, name='home'),
-    url(r'^dashboard/$', LoginView.as_view(), name='login'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^profile/$', views_account.profile, name='profile'),
     url(r'^vacaciones/$', views.vacaciones, name='vacaciones'),
