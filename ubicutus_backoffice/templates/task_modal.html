@@ -9,7 +9,6 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-
           {% if mod_task.status == 'New'%}
             <h5 class="modal-title text-success" id="exampleModalLabel">
               {{mod_task.name}}
@@ -42,6 +41,42 @@
           </button>
         </div>
         <div class="modal-body">
+          <!--Delete alerts-->
+          <div class="alert alert-success d-none" id="succMsg{{mod_task.id}}">La tarea fue eliminada exitosamente. Refresca la página para observar cambios</div>
+          <div class="alert alert-danger d-none" id="errMsg{{mod_task.id}}">La tarea no pudo ser eliminada</div>
+          <div class="alert alert-warning d-none" id="warnMsg{{mod_task.id}}">Esta tarea no puede ser eliminada.</div>
+          <!-- Archive alerts: -->
+          <div class="alert alert-info d-none" id="info-msg-archive{{mod_task.id}}">
+            {% if mod_task.archived %}
+              Desarchivar la tarea le permitirá verla en todas las vistas de la página,
+              haciéndola de fácil acceso. Presione otra vez para desarchivar.
+            {% else %}
+              Archivar la tarea le permitirá almacenarla y 
+              no se mostrará más ni aquí ni en sus resumenes. Presione otra vez para confirmar.
+            {% endif %}
+          </div>
+          <div class="alert alert-success d-none" id="succ-msg-archive{{mod_task.id}}">
+            {% if mod_task.archived %}
+              Tarea correctamente desarchivada
+            {% else %}
+              Tarea archivada exitosamente
+            {% endif %}
+          </div>
+          <div class="alert alert-warning d-none" id="warn-msg-archive{{mod_task.id}}">
+            {% if mod_task.archived %}
+              Esta tarea no puede ser desarchivada
+            {% else %}
+              Esta tarea no puede ser archivada
+            {% endif %}
+          </div>
+          <div class="alert alert-danger d-none" id="err-msg-archive{{mod_task.id}}">
+            {% if mod_task.archived %}
+              No se pudo desarchivar la tarea
+            {% else %}
+              No se pudo archivar la tarea
+            {% endif %}
+          </div>
+
             <div class="row">
                 <div class="col">
                     <strong>Deadlines:</strong>
@@ -63,43 +98,6 @@
                     {{mod_task.description}}
                 </div>
               </div>
-              mi tarea esta archivada: {{mod_task.archived}}
-            <!--Delete alerts-->
-            <div class="alert alert-success d-none" id="succMsg{{mod_task.id}}">La tarea fue eliminada exitosamente. Refresca la página para observar cambios</div>
-            <div class="alert alert-danger d-none" id="errMsg{{mod_task.id}}">La tarea no pudo ser eliminada</div>
-            <div class="alert alert-warning d-none" id="warnMsg{{mod_task.id}}">Esta tarea no puede ser eliminada.</div>
-            <!-- Archive alerts: -->
-            <div class="alert alert-info my-2 d-none" id="info-msg-archive{{mod_task.id}}">
-              {% if mod_task.archived %}
-                Desarchivar la tarea le permitirá verla en todas las vistas de la página,
-                haciéndola de fácil acceso. Presione otra vez para desarchivar.
-              {% else %}
-                Archivar la tarea le permitirá almacenarla y 
-                no se mostrará más ni aquí ni en sus resumenes. Presione otra vez para confirmar.
-              {% endif %}
-            </div>
-            <div class="alert alert-success my-2 d-none" id="succ-msg-archive{{mod_task.id}}">
-              {% if mod_task.archived %}
-                Tarea correctamente desarchivada
-              {% else %}
-                Tarea archivada exitosamente
-              {% endif %}
-            </div>
-            <div class="alert alert-warning my-2 d-none" id="warn-msg-archive{{mod_task.id}}">
-              {% if mod_task.archived %}
-                Esta tarea no puede ser desarchivada
-              {% else %}
-                Esta tarea no puede ser archivada
-              {% endif %}
-            </div>
-            <div class="alert alert-danger my-2 d-none" id="err-msg-archive{{mod_task.id}}">
-              {% if mod_task.archived %}
-                No se pudo desarchivar la tarea
-              {% else %}
-                No se pudo archivar la tarea
-              {% endif %}
-            </div>
-
         </div>
         <div class="modal-footer flex-fill">
           <a href="#" class="btn float-left delete-btn" id="delete-task-btn{{mod_task.id}}" data-id="{{mod_task.id}}">

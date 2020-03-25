@@ -28,7 +28,14 @@ aria-hidden="true">
     </div>
 
     <div class="modal-body w-100">
-        
+        <!--Save msgs-->
+        <div class="alert alert-success my-2 d-none" id="alert-save-succ"> Cambios guardados exitosamente. Refresca la página para ver los cambios </div>
+        <div class="alert alert-danger my-2 d-none" id="alert-save-err"> No se pudieron guardar estos cambios. </div>
+        <div class="alert alert-warning my-2 d-none" id="alert-save-warn"> Estos cambios son incorrectos. </div>
+        <!--Get data msgs-->
+        <div class="alert alert-danger my-2 d-none" id="alert-get-err"> Ocurrió un error y no se pudieron recuperar los datos </div>
+        <div class="alert alert-warning my-2 d-none" id="alert-get-warn"> Estos datos no pueden ser recuperados </div>
+
             
         <form method="POST" class="edit-task-mod-form" id="task-edit-form" data-submit="submitEdit">
             {% csrf_token %}
@@ -99,14 +106,6 @@ aria-hidden="true">
                 <button type="button" class="btn btn-primary rounded w-100 btn-outline-al btn-xl submitEdit" id="submitEdit">Guardar</button>
             </div>
         </form>
-        <!--Save msgs-->
-        <div class="alert alert-success my-2 d-none" id="alert-save-succ"> Cambios guardados exitosamente. Refresca la página para ver los cambios </div>
-        <div class="alert alert-danger my-2 d-none" id="alert-save-err"> No se pudieron guardar estos cambios. </div>
-        <div class="alert alert-warning my-2 d-none" id="alert-save-warn"> Estos cambios son incorrectos. </div>
-        <!--Get data msgs-->
-        <div class="alert alert-danger my-2 d-none" id="alert-get-err"> Ocurrió un error y no se pudieron recuperar los datos </div>
-        <div class="alert alert-warning my-2 d-none" id="alert-get-warn"> Estos datos no pueden ser recuperados </div>
-
     </div>
 
     <div class="modal-footer">
