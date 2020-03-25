@@ -34,7 +34,7 @@ $(document).on('submit', '#registerTaskMod',function(e){
     //Send ajax if everything is ok
     $.ajax({
         type:'POST',
-        url: dataUrl,
+        url: dataUrl, //Declarado en el html
         
         data:  form_data,
         //data:  $('#registerTaskMod').serialize(),

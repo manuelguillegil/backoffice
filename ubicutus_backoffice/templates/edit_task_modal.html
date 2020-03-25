@@ -57,7 +57,7 @@ aria-hidden="true">
                     <!--Initial date Field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
                         {{ form.init_date.label_tag }}         
-                        {{ form.init_date |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-init-date" }}
+                        {{ form.init_date |attr:"class:form-control form-control-user"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-init-date"|attr:"type:date"|attr:"required:true" }}
                         {% if form.init_date.help_text %}
                         <p class="help-block">{{ form.init_date.help_text|safe }}</p>
                         {% endif %}
@@ -67,7 +67,7 @@ aria-hidden="true">
                     <!--Final date Field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
                         {{ form.end_date.label_tag }}         
-                        {{ form.end_date |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-end-date" }}
+                        {{ form.end_date |attr:"class:form-control form-control-user"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-end-date"|attr:"type:date"|attr:"required:true" }}
                         {% if form.end_date.help_text %}
                         <p class="help-block">{{ form.end_date.help_text|safe }}</p>
                         {% endif %}
@@ -105,11 +105,45 @@ aria-hidden="true">
         $(document).ready(function(){
             var currentTaskId = null;
             var $form = $('#task-edit-form');
+            var $submitBtn = $('#submitEdit');
 
-            $form.submit(function(e){
-                //var url = 
+            $submitBtn.click(function(e){
+                var url = '{% url "editar_tarea_new" %}'
+                var dataArray = $form.serializeArray();
+                var taskData = {}
+
                 e.preventDefault();
                 
+                dataArray.forEach(function(it,i){
+                    if(it.name!='initial-init_date'){
+                        taskData[it.name] = it.value;
+                    }
+                });
+
+                taskData.task_id=currentTaskId;
+                console.log(taskData);
+
+                $.ajax({
+                    type:'POST',
+                    url: url,
+                    data: taskData,
+                    success:function(json){
+                        if(json.status == 'success'){
+                            alert("Everything ok")
+                        }
+                        else if(json.status == 'error'){
+                            alert("Something went wrong in the server");
+                        }
+                        else{
+                            alert("Undefined behavior");
+                            console.log(json);
+                        }
+                    },
+                    error:function(xhr,errmsg,et){
+                        alert("Error reaching the server");
+                    },
+                    dataType:'json'
+                });
             });
 
             //Sets the current task to be edited
@@ -123,10 +157,44 @@ aria-hidden="true">
                 //Set the default form values
                 $('#edit-task-name').val(el.data("tname"));
                 $('#edit-task-description').val(el.data("tdescript"));
-                $('#edit-task-init-date').val(el.data("tinitdate"));
-                $('#edit-task-end-date').val(el.data("tenddate"));
+                //$('#edit-task-init-date').val(el.data("tinitdate"));
+                //$('#edit-task-end-date').val(el.data("tenddate"));
                 $('#edit-task-status').val(el.data("status"));
                 currentTaskId = el.data("tid");
+                
+                $.ajax({
+                    type:'POST',
+                    url:'{% url "get_task" %}',
+                    data:{
+                        csrfmiddlewaretoken:'{{csrf_token}}',
+                        task_id:currentTaskId
+                    },
+                    dataType:'json',
+                    success:function(json){
+                        if(json.success=='yes'){
+                            alert("everything ok");
+                            console.log(json);
+                            console.log((new Date(json.init_date)).toISOString() )
+
+                            document.getElementById('edit-task-init-date').valueAsDate = new Date(json.init_date);
+                            document.getElementById('edit-task-end-date').valueAsDate = new Date(json.end_date);
+
+                        }
+                        else if(json.success=='no'){
+                            alert("something went wrong");
+                        }
+                        else{
+                            alert("undefined behavior");
+                        }
+                    },
+                    error:function(xhr,errmsg,errt){
+                        alert('Error conectando al servidor');
+                    }
+
+                });
+
+                console.log(el.data("tinitdate"));
+
             }
         });
     </script>

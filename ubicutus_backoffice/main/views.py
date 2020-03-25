@@ -297,9 +297,7 @@ def consulta_horas_trabajadas(request):
 
 @login_required
 def registrar_tareas_trabajadas(request):
-
-    
-        
+  
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
 
@@ -570,8 +568,8 @@ def tareas_archivadas(request):
 
 def obtener_valores(request):
     if request.method == 'POST':
-        pk = request.POST.task_id
-        obj = Task.objects.get(task_id)
+        pk = request.POST.get('task_id')
+        obj = Task.objects.get(id=pk)
         args = {
                 'success' : 'yes',
                 'name' : obj.name,
