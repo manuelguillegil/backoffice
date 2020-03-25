@@ -35,8 +35,8 @@
   <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
   <script type="text/javascript">
     function auto_start_clock(){
-      if({{clock_status}} == 1){
-        console.log("auto start: "+'{{clock}}')
+      if( {{ clock_status }} == 1) {
+        console.log("auto start: "+'{{clock}}');
         startChr('{{clock}}');
       }
     }

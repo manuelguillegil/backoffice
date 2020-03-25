@@ -498,7 +498,28 @@ def editar_tarea_new(request):
 
 @login_required
 def contador(request):
-    return render(request,'my_time.html',{'variable':''})
+    #Query to obtain all in progress tasks
+    tasks_ip = Task.objects.filter(user = request.user)
+
+    if request.method == 'POST':
+        task_id = request.POST.get('list-hours')
+        task = get_object_or_404(Task, pk=task_id)
+        time = request.session['clock']
+        end = datetime.strptime(time, '%H:%M:%S')
+        
+        end_obj = datetime.today()
+        init_obj = end_obj - timedelta(hours=end.hour, minutes=end.minute, seconds=end.second)
+
+        time_interval = TimeInterval(init_time=init_obj,end_time=end_obj,
+            task=task,user=request.user)
+        try:
+            time_interval.full_clean()
+            time_interval.save()
+            return redirect('horas_trabajadas')
+        except ValidationError:
+            print("There was an error")
+
+    return render(request,'my_time.html',{'tasks': tasks_ip})
 
 @login_required
 def eliminar_tarea(request):

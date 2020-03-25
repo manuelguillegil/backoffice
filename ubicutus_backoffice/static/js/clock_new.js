@@ -1,3 +1,6 @@
+// Elementos a actualizar de la pagina
+pageElement = document.getElementById('chronoPage');
+
 // Inicializamos las variables de las horas, minutos y segundos
 var seconds1 = 0;
 var mints1 = 0;
@@ -23,13 +26,7 @@ window.onload = function() {
 $(window).bind('beforeunload', function() {
     console.log('estado del crono: '+startchron);
     console.log('count del crono: '+ clockString);
-    $.ajax({
-        url: '/clock-view/',
-        data: {'clock': clockString, 'clock_status': startchron},
-        type: 'POST'
-    }).done(function(response){
-        console.log(response);
-    });
+    saveClockState();
 });
 
 // Variable de control del cronometro
@@ -44,7 +41,10 @@ function chronometer() {
         clockString = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
         // Se agrega la data en el front
         document.getElementById('chrono').innerHTML = clockString;
-
+        
+        if(pageElement != null) {
+            pageElement.innerHTML = clockString;
+        }
         
         console.log('crono: estado del crono: '+startchron);
         console.log('crono: count del crono: '+ clockString);
@@ -86,6 +86,7 @@ function increase_time(){
 
 // Inicia el cronometro
 function startChr(_initialClock) { 
+    console.log('valor inicial: '+ _initialClock);
     if(startchron != states.COUNTING){
         
         clockString = _initialClock;
@@ -134,6 +135,10 @@ function resetChr() {
     console.log('reset out: estado del crono: '+startchron);
     console.log('reset out: count del crono: '+ clockString);
     document.getElementById('chrono').innerHTML = clockString;
+    
+    if(pageElement != null) {
+        pageElement.innerHTML = clockString;
+    }
 }
 
 function saveClockState() {

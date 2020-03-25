@@ -20,15 +20,28 @@
 {% endblock %}
 
 {% block welcome_form %}
-  <div class="p-4 h2 text-gray-900 mb-4 text-center" id="chrono">00:00:00</div>  
+  <div class="p-4 h2 text-gray-900 mb-4 text-center" id="chronoPage">{{ clock }}</div>  
 
   <div class="form">
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="startChr( '{{ request.session.clock }}' )">Empezar </button>
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="stopChr()">Detener</button>
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="resetChr()">Resetear</button>
   </div>
-{% endblock welcome_form %}
 
-{% block cscripts %} 
-  <script src="{%static  'js/clock_new.js' %}"></script>
-{% endblock %}
+  <form class="user mt-4" method="POST" id="select-task-form">
+    {% csrf_token %}
+    <select name="list-hours" id="task-select" class="form-control">
+      <option  id="optNone" value="-1" selected>Ninguna</option>
+      {% for task in tasks %}
+      <option value="{{ task.id }}" id="opt{{task.id}}" data-tname="{{task.name}}" data-tdescrp="{{task.description}}"
+      data-indate="{{task.init_date}}" data-endate="{{task.end_date}}" data-status="{{task.status}}" >
+         {{ task.name }}
+      </option>
+      {% endfor %}
+    </select>
+    <div class="p-3">
+      <button type="submit" value="Select" class="btn btn-primary btn-user btn-block" id="sendHour">Asignar Hora</button>
+      <div class="alert-warning alert d-none mt-4" id="no-task-alert"> Debe escoger una tarea válida </div>
+    </div>
+  </form>
+{% endblock welcome_form %}
