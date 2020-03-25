@@ -87,7 +87,7 @@ aria-hidden="true">
                         <div class="font-weight-bold">
                             {{ form.status.label_tag }}   
                         </div>      
-                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"id:edit-status" }}
+                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"id:edit-task-status"|attr:"type:select" }}
                         {% if form.status.help_text %}
                         <p class="help-block">{{ form.status.help_text|safe }}</p>
                         {% endif %}
@@ -194,6 +194,7 @@ aria-hidden="true">
                             document.getElementById('edit-task-init-date').valueAsDate = new Date(json.init_date);
                             document.getElementById('edit-task-end-date').valueAsDate = new Date(json.end_date);
                             $('#edit-task-status').val(json.status);
+                            
                             $formFields.prop("disabled",false);
                         }
                         else if(json.success=='no'){
