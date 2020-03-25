@@ -36,8 +36,10 @@ aria-hidden="true">
                 <div class="fieldWrapper">
                     <!--Name field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
-                        {{ form.name.label_tag }}         
-                        {{ form.name |attr:"class:form-control"|attr:"placeholder:Nombre de la tarea"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-name" }}
+                        <div class="font-weight-bold">
+                            {{ form.name.label_tag }}     
+                        </div>    
+                        {{ form.name |attr:"class:form-control"|attr:"placeholder:Nombre de la tarea"|attr:"id:edit-task-name" }}
                         {% if form.name.help_text %}
                         <p class="help-block">{{ form.name.help_text|safe }}</p>
                         {% endif %}
@@ -46,8 +48,10 @@ aria-hidden="true">
 
                     <!--Description Field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
-                        {{ form.description.label_tag }}         
-                        {{ form.description |attr:"class:form-control"|attr:"placeholder:Descripcion de la tarea"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-description"|attr:"rows:4"}}
+                        <div class="font-weight-bold">
+                            {{ form.description.label_tag }}
+                        </div>
+                        {{ form.description |attr:"class:form-control"|attr:"placeholder:Descripcion de la tarea"|attr:"id:edit-task-description"|attr:"rows:4"}}
                         {% if form.description.help_text %}
                         <p class="help-block">{{ form.description.help_text|safe }}</p>
                         {% endif %}
@@ -56,8 +60,10 @@ aria-hidden="true">
 
                     <!--Initial date Field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
-                        {{ form.init_date.label_tag }}         
-                        {{ form.init_date |attr:"class:form-control form-control-user"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-init-date"|attr:"type:date"|attr:"required:true" }}
+                        <div class="font-weight-bold">
+                            {{ form.init_date.label_tag }}
+                        </div>         
+                        {{ form.init_date |attr:"class:form-control form-control-user"|attr:"placeholder:Fecha inicial"|attr:"id:edit-task-init-date"|attr:"type:date"|attr:"required:true" }}
                         {% if form.init_date.help_text %}
                         <p class="help-block">{{ form.init_date.help_text|safe }}</p>
                         {% endif %}
@@ -66,8 +72,10 @@ aria-hidden="true">
 
                     <!--Final date Field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
-                        {{ form.end_date.label_tag }}         
-                        {{ form.end_date |attr:"class:form-control form-control-user"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-task-end-date"|attr:"type:date"|attr:"required:true" }}
+                        <div class="font-weight-bold">
+                            {{ form.end_date.label_tag }} 
+                        </div>        
+                        {{ form.end_date |attr:"class:form-control form-control-user"|attr:"placeholder:Fecha inicial"|attr:"id:edit-task-end-date"|attr:"type:date"|attr:"required:true" }}
                         {% if form.end_date.help_text %}
                         <p class="help-block">{{ form.end_date.help_text|safe }}</p>
                         {% endif %}
@@ -76,8 +84,10 @@ aria-hidden="true">
 
                     <!--Status Field-->
                     <div class="form-group floating-label-form-group-edit controls mb-0 pb-2">
-                        {{ form.status.label_tag }}         
-                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"style: background-color: rgba(233, 229, 200, 0.5)"|attr:"id:edit-status" }}
+                        <div class="font-weight-bold">
+                            {{ form.status.label_tag }}   
+                        </div>      
+                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"id:edit-status" }}
                         {% if form.status.help_text %}
                         <p class="help-block">{{ form.status.help_text|safe }}</p>
                         {% endif %}
@@ -86,9 +96,16 @@ aria-hidden="true">
                 </div>
             <br>
             <div class="form-group text-center">
-                <button type="button" class="btn btn-outline-al btn-xl submitEdit" id="submitEdit">Save</button>
+                <button type="button" class="btn btn-primary rounded w-100 btn-outline-al btn-xl submitEdit" id="submitEdit">Guardar</button>
             </div>
         </form>
+        <!--Save msgs-->
+        <div class="alert alert-success my-2 d-none" id="alert-save-succ"> Cambios guardados exitosamente. Refresca la página para ver los cambios </div>
+        <div class="alert alert-danger my-2 d-none" id="alert-save-err"> No se pudieron guardar estos cambios. </div>
+        <div class="alert alert-warning my-2 d-none" id="alert-save-warn"> Estos cambios son incorrectos. </div>
+        <!--Get data msgs-->
+        <div class="alert alert-danger my-2 d-none" id="alert-get-err"> Ocurrió un error y no se pudieron recuperar los datos </div>
+        <div class="alert alert-warning my-2 d-none" id="alert-get-warn"> Estos datos no pueden ser recuperados </div>
 
     </div>
 
@@ -105,12 +122,15 @@ aria-hidden="true">
         $(document).ready(function(){
             var currentTaskId = null;
             var $form = $('#task-edit-form');
+            var $formFields = $('#task-edit-form :input');
             var $submitBtn = $('#submitEdit');
 
             $submitBtn.click(function(e){
                 var url = '{% url "editar_tarea_new" %}'
                 var dataArray = $form.serializeArray();
                 var taskData = {}
+
+                resetMsgSave();
 
                 e.preventDefault();
                 
@@ -121,7 +141,6 @@ aria-hidden="true">
                 });
 
                 taskData.task_id=currentTaskId;
-                console.log(taskData);
 
                 $.ajax({
                     type:'POST',
@@ -129,10 +148,10 @@ aria-hidden="true">
                     data: taskData,
                     success:function(json){
                         if(json.status == 'success'){
-                            alert("Everything ok")
+                            raiseSuccSave();
                         }
                         else if(json.status == 'error'){
-                            alert("Something went wrong in the server");
+                            raiseWarnSave();
                         }
                         else{
                             alert("Undefined behavior");
@@ -140,7 +159,7 @@ aria-hidden="true">
                         }
                     },
                     error:function(xhr,errmsg,et){
-                        alert("Error reaching the server");
+                        raiseErrSave();
                     },
                     dataType:'json'
                 });
@@ -154,14 +173,10 @@ aria-hidden="true">
             // Given the dom item that contains the task data, updates the content of this
             // form with such data
             function updateEditForm(el){
-                //Set the default form values
-                $('#edit-task-name').val(el.data("tname"));
-                $('#edit-task-description').val(el.data("tdescript"));
-                //$('#edit-task-init-date').val(el.data("tinitdate"));
-                //$('#edit-task-end-date').val(el.data("tenddate"));
-                $('#edit-task-status').val(el.data("status"));
-                currentTaskId = el.data("tid");
-                
+                currentTaskId = el.data("tid"); //Get the calling id
+                $formFields.prop('disabled',true); //disable this form while waiting for the response
+                resetMsgGet();
+
                 $.ajax({
                     type:'POST',
                     url:'{% url "get_task" %}',
@@ -172,23 +187,26 @@ aria-hidden="true">
                     dataType:'json',
                     success:function(json){
                         if(json.success=='yes'){
-                            alert("everything ok");
-                            console.log(json);
-                            console.log((new Date(json.init_date)).toISOString() )
-
+                            //If the server returns an appropiate response, 
+                            //the update the form values with the received values
+                            $('#edit-task-name').val(json.name);
+                            $('#edit-task-description').val(json.description);
                             document.getElementById('edit-task-init-date').valueAsDate = new Date(json.init_date);
                             document.getElementById('edit-task-end-date').valueAsDate = new Date(json.end_date);
-
+                            $('#edit-task-status').val(json.status);
+                            $formFields.prop("disabled",false);
                         }
                         else if(json.success=='no'){
-                            alert("something went wrong");
+                            console.log("Operation rejected");
+                            raiseWarnGet();
                         }
                         else{
                             alert("undefined behavior");
                         }
                     },
                     error:function(xhr,errmsg,errt){
-                        alert('Error conectando al servidor');
+                        console.log("Error reaching the host");
+                        raiseErrGet();
                     }
 
                 });
@@ -196,6 +214,43 @@ aria-hidden="true">
                 console.log(el.data("tinitdate"));
 
             }
+
+            ///// Aux functions: /////
+
+            //Show an error message for the get data operation
+            function raiseErrGet(){
+                $('#alert-get-err').removeClass('d-none');
+            }
+            //Show a warning message for the get data operation
+            function raiseWarnGet(){
+                $('#alert-get-warn').removeClass('d-none');
+            }
+            //Reset all get-related msgs
+            function resetMsgGet(){
+                $('#alert-get-warn').addClass('d-none');
+                $('#alert-get-err').addClass('d-none');
+            }
+
+            //Show an error message for the get data operation
+            function raiseSuccSave(){
+                $('#alert-save-succ').removeClass('d-none');
+            }
+            //Show an error message for the get data operation
+            function raiseErrSave(){
+                $('#alert-save-err').removeClass('d-none');
+            }
+            //Show a warning message for the get data operation
+            function raiseWarnSave(){
+                $('#alert-save-warn').removeClass('d-none');
+            }
+            //Reset all Save-related msgs
+            function resetMsgSave(){
+                $('#alert-save-warn').addClass('d-none');
+                $('#alert-save-err').addClass('d-none');
+                $('#alert-save-succ').addClass('d-none');
+            }
+            
+
         });
     </script>
 
