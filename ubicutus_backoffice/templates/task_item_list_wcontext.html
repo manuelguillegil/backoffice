@@ -3,6 +3,7 @@
 <!--
     Variables required by this template:
         item_task: the task refered by this item
+        modal: Edit task modal
 -->
 
 
@@ -49,9 +50,13 @@
             </span>
         </div>
     </div>
-    <a class="nav-link p-0 text-gray-700 float-right" href="{% url 'editar_tarea' item_task.id %}">
-        <i class="fas fa-pen"></i>
-    </a>
+    <div class="col-1">
+        <div class="text-gray-800 btn p-0 modal-edit-trigger" data-toggle="modal" data-target="#{{modal}}" 
+            data-tname="{{item_task.name}}" data-tdescript="{{item_task.description}}" data-tinitdate=" {{item_task.init_date}} "
+            data-tenddate=" {{item_task.end_date}} " data-status="{{item_task.status}}" data-tid="{{ item_task.id }}">
+            <i class="fas fa-pen" ></i>
+        </div>     
+    </div>
 
 </div>
 <hr>
