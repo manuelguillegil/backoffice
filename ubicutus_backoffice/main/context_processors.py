@@ -2,6 +2,8 @@ def clock_variable(request):
     clock = '00:00:00'
 
     clock = request.session.get('clock', clock)
+    if(clock == ''):
+        clock = '00:00:00'
     request.session['clock'] = clock
     request.session.save()
 
