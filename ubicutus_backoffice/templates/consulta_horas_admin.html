@@ -1,0 +1,154 @@
+{% extends 'base_site.html' %}
+{% load static %}
+
+
+{% block pageTitle %}Consulta de horas trabajadas por usuario{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- Page Heading-->
+  <center>
+  <h1 class="h3 mb-4 text-gray-800 mt-4">Consulta de horas trabajadas por usuario</h1></center>
+
+
+<!-- /.container-fluid -->
+<!-- Content Row -->
+    <div class="row">
+
+        <!-- Content Column -->
+        <!-- Task Card : New Task -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-2">
+                    <div class="row">
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-primary h-100">
+                                <i class="fas fa-sun"></i> Esta semana
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                             data-target="#newBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="newBody">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                              <tr>
+                                <td class="text-center"><strong>Usuario</strong></td>
+                                <td class="text-center"><strong>Horas</strong></td>
+                              </tr>
+                              {% for p in hours_in_this_month%}
+                              <tr>
+                                <td>{{p.0.user}}</td>
+                                <td>{{p.0.end_time}}-{{p.0.init_time}}</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Column -->
+        <!-- Task Card : In progress Task -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-2">
+                    <div class="row">
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-primary h-100">
+                                <i class="fas fa-cloud"></i> Este mes
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                             data-target="#inproBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="inproBody">
+                    
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                  <tr>
+                                    <td class="text-center"><strong>Usuario</strong></td>
+                                    <td class="text-center"><strong>Horas</strong></td>
+                                  </tr>
+                                  {% for p in hours_in_this_month%}
+                                  <tr>
+                                    <td>{{p.0.user}}</td>
+                                    <td>{{p.0.end_time}}-{{p.0.init_time}}</td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                      </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-2">
+                    <div class="row">
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-primary h-100">
+                                <i class="fas fa-calendar"></i> Por mes en este año
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                             data-target="#inproBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body collapse show" id="inproBody">
+                    
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                  <tr>
+                                    <td class="text-center"><strong>Usuario</strong></td>
+                                    <td class="text-center"><strong>Horas</strong></td>
+                                    <td class="text-center"><strong>Mes</strong></td>
+                                  </tr>
+                                  {% for p in hours_in_this_month%}
+                                  <tr>
+                                    <td>{{p.0.user}}</td>
+                                    <td>{{p.0.end_time}}-{{p.0.init_time}}</td>
+                                    <td>{{p.0.end_time}}-{{p.0.init_time}}</td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                      </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+

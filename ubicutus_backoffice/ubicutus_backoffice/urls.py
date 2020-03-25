@@ -39,6 +39,8 @@ urlpatterns = [
     url(r'^archivar_tarea/$', views.archivar_tarea, name='archivar_tarea'),
     url(r'^desarchivar_tarea/$', views.desarchivar_tarea, name='desarchivar_tarea'),
 
+    url(r'^horas_trabajadas_admin/$', views.horas_trabajadas_admin, name='horas_trabajadas_admin'),
+
     path('accounts/',include('accounts.urls')),
    
     path('jet/', include('jet.urls', 'jet')),

@@ -510,3 +510,15 @@ def clock_view(request):
 def get_user(request):
     return User.objects.filter(username=request.user.username)
 
+# VIEW HOUR FOR ADMINS
+@login_required
+def horas_trabajadas_admin(request):
+    ## Por los momentos solo hacer get de todas las horas trabajadas
+    today = datetime.now()
+    time_this_month = TimeInterval.objects.filter(init_time__year=today.year,init_time__month=today.month)
+    hours_in_this_month = []
+    for t in time_this_month:
+        hours_in_this_month.append([t,Task.objects.get(id=t.task_id)])
+
+ 
+    return render(request, 'consulta_horas_admin.html',{'hours_in_this_month':hours_in_this_month})
