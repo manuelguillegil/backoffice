@@ -84,7 +84,7 @@ class EditTaskForm(forms.ModelForm):
     end_date = forms.DateTimeField(
         label="Fecha de finalización",
         required=False,
-        widget=forms.DateInput(attrs={"id" : 'endDate'})
+        widget=forms.DateTimeInput(attrs={"id" : 'endDate'})
     )
 
     status = forms.ChoiceField(
