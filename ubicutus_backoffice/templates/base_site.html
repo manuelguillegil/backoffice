@@ -64,6 +64,24 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
+      {% if user.is_superuser %}
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Super Usuario
+      </div>
+
+      <!-- time-counting section button -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'horas_trabajadas_admin' %}">
+          <i class="fas fa-search"></i>
+          <!--Aqui falta poner el url hacia la vista del reloj @TODO-->
+          <span href="">Consultar Trabajo de la Empresa</span>
+        </a>
+      </li>
+      {% endif %}
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -72,15 +90,6 @@
       <div class="sidebar-heading">
         Interfaz
       </div>
-
-      <!-- time-counting section button -->
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'horas_trabajadas_admin' %}">
-          <i class="fas fa-stopwatch"></i>
-          <!--Aqui falta poner el url hacia la vista del reloj @TODO-->
-          <span href="">Consultar Trabajo de la Empresa</span>
-        </a>
-      </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collpaseHoras" aria-expanded="true"
