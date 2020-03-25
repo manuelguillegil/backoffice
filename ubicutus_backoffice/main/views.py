@@ -316,8 +316,6 @@ def registrar_tareas_trabajadas(request):
     
 @login_required
 def registrar_tareas_trabajadas_render(request):
-
-    
         
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
@@ -328,8 +326,7 @@ def registrar_tareas_trabajadas_render(request):
             instance.save()
             return redirect('tareas')
         else:
-            return redirect('registrar_tarea')
-
+            return redirect('nueva_tarea')
 
     #If the task its been created on the fly (not by its own page)
     else:
