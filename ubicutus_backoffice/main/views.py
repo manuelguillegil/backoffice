@@ -297,9 +297,7 @@ def consulta_horas_trabajadas(request):
 
 @login_required
 def registrar_tareas_trabajadas(request):
-
-    
-        
+  
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
 
@@ -318,8 +316,6 @@ def registrar_tareas_trabajadas(request):
     
 @login_required
 def registrar_tareas_trabajadas_render(request):
-
-    
         
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
@@ -330,8 +326,7 @@ def registrar_tareas_trabajadas_render(request):
             instance.save()
             return redirect('tareas')
         else:
-            return redirect('registrar_tarea')
-
+            return redirect('nueva_tarea')
 
     #If the task its been created on the fly (not by its own page)
     else:
@@ -587,6 +582,23 @@ def tareas_archivadas(request):
     arch_tasks = Task.objects.filter(archived=True).filter(user__in = users)
     args = {'arch_tasks' : arch_tasks}
     return render(request, 'archived_task.html', args)
+
+
+def obtener_valores(request):
+    if request.method == 'POST':
+        pk = request.POST.get('task_id')
+        obj = Task.objects.get(id=pk)
+        args = {
+                'success' : 'yes',
+                'name' : obj.name,
+                'description' : obj.description,
+                'init_date' : obj.init_date,
+                'end_date' : obj.end_date,
+                'status' : obj.status
+               }
+        return JsonResponse(args)
+    else:
+        return JsonResponse({'success':'no'})
 
 
 

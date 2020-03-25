@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'^eliminar_tarea/$', views.eliminar_tarea, name='eliminar_tarea'),
     url(r'^archivar_tarea/$', views.archivar_tarea, name='archivar_tarea'),
     url(r'^desarchivar_tarea/$', views.desarchivar_tarea, name='desarchivar_tarea'),
+    url(r'^nueva_tarea/$', views.registrar_tareas_trabajadas_render, name='nueva_tarea'),
+
 
     path('accounts/',include('accounts.urls')),
    
@@ -54,6 +56,7 @@ urlpatterns = [
     path('clock-view/', views.clock_view , name='clock-view'),
 
     url(r'^edit_task/$', views.editar_tarea_new, name='editar_tarea_new'),
-    url(r'^tareas_archivadas/$', views.tareas_archivadas, name='tareas_archivadas')
+    url(r'^tareas_archivadas/$', views.tareas_archivadas, name='tareas_archivadas'),
+    url(r'^get_task/$', views.obtener_valores, name='get_task')
 
 ]
