@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show" id="newBody">
+                <div class="card-body collapse show overflow-auto vh-70" id="newBody">
                     <div class="card-body">
                       {% if hours_in_this_week%}
                         <div class="table-responsive">
@@ -49,6 +49,7 @@
                                 <td>{{p.0.user|truncatechars:12}}</td>
                                 <td>{{p.1}} horas</td>
                               </tr>
+                              {% endfor %}
                             </tbody>
                           </table>
                         </div>
@@ -83,7 +84,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show" id="inproBody">
+                <div class="card-body collapse show overflow-auto vh-70" id="inproBody">
                     {% if hours_in_this_month%}
                     <div class="card-body">
                         <div class="table-responsive">
@@ -98,8 +99,8 @@
                                     <td>{{p.0.user|truncatechars:12}}</td>
                                     
                                     <td>{{p.1}} horas</td>
-                                    
                                   </tr>
+                                  {% endfor %}
                                 </tbody>
                               </table>
                         </div>
@@ -133,7 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show" id="inproBody">
+                <div class="card-body collapse show overflow-auto vh-70" id="inproBody">
                     
                     <div class="card-body">
                         {%if hours_in_this_year%}
