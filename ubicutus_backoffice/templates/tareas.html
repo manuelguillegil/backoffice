@@ -141,14 +141,18 @@
                 </div>
                 <div class="card-body collapse show overflow-auto vh-70" id="doneBody">
                     <ul class="list-unstyled">
-                        <li>
+                        <li class="text-center h-100 d-flex flex-column align-items-center ">
                             {% for task in done %}
                                 {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                             {% empty %}
-                            <span>
-                                No hay nada que hacer aquí por ahora 
-                                <i class="fas fa-umbrella-beach mr-1"></i>
-                            </span>
+                            <div class="container">
+                                <span class="my-3">
+                                    No hay nada que hacer aquí por ahora 
+                                </span>
+                            </div>
+                            <div class="container">
+                                <i class="fas fa-umbrella-beach mr-1 fa-10x"></i>
+                            </div>
                             {% endfor %}
                         </li>    
                     </ul>
@@ -176,23 +180,32 @@
                 </div>
                 
                 
-                {% include 'new_task_modal.html' with mid="addTaskModal" form=new_task_form%}
                 
             </div>
 
-            <div class="card-body collapse show" id="allBody">
-                
-                {% for pair in tasksWForms %}
-                    {% include 'task_list_item.html' with mtask=pair.0 modal="edit-task-modal" %}
-                {% endfor %}
-                {% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
-            </div>
+            <div class="card-body collapse show overflow-auto vh-100    " id="allBody">
+                <ul class="list-unstyled">
+                    <li>
+                        {% for task in all %}
+                            {% include 'task_list_item.html' with mtask=task modal='edit-task-modal' %}
+                        {% empty %}
+                            No hay ninguna tarea que mostrar
+                        {% endfor %}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
+</div>
 
-
-
+    <!--Info modals-->
+    {% for task in all %}
+        {% include 'task_modal.html' with mod_task=task %}
+    {% endfor %}
+    <!--Edit Modal-->
+    {% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
+    <!--Add task modal-->
+    {% include 'new_task_modal.html' with mid="addTaskModal" form=new_task_form%}
 {% endblock %}
 
