@@ -33,7 +33,15 @@
 
   <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
-
+  <script type="text/javascript">
+    function auto_start_clock(){
+      if( {{ clock_status }} == 1) {
+        console.log("auto start: "+'{{clock}}');
+        startChr('{{clock}}');
+      }
+    }
+    window.onload = auto_start_clock;
+  </script>
 </head>
 
 <body id="page-top">
@@ -85,7 +93,7 @@
               <i class="far fa-eye mr-1"></i>Consulta</a>
               <a class="collapse-item" href="{% url 'lista_tareas' %}">
                   <i class="fas fa-plus mr-1"></i>Registrar hora</a>
-            <a class="collapse-item" href="{% url 'registrar_tarea' %}">
+            <a class="collapse-item" href="{% url 'nueva_tarea' %}">
               <i class="fas fa-plus mr-1"></i>Registrar tarea</a>
           </div>
         </div>
@@ -168,13 +176,14 @@
             <h6 class="collapse-header">Login Screens:</h6>
             <a class="collapse-item" href="{% url 'login' %}">Login</a>
             <a class="collapse-item" href="{% url 'signup' %}">Signup</a>
-            <a class="collapse-item" href="#">Forgot Password</a>
+            <a class="collapse-item" href="{% url 'tareas' %}">Tareas</a>
+            <a class="collapse-item" href="{% url 'nueva_tarea' %}">Registrar Tarea</a>
+            <a class="collapse-item" href="{% url 'horas_trabajadas' %}">Horas Trabajadas</a>
+            <a class="collapse-item" href="{% url 'vacaciones' %}">Solicitud Vacaciones</a>
+            <a class="collapse-item" href="{% url 'adelanto' %}">Solicitud de Adelanto</a>
+            <a class="collapse-item" href="{% url 'reporte_falta' %}">Enviar reporte de falta</a>
             <a class="collapse-item" href="{% url 'user_data' %}">User Data</a>
             <a class="collapse-item" href="{% url 'edit_user_data' %}">Edit User Data</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="#"> 404 Page</a>
-            <a class="collapse-item" href="#">Blank Page</a>
           </div>
         </div>
       </li>
@@ -225,17 +234,17 @@
             <li class="nav-item mx-1 mt-2">
             
               
-                <h4 class="text-gray-700">
-                  00:00:00
+                <h4 class="text-gray-700" id="chrono">
+                  {{ clock }}
                 </h4>
               
               
             </li>
-
+            
             <li class="nav-item mx-1">
             
               <div class="nav-item no-arrow mx-1">
-                <a class="nav-link text-gray-5" href="#">
+                <a class="nav-link text-gray-5" onclick="startChr( '{{ request.session.clock }}')">
                   <i class="fas fa-play fa-fw"></i>
                 </a>
               </div>
@@ -245,7 +254,7 @@
             <li class="nav-item ">
             
               <div class="nav-item no-arrow">
-                <a class="nav-link text-gray-5" href="#">
+                <a class="nav-link text-gray-5" onclick="stopChr()">
                   <i class="fas fa-pause fa-fw"></i>
                 </a>
               </div>
@@ -255,7 +264,7 @@
             <li class="nav-item">
             
               <div class="nav-item dropdown no-arrow">
-                <a class="nav-link  text-gray-5" href="#">
+                <a class="nav-link  text-gray-5" onclick="resetChr()">
                   <i class="fas fa-stop fa-fw"></i>
                 </a>
               </div>
@@ -407,9 +416,10 @@
 
 
   <!--Clock code-->
-  <script src="{% static 'js/clock.js' %}"></script>
+  <script src="{%static  'js/clock_new.js' %}"></script>
+
   <!-- Page level custom scripts -->
-  {% block cscripts %} 
+  {% block cscripts %}
   {% endblock %}
 </body>
 

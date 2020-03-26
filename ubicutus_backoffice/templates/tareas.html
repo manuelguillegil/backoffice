@@ -36,7 +36,7 @@
                 </div>
                 <div class="card-body collapse show" id="newBody">
                     {% for task in new %}
-                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                        {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                     {% empty %}
                     <span>
                         No hay nada que hacer aquí por ahora 
@@ -67,7 +67,7 @@
                 </div>
                 <div class="card-body collapse show" id="inproBody">
                     {% for task in inpro %}
-                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                        {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                     {% empty %}
                     <span>
                         No hay nada que hacer aquí por ahora 
@@ -101,7 +101,7 @@
                 </div>
                 <div class="card-body collapse show" id="freezeBody">
                     {% for task in waiting %}
-                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                        {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                     {% empty %}
                     <span>
                         No hay nada que hacer aquí por ahora 
@@ -131,7 +131,7 @@
                 </div>
                 <div class="card-body collapse show" id="doneBody">
                     {% for task in done %}
-                        {% include 'task_item_list_wcontext.html' with item_task=task %}
+                        {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                     {% empty %}
                     <span>
                         No hay nada que hacer aquí por ahora 
@@ -169,9 +169,9 @@
             <div class="card-body collapse show" id="allBody">
                 
                 {% for pair in tasksWForms %}
-                    {% include 'task_list_item.html' with mtask=pair.0 mform=pair.1 %}
+                    {% include 'task_list_item.html' with mtask=pair.0 modal="edit-task-modal" %}
                 {% endfor %}
-                
+                {% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
             </div>
             </div>
         </div>
@@ -179,4 +179,6 @@
 </div>
 
 
+
 {% endblock %}
+

@@ -1,3 +1,6 @@
+// Elementos a actualizar de la pagina
+pageElement = document.getElementById('chronoPage');
+
 // Inicializamos las variables de las horas, minutos y segundos
 var seconds1 = 0;
 var mints1 = 0;
@@ -7,67 +10,162 @@ var seconds2 = 0;
 var mints2 = 0;
 var hours2 = 0;
 
+var clockString = '';
+
 // Estados del reloj
 const states = {
     WAITING : 0,
     COUNTING : 1,
     PAUSED : 2,
 }
+/*
+window.onload = function() {
+  startChr(_initialClock);
+}; */
+
+$(window).bind('beforeunload', function() {
+    console.log('estado del crono: '+startchron);
+    console.log('count del crono: '+ clockString);
+    saveClockState();
+});
 
 // Variable de control del cronometro
 var startchron = states.WAITING;
 
 function chronometer() {
+
     if(startchron == states.COUNTING) {
-        seconds1 += 1;       // seteamos los segundos
+        
+        increase_time();
 
-        // Verificaciones para actualizar los numeros
-        if(seconds1 > 9) {
-            seconds1 = 0;
-            seconds2 += 1;
-        }
-
-        // set minutes
-        if(seconds2 > 5) {
-            seconds2 = 0;
-            mints1 += 1;
-        }
-
-        if(mints1 > 9) {
-            mints1 = 0;
-            mints2 += 1;
-        }
-
-        if(mints2 > 5) {
-            mints2 = 0;
-            hours1 += 1;
-        }
-
-        if(hours1 > 9) {
-            hours1 = 0;
-            hours2 += 1;
-        }
-
+        clockString = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
         // Se agrega la data en el front
-        document.getElementById('chrono').innerHTML = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
-
+        document.getElementById('chrono').innerHTML = clockString;
+        
+        if(pageElement != null) {
+            pageElement.innerHTML = clockString;
+        }
+        
+        console.log('crono: estado del crono: '+startchron);
+        console.log('crono: count del crono: '+ clockString);
         // Esperamos un tiempo y se vuelve a llamar a chronometer para seguir contando
         setTimeout("chronometer()", 1000);
     }
 }
 
+function increase_time(){
+    seconds1 += 1;       // seteamos los segundos
+
+    // Verificaciones para actualizar los numeros
+    if(seconds1 > 9) {
+        seconds1 = 0;
+        seconds2 += 1;
+    }
+
+    // set minutes
+    if(seconds2 > 5) {
+        seconds2 = 0;
+        mints1 += 1;
+    }
+
+    if(mints1 > 9) {
+        mints1 = 0;
+        mints2 += 1;
+    }
+
+    if(mints2 > 5) {
+        mints2 = 0;
+        hours1 += 1;
+    }
+
+    if(hours1 > 9) {
+        hours1 = 0;
+        hours2 += 1;
+    }
+}
+
 // Inicia el cronometro
-function startChr() { 
+function startChr(_initialClock) { 
+    console.log('valor inicial: '+ _initialClock);
     if(startchron != states.COUNTING){
 
-        startchron = states.COUNTING; 
-        chronometer(); 
+        var promise = new Promise( (resolve, reject) => {
+
+            $.ajax({
+                url: '/clock-play/',
+                data: {
+                    'clock': clockString, 
+                    'clock_status': startchron,
+                },
+                type: 'POST',
+                success:function(json){
+                    if(json.status=='success'){
+                        clockString = json.clockString;
+
+                        if(clockString!=''){
+                            console.log('llego: '+clockString);
+                            resolve(clockString);
+                        }else{
+                            reject('fail to get clockString 5');
+                        }
+                    }
+                    else if(json.status=='error'){
+                        reject('fail to get clockString 4');
+                    }
+                    else{
+                        alert("Respuesta indefinida");
+                        console.log(json);
+                        reject('fail to get clockString 3');
+                    }
+                  },
+                  error:function(xhr, errmsg, err){
+                    raiseErr();
+                    console.log(errmsg)
+                    reject('fail to get clockString 2');
+                  },
+                dataType:'json',
+
+            }).done(function(response){
+                console.log(response);
+            });
+
+        });
+
+
+        return promise.then( clockvalue => {
+
+            clockString = clockvalue;
+
+            seconds1 = clockString.charCodeAt(7) - "0".charCodeAt(0);
+            seconds2 = clockString.charCodeAt(6) - "0".charCodeAt(0);
+            mints1   = clockString.charCodeAt(4) - "0".charCodeAt(0);
+            mints2   = clockString.charCodeAt(3) - "0".charCodeAt(0);
+            hours1   = clockString.charCodeAt(1) - "0".charCodeAt(0);
+            hours2   = clockString.charCodeAt(0) - "0".charCodeAt(0);
+            
+            startchron = states.COUNTING;
+            console.log('start in: estado del crono: '+startchron);
+            console.log('start in: count del crono: '+ clockString);
+            saveClockState();
+            console.log('start out: estado del crono: '+startchron);
+            console.log('start out: count del crono: '+ clockString);
+            chronometer(); 
+
+        }).catch( e => { 
+            console.log(e); 
+        }); 
+
     }
 }
 
 // Detiene el cronometro
 function stopChr() { 
-    startchron = states.PAUSED; 
+    startchron = states.PAUSED;
+    console.log('pause in: estado del crono: '+startchron);
+    console.log('pause in: count del crono: '+ clockString);
+    saveClockState();
+    console.log('pause out: estado del crono: '+startchron);
+    console.log('pause out: count del crono: '+ clockString);
 }
 
 // Resetea a los valores por defecto las variables
@@ -81,7 +179,29 @@ function resetChr() {
     seconds2 = 0; 
     seconds1 = 0; 
     
-    document.getElementById('chrono').innerHTML = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
+    clockString = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
+    console.log('reset in: estado del crono: '+startchron);
+    console.log('reset in: count del crono: '+ clockString);
+    saveClockState();
+    console.log('reset out: estado del crono: '+startchron);
+    console.log('reset out: count del crono: '+ clockString);
+    document.getElementById('chrono').innerHTML = clockString;
+    
+    if(pageElement != null) {
+        pageElement.innerHTML = clockString;
+    }
+}
+
+function saveClockState() {
+    console.log('save state in: estado del crono: '+startchron);
+    console.log('save state in: count del crono: '+ clockString);
+    $.ajax({
+        url: '/clock-view/',
+        data: {'clock': clockString, 'clock_status': startchron },
+        type: 'POST'
+    }).done(function(response){
+        console.log(response);
+    });
 }
 
 document.getElementById('chrono').value = seconds1;

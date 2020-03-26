@@ -12,7 +12,9 @@ from .forms import RegisterTimeInterval, EditTaskForm, RequestVacation, RequestA
 from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 from datetime import datetime
+
 from django.template import RequestContext
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -58,10 +60,10 @@ def dashboard(request):
         worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
     # Tareas completadas
-    completed_task = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users).count()
+    completed_task = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users).filter(archived=False).count()
     
     # Tareas asignadas
-    assigned_task = Task.objects.filter(user__in = users)\
+    assigned_task = Task.objects.filter(user__in = users).filter(archived=False)\
     .exclude(status=Task.Status.CLOSED).count()
     
     # Horas trabajadas durante los ultimos 5 dias trabajados
@@ -108,7 +110,7 @@ def status_chart(request):
     labels = []
     data = []
 
-    queryset = Task.objects.filter(user=request.user)\
+    queryset = Task.objects.filter(user=request.user).filter(archived=False)\
     .values('status').annotate(task_count=Count('pk'))\
     .order_by('status')
 
@@ -298,9 +300,7 @@ def consulta_horas_trabajadas(request):
 
 @login_required
 def registrar_tareas_trabajadas(request):
-
-    
-        
+  
     if request.method == "POST":
         form = RegisterTaskForm(request.POST)
 
@@ -316,6 +316,26 @@ def registrar_tareas_trabajadas(request):
     #If the task its been created on the fly (not by its own page)
     else:
         form = RegisterTaskForm()
+    
+@login_required
+def registrar_tareas_trabajadas_render(request):
+        
+    if request.method == "POST":
+        form = RegisterTaskForm(request.POST)
+
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            return redirect('tareas')
+        else:
+            return redirect('nueva_tarea')
+
+    #If the task its been created on the fly (not by its own page)
+    else:
+        form = RegisterTaskForm()
+    
+    return render(request,'registrar_tarea.html',{'form':form})
 
 @login_required
 def lista_tarea(request):
@@ -323,7 +343,7 @@ def lista_tarea(request):
     users = User.objects.filter(username=request.user.username)
 
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(user__in = users)
+    tasks_ip = Task.objects.filter(user__in = users).filter(archived=False)
 
     if request.method == 'POST':
         task = request.POST.get('list-hours')
@@ -394,28 +414,31 @@ def tareas(request):
     users = get_user(request)
 
     #Query to obtain all new tasks
-    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(user__in = users) 
+    tasks_new = Task.objects.filter(status=Task.Status.NEW).filter(archived=False).filter(user__in = users) 
 
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(user__in = users) 
+    tasks_ip = Task.objects.filter(status=Task.Status.INPROGRESS).filter(archived=False).filter(user__in = users) 
 
     #Query to obtain all waiting to be done tasks
-    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(user__in = users) 
+    tasks_waiting = Task.objects.filter(status=Task.Status.WAITING).filter(archived=False).filter(user__in = users) 
     
     #Query to obtain all done tasks
-    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users)
+    tasks_done = Task.objects.filter(status=Task.Status.CLOSED).filter(archived=False).filter(user__in = users)
 
     #Create task form
     form = RegisterTaskForm()
 
-    all_tasks = Task.objects.filter().filter(user__in = users)
+    all_tasks = Task.objects.filter(archived=False).filter(user__in = users)
 
     tasks_and_forms = []
 
     delete_form = TaskId()
 
+    archive_form = TaskId()
+
+    # ARREGLAR ESTOOOoOoO
     for t in all_tasks:
-        tasks_and_forms.append( [ t , EditTaskForm(instance=t)] )
+        tasks_and_forms.append( [ t , EditTaskForm()] )
 
 
     args = {'done': tasks_done,
@@ -425,12 +448,14 @@ def tareas(request):
             'all': all_tasks,
             'tasksWForms' : tasks_and_forms,
             'new_task_form' : form,
-            'delete_form' : delete_form
+            'delete_form' : delete_form,
+            'archive_form' : archive_form,
+            'edit_task_form' : EditTaskForm()
             }
 
     return render(request,'tareas.html', args)
 
-
+# NO USAR EESTE
 @login_required
 def editar_tarea(request,pk):
     task = get_object_or_404(Task, id=pk)
@@ -446,197 +471,162 @@ def editar_tarea(request,pk):
     return render(request, 'edit_task.html', {'task': task, 'form': form})
 
 @login_required
-def contador(request):
-    return render(request,'my_time.html',{'variable':''})
+def editar_tarea_new(request):
+    users = get_user(request)
 
-@login_required
-def eliminar_tarea(request):
     if request.method == 'POST':
-        print("me llegó un post")
-        form = TaskId(request.POST)
+        form = EditTaskForm(request.POST)
         pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
-            Task.objects.filter(id=pk).delete()
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
+            obj = Task.objects.get(id=pk)
+            obj.name = form.data['name']
+            obj.description = form.data['description']
+            obj.init_date = form.data['init_date']
+            obj.end_date = form.data['end_date']
+            obj.status = form.data['status']
+            obj.save()
             return JsonResponse({'status':'success'})
         else:
             return JsonResponse({'status':'error'})
     else:
+        form = EditTaskForm()
+
+    return render(request, 'edit_task_new.html', {'form': form})
+
+
+@login_required
+def contador(request):
+    #Query to obtain all in progress tasks
+    tasks_ip = Task.objects.filter(user = request.user)
+
+    if request.method == 'POST':
+        task_id = request.POST.get('list-hours')
+        task = get_object_or_404(Task, pk=task_id)
+        time = request.session['clock']
+        end = datetime.strptime(time, '%H:%M:%S')
+        
+        end_obj = datetime.today()
+        init_obj = end_obj - timedelta(hours=end.hour, minutes=end.minute, seconds=end.second)
+
+        time_interval = TimeInterval(init_time=init_obj,end_time=end_obj,
+            task=task,user=request.user)
+        try:
+            time_interval.full_clean()
+            time_interval.save()
+            return redirect('horas_trabajadas')
+        except ValidationError:
+            print("There was an error")
+
+    return render(request,'my_time.html',{'tasks': tasks_ip})
+
+@login_required
+def eliminar_tarea(request):
+    users = get_user(request)
+    if request.method == 'POST':
+        print("me llegó un post")
+        form = TaskId(request.POST)
+        pk = form.data['task_id']
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
+            Task.objects.filter(id=pk).delete()
+            return JsonResponse({'status':'success'})
+        else:
+            return JsonResponse({'status':'error la tarea no existe'})
+    else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
+@login_required
 def archivar_tarea(request):
+    users = get_user(request)
     if request.method == 'POST':
         form = TaskId(request.POST)
         pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
             obj = Task.objects.get(id=pk)
             obj.archived = True
             obj.save()
             return JsonResponse({'status':'success'})
         else:
-            return JsonResponse({'status':'error'})
+            return JsonResponse({'status':'error la tarea no existe'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
+@login_required
 def desarchivar_tarea(request):
+    users = get_user(request)
     if request.method == 'POST':
         form = TaskId(request.POST)
         pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
+        if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
             obj = Task.objects.get(id=pk)
             obj.archived = False
             obj.save()
             return JsonResponse({'status':'success'})
         else:
-            return JsonResponse({'status':'error'})
+            return JsonResponse({'status':'error la tarea no existe'})
     else:
         form = TaskId()
         return render(request, 'delete_task.html', {'form': form})
 
-##################### PERSISTENT CLOCK #######################################################
 
-#### me copie esto de la view "eliminar_tarea" que esta arriba
+def tareas_archivadas(request):
+    users = get_user(request)
+    arch_tasks = Task.objects.filter(archived=True).filter(user__in = users)
+    args = {'arch_tasks' : arch_tasks}
+    return render(request, 'archived_task.html', args)
 
-@login_required
+
+def obtener_valores(request):
+    if request.method == 'POST':
+        pk = request.POST.get('task_id')
+        obj = Task.objects.get(id=pk)
+        args = {
+                'success' : 'yes',
+                'name' : obj.name,
+                'description' : obj.description,
+                'init_date' : obj.init_date,
+                'end_date' : obj.end_date,
+                'status' : obj.status
+               }
+        return JsonResponse(args)
+    else:
+        return JsonResponse({'success':'no'})
+
+
+@csrf_exempt
+def clock_view(request):
+    if request.method == 'POST':
+        request.session['clock'] = request.POST['clock']
+        request.session['clock_status'] = request.POST['clock_status']
+        request.session.save()
+        clockString = request.session['clock']
+        message = 'Clock succesfully updated: '+ clockString
+
+        if(request.session['clock'] != None):
+            return  JsonResponse({'status':'success','clockString': clockString})
+        else:
+            return JsonResponse({'status':'error','clockString':''})
+
+    return HttpResponse('Not Post')
+
+@csrf_exempt
 def clock_play(request):
     if request.method == 'POST':
-
-    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
-        loQueMePasan = ClockData(request.POST)
-
-        request.session['current_task'] = loQueMePasan.data['task']
-        request.session['last_init_time'] = datetime.now()
-        request.session['status'] = 'COUNTING'
-
-        ## y ahora que el reloj de alguna forma use los valores hours, mins y sec 1 y 2 como
-        ## valores iniciales 
-
-    #########################################################################################    
-        form = TaskId(request.POST)
-        pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
-            Task.objects.filter(id=pk).delete()
-            return JsonResponse({'status':'success'})
-        else:
-            return JsonResponse({'status':'error'})
-    else:
-        form = TaskId()
-        return render(request, 'delete_task.html', {'form': form})
-
-@login_required
-def clock_pause(request):
-    if request.method == 'POST':
-
-    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
-        loQueMePasan = ClockData(request.POST)
-
-        cur_task = loQueMePasan.data['task']
-        init_time = loQueMePasan.data['time']
-        interval = TimeInterval(init_time, datetime.now(), request.user, cur_task)
-        interval.save()
-
-        del request.session['last_init_time'] # elimino last_init_time y queda None
-        request.session['status'] = 'PAUSED'
-        request.session['counter_hours1'] = loQueMePasan.data['hour1']
-        request.session['counter_hours2'] = loQueMePasan.data['hour2']
-        request.session['counter_mins1'] = loQueMePasan.data['min1']
-        request.session['counter_mins2'] = loQueMePasan.data['min2']
-        request.session['counter_sec1'] = loQueMePasan.data['sec1']
-        request.session['counter_sec2'] = loQueMePasan.data['sec2']
-
-        ## ya se deberian haber guardado los datos, se queda pausado el crono
-
-    ######################################################################################### 
         
-        form = TaskId(request.POST)
-        pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
-            Task.objects.filter(id=pk).delete()
-            return JsonResponse({'status':'success'})
+        clockString = request.session['clock']
+        #message = 'Clock succesfully updated: '+ clockString
+
+        if(request.session['clock'] != None):
+            return  JsonResponse({'status':'success','clockString': clockString})
         else:
-            return JsonResponse({'status':'error'})
-    else:
-        form = TaskId()
-        return render(request, 'delete_task.html', {'form': form})
+            return JsonResponse({'status':'error','clockString':''})
 
-@login_required
-def clock_stop(request):
-    if request.method == 'POST':
+    return HttpResponse('Not Post')
 
-    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
-
-        loQueMePasan = ClockData(request.POST)
-
-        cur_task = loQueMePasan.data['task']
-        init_time = loQueMePasan.data['time']
-        interval = TimeInterval(init_time, datetime.now(), request.user, cur_task)
-        interval.save()
-
-        del request.session['last_init_time'] # elimino last_init_time y queda None
-        del request.session['current_task']
-        request.session['status'] = 'WAITING'
-        request.session['counter_hours1'] = 0
-        request.session['counter_hours2'] = 0
-        request.session['counter_mins1'] = 0
-        request.session['counter_mins2'] = 0
-        request.session['counter_sec1'] = 0
-        request.session['counter_sec2'] = 0
-
-        ## ya se deberian haber guardado los datos, se queda pausado el crono
-
-    ######################################################################################### 
-        
-        form = TaskId(request.POST)
-        pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
-            Task.objects.filter(id=pk).delete()
-            return JsonResponse({'status':'success'})
-        else:
-            return JsonResponse({'status':'error'})
-    else:
-        form = TaskId()
-        return render(request, 'delete_task.html', {'form': form})
-
-@login_required
-def clock_page_change(request):
-    if request.method == 'POST':
-
-    ######## no se como funciona esto bien asi q' en este bloque pongo lo que quiero que pase
-
-        loQueMePasan = ClockData(request.POST)
-
-        # 2 casos: SI el pana se esta saliendo de backoffice
-        #               entonces guarda el beta en la base de datos: (asumo que si te sales la sesion se cierra sola)
-        cur_task = loQueMePasan.data['task']
-        init_time = loQueMePasan.data['time']
-        interval = TimeInterval(init_time, datetime.now(), request.user, cur_task)
-        interval.save()
-
-        # SINO entonces guarda la informacion del counter en las session vars:
-        request.session['counter_hours1'] = loQueMePasan.data['hour1']
-        request.session['counter_hours2'] = loQueMePasan.data['hour2']
-        request.session['counter_mins1'] = loQueMePasan.data['min1']
-        request.session['counter_mins2'] = loQueMePasan.data['min2']
-        request.session['counter_sec1'] = loQueMePasan.data['sec1']
-        request.session['counter_sec2'] = loQueMePasan.data['sec2']
-
-    ######################################################################################### 
-        
-        form = TaskId(request.POST)
-        pk = form.data['task_id']
-        if ( Task.objects.filter(id=pk).exists() ):
-            Task.objects.filter(id=pk).delete()
-            return JsonResponse({'status':'success'})
-        else:
-            return JsonResponse({'status':'error'})
-    else:
-        form = TaskId()
-        return render(request, 'delete_task.html', {'form': form})
-
-#######################################
 
 # UTILITIES FOR THE QUERIES
 def get_user(request):
     return User.objects.filter(username=request.user.username)
+
 

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>algo</title>
+</head>
+<body>
+	<form method="POST">
+    	{% csrf_token %}
+		{{ form.as_p }}
+		<button type="submit" class="btn btn-primary btn-user btn-block" id="sendMessageButton">Editar</button>
+	</form>
+</body>
+</html>

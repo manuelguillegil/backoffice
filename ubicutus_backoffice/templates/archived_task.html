@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>nose2</title>
+</head>
+<body style="background-color:pink;">
+	{% for t in arch_tasks %}
+		{{t.name}}
+		{{t.description}}
+		{{t.init_date}}
+		{{t.end_date}}
+		{{t.status}}
+		{{t.archived}}
+		<br>
+		<br>
+	{% endfor %}
+</body>
+</html>

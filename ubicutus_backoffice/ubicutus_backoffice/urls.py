@@ -22,7 +22,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 # PURGAR URLS PLSSSSSSSSS
 urlpatterns = [
-    url(r'^$', LoginView.as_view(), name='login'),
+    url(r'^$', views.dashboard, name='home'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^profile/$', views_account.profile, name='profile'),
     url(r'^vacaciones/$', views.vacaciones, name='vacaciones'),
@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'^eliminar_tarea/$', views.eliminar_tarea, name='eliminar_tarea'),
     url(r'^archivar_tarea/$', views.archivar_tarea, name='archivar_tarea'),
     url(r'^desarchivar_tarea/$', views.desarchivar_tarea, name='desarchivar_tarea'),
+    url(r'^nueva_tarea/$', views.registrar_tareas_trabajadas_render, name='nueva_tarea'),
+
 
     path('accounts/',include('accounts.urls')),
    
@@ -50,4 +52,12 @@ urlpatterns = [
     path('status-chart/', views.status_chart, name='status-chart'),
     path('task-hours-chart/', views.task_hours_chart, name='task-hours-chart'),
     path('hours-worked-chart/', views.hours_worked_chart, name='hours-worked-chart'),
+
+    path('clock-view/', views.clock_view , name='clock-view'),
+    path('clock-play/', views.clock_play , name='clock-play'),
+
+    url(r'^edit_task/$', views.editar_tarea_new, name='editar_tarea_new'),
+    url(r'^tareas_archivadas/$', views.tareas_archivadas, name='tareas_archivadas'),
+    url(r'^get_task/$', views.obtener_valores, name='get_task')
+
 ]

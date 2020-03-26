@@ -3,7 +3,7 @@
 <!--
     Variables required by this template:
         mtask: the task refered by this item
-        mform: form to be rendered by the modal
+        modal: modal with the edit form
 
 -->
 <div class="row">
@@ -14,16 +14,18 @@
         </a>
     </div>
     
-    <div class="col-1">
+    <!--Este botón debe ser deprecated para la próxima entrega-->
+    <div class="col-1 d-none">
       <a class="nav-link p-0 text-gray-700" href="{% url 'editar_tarea' mtask.id %}"><i class="fas fa-pen"></i></a>
     </div>
     
     <!--Este botón no va a estar presente para el segundo sprint, pero lo estará en el tercero-->
-    <div class="col-1 d-none">
-        <div class="text-gray-800 btn p-0" data-toggle="modal" data-target="#taskEditModal{{ mtask.id|stringformat:'i'}}" >
+    <div class="col-1">
+        <div class="text-gray-800 btn p-0 modal-edit-trigger" data-toggle="modal" data-target="#{{modal}}" 
+            data-tname="{{mtask.name}}" data-tdescript="{{mtask.description}}" data-tinitdate=" {{mtask.init_date}} "
+            data-tenddate=" {{mtask.end_date}} " data-status="{{mtask.status}}" data-tid="{{ mtask.id }}">
             <i class="fas fa-pen" ></i>
-        </div>
-        
+        </div>     
     </div>
   </div>
    
@@ -57,4 +59,4 @@
       </div>
   {% endif %}
   <hr>
-  {% include 'edit_task_modal.html' with taskId=mtask.id|stringformat:'i' form=mform%}
+  
