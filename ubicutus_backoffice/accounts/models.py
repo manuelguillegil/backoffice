@@ -9,6 +9,27 @@ from enum import Enum
 
 # Create your models here.
 
+class  Task(models.Model):
+
+    class Status(models.TextChoices):
+        NEW = 'New'
+        INPROGRESS = 'In progress'
+        WAITING = 'Waiting'
+        CLOSED = 'Closed'
+
+    name = models.CharField(max_length=60, default='')
+    description = models.TextField(max_length=1000, default='')
+    init_date = models.DateTimeField(default=datetime.now)
+    end_date = models.DateTimeField(blank=True, null=True, default=None)
+    status = models.CharField(
+        max_length=60,
+        choices=Status.choices,
+        default=Status.NEW,
+    )
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    archived = models.BooleanField(default=False)
+
+
 class UserProfile(models.Model):
 
     REQSTUDENT = 'RS'
@@ -34,26 +55,11 @@ class UserProfile(models.Model):
         default=REQSTUDENT,
     )
     remaining_vac_days = models.IntegerField(default=30)
+    clock_last_task = models.ForeignKey(Task,on_delete=models.SET_NULL,blank=True,null=True, default=None)
+    clock_last_init = models.DateTimeField(blank=True, null=True, default=None)
+    clock_status = models.IntegerField(default=0)
+    clock = models.CharField(max_length=20, default='00:00:00')
 
-class  Task(models.Model):
-
-    class Status(models.TextChoices):
-        NEW = 'New'
-        INPROGRESS = 'In progress'
-        WAITING = 'Waiting'
-        CLOSED = 'Closed'
-
-    name = models.CharField(max_length=60, default='')
-    description = models.TextField(max_length=1000, default='')
-    init_date = models.DateTimeField(default=datetime.now)
-    end_date = models.DateTimeField(blank=True, null=True, default=None)
-    status = models.CharField(
-        max_length=60,
-        choices=Status.choices,
-        default=Status.NEW,
-    )
-    user = models.ForeignKey(User,on_delete=models.CASCADE,default=1)
-    archived = models.BooleanField(default=False)
 
 class TimeInterval(models.Model):
     init_time = models.DateTimeField(default=datetime.now)

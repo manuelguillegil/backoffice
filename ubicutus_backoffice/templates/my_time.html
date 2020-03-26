@@ -23,7 +23,7 @@
   <div class="p-4 h2 text-gray-900 mb-4 text-center" id="chronoPage">{{ clock }}</div>  
 
   <div class="form">
-    <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="startChr( '{{ request.session.clock }}' )">Empezar </button>
+    <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="startChr( '{{ request.user.userprofile.clock }}' )">Empezar </button>
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="stopChr()">Detener</button>
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="resetChr()">Resetear</button>
   </div>

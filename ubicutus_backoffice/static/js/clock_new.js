@@ -10,7 +10,7 @@ var seconds2 = 0;
 var mints2 = 0;
 var hours2 = 0;
 
-var clockString = '';
+var clockString = '00:00:00';
 
 // Estados del reloj
 const states = {
@@ -24,8 +24,8 @@ window.onload = function() {
 }; */
 
 $(window).bind('beforeunload', function() {
-    console.log('estado del crono: '+startchron);
-    console.log('count del crono: '+ clockString);
+    console.log('AAAAAAAAAAAA estado del crono: '+startchron);
+    console.log('AAAAAAAAAAAA count del crono: '+ clockString);
     saveClockState();
 });
 
@@ -86,7 +86,7 @@ function increase_time(){
 
 // Inicia el cronometro
 function startChr(_initialClock) { 
-    console.log('valor inicial: '+ _initialClock);
+
     if(startchron != states.COUNTING){
 
         var promise = new Promise( (resolve, reject) => {
@@ -195,13 +195,51 @@ function resetChr() {
 function saveClockState() {
     console.log('save state in: estado del crono: '+startchron);
     console.log('save state in: count del crono: '+ clockString);
-    $.ajax({
-        url: '/clock-view/',
-        data: {'clock': clockString, 'clock_status': startchron },
-        type: 'POST'
-    }).done(function(response){
-        console.log(response);
+
+    var promise2 = new Promise( (resolve, reject) => {
+        $.ajax({
+            url: '/clock-view/',
+            data: {'clock': clockString, 'clock_status': startchron },
+            type: 'POST',
+            dataType:'json',
+            success:function(json){
+                if(json.status=='success'){
+
+                    if(clockString == json.clockString){
+                        console.log('llego: '+clockString);
+                        resolve(clockString);
+                    }else{
+                        reject('fail to save clockString 5');
+                    }
+                }
+                else if(json.status=='error'){
+                    reject('fail to save clockString 4');
+                }
+                else{
+                    alert("Respuesta indefinida");
+                    console.log(json);
+                    reject('fail to save clockString 3');
+                }
+            },
+            error:function(xhr, errmsg, err){
+                raiseErr();
+                console.log(errmsg)
+                reject('fail to save clockString 2');
+            },
+        }).done(function(response){
+            console.log(response);
+        });
     });
+
+    return promise2.then( clockvalue => {
+
+        clockString = clockvalue;
+        console.log('jeje')
+
+    }).catch( e => { 
+        console.log(e); 
+    });
+
 }
 
 document.getElementById('chrono').value = seconds1;

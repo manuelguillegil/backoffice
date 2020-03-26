@@ -597,13 +597,13 @@ def obtener_valores(request):
 @csrf_exempt
 def clock_view(request):
     if request.method == 'POST':
-        request.session['clock'] = request.POST['clock']
-        request.session['clock_status'] = request.POST['clock_status']
-        request.session.save()
-        clockString = request.session['clock']
-        message = 'Clock succesfully updated: '+ clockString
+        
+        request.user.userprofile.clock = request.POST['clock']
+        request.user.userprofile.clock_status = request.POST['clock_status'] 
+        request.user.userprofile.save()
+        clockString = request.user.userprofile.clock
 
-        if(request.session['clock'] != None):
+        if(clockString != None):
             return  JsonResponse({'status':'success','clockString': clockString})
         else:
             return JsonResponse({'status':'error','clockString':''})
@@ -614,10 +614,9 @@ def clock_view(request):
 def clock_play(request):
     if request.method == 'POST':
         
-        clockString = request.session['clock']
-        #message = 'Clock succesfully updated: '+ clockString
+        clockString = request.user.userprofile.clock
 
-        if(request.session['clock'] != None):
+        if(clockString != None):
             return  JsonResponse({'status':'success','clockString': clockString})
         else:
             return JsonResponse({'status':'error','clockString':''})
