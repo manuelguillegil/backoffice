@@ -104,8 +104,8 @@ def dashboard(request):
 def status_chart(request):
     empty = 0
 
-    labels = []
-    data = []
+    labels = ['Hecho', 'En curso', 'Nuevo', 'Detenido']
+    data = [0, 0, 0, 0]
 
     queryset = Task.objects.filter(user=request.user).filter(archived=False)\
     .values('status').annotate(task_count=Count('pk'))\
@@ -116,31 +116,13 @@ def status_chart(request):
 
     for entry in queryset:
         if entry['status'] == 'Closed':
-            labels.append('Hecho')
+            data[0] = entry['task_count']
         elif entry['status'] == 'In progress':
-            labels.append('En curso')
+            data[1] = entry['task_count']
         elif entry['status'] == 'Waiting':
-            labels.append('Detenido')
+            data[3] = entry['task_count']
         else:
-            labels.append('Nuevo')
-        data.append(entry['task_count'])
-
-    if 'Closed' not in queryset.values():
-        labels.append('Hecho')
-        data.append(0)
-
-    if 'Waiting' not in queryset.values():
-        labels.append('Detenido')
-        data.append(0)
-
-    if 'In progress' not in queryset.values():
-        labels.append('En curso')
-        data.append(0)
-
-    if 'New' not in queryset.values():
-        labels.append('Nuevo')
-        data.append(0)
-
+            data[2] = entry['task_count']
     
     return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
