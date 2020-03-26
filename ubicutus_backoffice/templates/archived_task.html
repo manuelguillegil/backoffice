@@ -25,7 +25,7 @@
 		<div class="col-lg-12 mb-4">
 		<!-- Task Card -->
 		<!-- all -->
-		<div class="card shadow mb-4">
+		<div class="card shadow mb-4  vh-100">
 			<div class="card-header py-2 d-flex align-items-center">
 				
 				<h6 class="m-0 font-weight-bold text-primary margin-auto mr-auto">
@@ -40,17 +40,21 @@
 								
 			</div>
 
-			<div class="card-body collapse show" id="allBody">
-				<!--List of task items-->
-				{% for task in arch_tasks %}
-					{% include 'task_list_item.html' with mtask=task modal="edit-task-modal" %}
-					{% include 'task_modal.html' with mod_task=task %}
-					
-				{% empty %}
-					<span>Por ahora no hay tareas que mostrar	</span>
-				{% endfor %}
-				<!--Edit menu-->
-				{% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
+			<div class="card-body collapse show overflow-auto" id="allBody">
+				<ul class="list-unstyled">
+					<li>
+						<!--List of task items-->
+						{% for task in arch_tasks %}
+							{% include 'task_list_item.html' with mtask=task modal="edit-task-modal" %}
+							{% include 'task_modal.html' with mod_task=task %}
+							
+						{% empty %}
+							<span>Por ahora no hay tareas que mostrar	</span>
+						{% endfor %}
+						<!--Edit menu-->
+						{% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
+					</li>
+				</ul>
 
 			</div>
 			</div>

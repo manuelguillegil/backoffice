@@ -20,7 +20,7 @@
         <!-- Task Card : New Task -->
         <div class="col-lg-6 mb-4">
 
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4  vh-70">
                 <div class="card-header bg-success py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -34,16 +34,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto vh-70" id="newBody">
-                    <ul class=" list-unstyled">
-                        <li>
+                <div class="card-body collapse show overflow-auto" id="newBody">
+                    <ul class=" list-unstyled h-100">
+                        <li class="h-100">
                             {% for task in new %}
                                 {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                             {% empty %}
-                            <span>
-                                No hay nada que hacer aquí por ahora 
-                                <i class="fas fa-umbrella-beach mr-1"></i>
-                            </span>
+                            <div class="d-flex align-items-center text-center h-100">
+                                <span class="">
+                                    No hay nada que hacer aquí por ahora 
+                                </span>
+                            
+                            
+                                <i class="fas fa-umbrella-beach mr-1 fa-10x"></i>
+                            </div>
                             {% endfor %}
                         </li>
                     </ul>
@@ -55,7 +59,7 @@
         <!-- Task Card : In progress Task -->
         <div class="col-lg-6 mb-4">
 
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4  vh-70">
                 <div class="card-header bg-warning py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -69,16 +73,20 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto vh-70" id="inproBody">
-                    <ul class="list-unstyled">
-                        <li>
+                <div class="card-body collapse show overflow-auto" id="inproBody">
+                    <ul class="list-unstyled h-100">
+                        <li class="h-100">
                             {% for task in inpro %}
                                 {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                             {% empty %}
-                            <span>
-                                No hay nada que hacer aquí por ahora 
-                                <i class="fas fa-umbrella-beach mr-1"></i>
-                            </span>
+                            <div class="d-flex align-items-center text-center h-100">
+                                <span class="">
+                                    No hay nada que hacer aquí por ahora 
+                                </span>
+                            
+                            
+                                <i class="fas fa-umbrella-beach mr-1 fa-10x"></i>
+                            </div>
                             {% endfor %}
                         </li>
                     </ul>
@@ -93,7 +101,7 @@
          <!-- Task Card : Freezed Task -->
        <div class="col-lg-6 mb-4">
 
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4  vh-70">
                 <div class="card-header bg-danger py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -107,16 +115,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto vh-70" id="freezeBody">
-                    <ul class="list-unstyled">
-                        {% for task in waiting %}
-                            {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
-                        {% empty %}
-                        <span>
-                            No hay nada que hacer aquí por ahora 
-                            <i class="fas fa-umbrella-beach mr-1"></i>
-                        </span>
-                        {% endfor %}
+                <div class="card-body collapse show overflow-auto" id="freezeBody">
+                    <ul class="list-unstyled h-100">
+                        <li class="h-100">
+                            {% for task in waiting %}
+                                {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
+                            {% empty %}
+                            <div class="d-flex align-items-center text-center h-100">
+                                <span class="">
+                                    No hay nada que hacer aquí por ahora 
+                                </span>
+                            
+                            
+                                <i class="fas fa-umbrella-beach mr-1 fa-10x"></i>
+                            </div>
+                            {% endfor %}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -125,7 +139,7 @@
         <!-- Content Column -->
        <!-- Task Card : Done Task -->
        <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4">
+            <div class="card shadow mb-4  vh-70">
                 <div class="card-header bg-primary py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -139,18 +153,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto vh-70" id="doneBody">
-                    <ul class="list-unstyled">
-                        <li class="text-center h-100 d-flex flex-column align-items-center ">
+                <div class="card-body collapse show overflow-auto" id="doneBody">
+                    <ul class="list-unstyled h-100">
+                        <li class="h-100">
                             {% for task in done %}
                                 {% include 'task_item_list_wcontext.html' with item_task=task modal="edit-task-modal" %}
                             {% empty %}
-                            <div class="container">
-                                <span class="my-3">
+                            <div class="d-flex align-items-center text-center h-100">
+                                <span class="">
                                     No hay nada que hacer aquí por ahora 
                                 </span>
-                            </div>
-                            <div class="container">
+                            
+                            
                                 <i class="fas fa-umbrella-beach mr-1 fa-10x"></i>
                             </div>
                             {% endfor %}
@@ -164,7 +178,7 @@
         <div class="col-lg-12 mb-4">
         <!-- Task Card -->
         <!-- all -->
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4  vh-100">
             <div class="card-header py-2 d-flex align-items-center">
                 
                 <h6 class="m-0 font-weight-bold text-primary margin-auto mr-auto">Todas</h6>
@@ -183,7 +197,7 @@
                 
             </div>
 
-            <div class="card-body collapse show overflow-auto vh-100    " id="allBody">
+            <div class="card-body collapse show overflow-auto" id="allBody">
                 <ul class="list-unstyled">
                     <li>
                         {% for task in all %}
@@ -198,7 +212,6 @@
     </div>
 </div>
 </div>
-
     <!--Info modals-->
     {% for task in all %}
         {% include 'task_modal.html' with mod_task=task %}
@@ -207,5 +220,6 @@
     {% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
     <!--Add task modal-->
     {% include 'new_task_modal.html' with mid="addTaskModal" form=new_task_form%}
+
 {% endblock %}
 
