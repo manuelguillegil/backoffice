@@ -18,6 +18,7 @@
       <h3 class="m-0 font-weight-bold text-primary text-center">Total de horas trabajadas</h3>
     </div>
     <div class="card-body">
+      {%if time_intervals%}
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
@@ -40,6 +41,12 @@
           </tbody>
         </table>
       </div>
+      {% else %}
+      <span>
+          No hay horas registradas
+          <i class="fas fa-stopwatch"></i>
+      </span>
+      {% endif %}
     </div>
   </div>
   </div>
