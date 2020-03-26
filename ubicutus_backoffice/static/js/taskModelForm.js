@@ -100,6 +100,7 @@ function clearMsgs(){
 
 function raiseSucc(){
     $('#alert-add-success').removeClass("d-none");
+    location.reload();
 }
 function raiseWarn(){
     $('#alert-add-warning').removeClass("d-none");

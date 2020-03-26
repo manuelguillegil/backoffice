@@ -100,7 +100,8 @@
               </div>
         </div>
         <div class="modal-footer flex-fill">
-          <a href="#" class="btn float-left delete-btn" id="delete-task-btn{{mod_task.id}}" data-id="{{mod_task.id}}">
+          <a href="#" class="btn float-left delete-btn" id="delete-task-btn{{mod_task.id}}" 
+             data-id="{{mod_task.id}}" title="Mantén presionado para eliminar. Esta acción es permanente.">
             <i class="text-danger fas fa-trash"></i>
           </a>
           <div class="progress w-100 invisible" id="progress-bar{{mod_task.id}}">
@@ -144,16 +145,14 @@
       /// Archive Variables ///
       var archiveCounter = 0;
       var $archiveBtn = $('#archive-btn{{mod_task.id}}');
-      //////////////////////////////
-      
-      $deleteBtn.click(console.log($deleteBtn));
+      ////////////////////////////// 
       
       $deleteBtn.on('mousedown touchstart',function(e){    
           resetMsgs();
           showBar();
           timerId = setInterval(timeHandler,timeInterval);
           
-      }).bind('mouseup mouseleave touchend', function() {
+      }).bind('mouseup mouseleave touchend', function(){
             hideBar()
             timePassed = 0;
             clearInterval(timerId);
@@ -299,6 +298,7 @@
         $('#errMsg{{mod_task.id}}').addClass('d-none');
         $('#warnMsg{{mod_task.id}}').addClass('d-none');
         $('#succMsg{{mod_task.id}}').addClass('d-none');
+        $('#infoMsg{{mod_task.id}}').addClass('d-none');
       }
 
       function raiseErr(){
@@ -309,7 +309,9 @@
       }
       function raiseSucc(){
         $('#succMsg{{mod_task.id}}').removeClass('d-none');
+        location.reload()
       }
+      
       //Archive msgs:
       function resetArchMsgs(){
         $('#info-msg-archive{{mod_task.id}}').addClass('d-none');
@@ -324,6 +326,7 @@
 
       function raiseSuccArch(){
         $('#succ-msg-archive{{mod_task.id}}').removeClass('d-none');
+        location.reload()
       }
 
       function raiseErrArch(){
