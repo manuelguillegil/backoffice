@@ -502,20 +502,24 @@ def contador(request):
     if request.method == 'POST':
         task_id = request.POST.get('list-hours')
         task = get_object_or_404(Task, pk=task_id)
-        time = request.session['clock']
-        end = datetime.strptime(time, '%H:%M:%S')
-        
-        end_obj = datetime.today()
-        init_obj = end_obj - timedelta(hours=end.hour, minutes=end.minute, seconds=end.second)
 
-        time_interval = TimeInterval(init_time=init_obj,end_time=end_obj,
-            task=task,user=request.user)
-        try:
-            time_interval.full_clean()
-            time_interval.save()
-            return redirect('horas_trabajadas')
-        except ValidationError:
-            print("There was an error")
+        request.user.userprofile.clock_last_task = task
+        request.user.userprofile.save()
+        
+        # time = request.session['clock']
+        # end = datetime.strptime(time, '%H:%M:%S')
+        
+        # end_obj = datetime.today()
+        # init_obj = end_obj - timedelta(hours=end.hour, minutes=end.minute, seconds=end.second)
+
+        # time_interval = TimeInterval(init_time=init_obj,end_time=end_obj,
+        #     task=task,user=request.user)
+        # try:
+        #     time_interval.full_clean()
+        #     time_interval.save()
+        #     return redirect('horas_trabajadas')
+        # except ValidationError:
+        #     print("There was an error")
 
     return render(request,'my_time.html',{'tasks': tasks_ip})
 
@@ -604,7 +608,7 @@ def clock_view(request):
         clockString = request.user.userprofile.clock
 
         if(clockString != None):
-            return  JsonResponse({'status':'success','clockString': clockString})
+            return JsonResponse({'status':'success','clockString': clockString})
         else:
             return JsonResponse({'status':'error','clockString':''})
 
@@ -617,7 +621,7 @@ def clock_play(request):
         clockString = request.user.userprofile.clock
 
         if(clockString != None):
-            return  JsonResponse({'status':'success','clockString': clockString})
+            return JsonResponse({'status':'success','clockString': clockString})
         else:
             return JsonResponse({'status':'error','clockString':''})
 

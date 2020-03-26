@@ -85,7 +85,7 @@ function increase_time(){
 }
 
 // Inicia el cronometro
-function startChr(_initialClock) { 
+async function startChr() { 
 
     if(startchron != states.COUNTING){
 
@@ -192,7 +192,7 @@ function resetChr() {
     }
 }
 
-function saveClockState() {
+async function saveClockState() {
     console.log('save state in: estado del crono: '+startchron);
     console.log('save state in: count del crono: '+ clockString);
 
