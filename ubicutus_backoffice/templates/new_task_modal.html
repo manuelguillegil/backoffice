@@ -27,7 +27,10 @@ aria-hidden="true">
     </div>
 
     <div class="modal-body w-100">
-        
+        <div class="alert-warning alert" id="alert-add-warning">Asegúrese de llenar los campos correctamente. Debe añadir nombre y descripción</div>
+        <div class="alert-success alert" id="alert-add-success">La tarea ha sido añadida correctamente. Refresque la página para observar cambios</div>
+        <div class=" alert-danger alert" id="alert-add-error">Su tarea no pudo ser añadida correctamente.</div>
+    
             
         <form class="user p-4" name="registerUser" id="registerTaskMod" novalidate method="POST" data-url="{% url 'registrar_tarea' %}">
             
@@ -92,10 +95,6 @@ aria-hidden="true">
                     <!--submit-->
                     <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Registrar tarea</button>
                 </div>
-            
-                <div class="alert-warning alert my-3" id="alert-add-warning">Asegúrese de llenar los campos correctamente. Debe añadir nombre y descripción</div>
-                <div class="alert-success alert my-3" id="alert-add-success">La tarea ha sido añadida correctamente. Refresque la página para observar cambios</div>
-                <div class=" alert-danger alert my-3" id="alert-add-error">Su tarea no pudo ser añadida correctamente.</div>
             
         </form>
 

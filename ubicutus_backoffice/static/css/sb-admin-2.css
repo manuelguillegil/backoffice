@@ -7430,6 +7430,10 @@ button.bg-dark:focus {
   height: 100vh !important;
 }
 
+.vh-70 {
+  height: 70vh !important;
+}
+
 .stretched-link::after {
   position: absolute;
   top: 0;

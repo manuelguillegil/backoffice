@@ -145,12 +145,21 @@
         </a>
       </li>
 
-      <!-- recent actions section button -->
+      <!-- all tasks section button -->
       <li class="nav-item">
         <a class="nav-link" href="{% url 'tareas' %}">
           <i class="fas fa-list"></i>
           <!--Aqui falta poner el url hacia la vista de las tareas @TODO-->
           <span href="">Tareas</span>
+        </a>
+      </li>
+
+      <!-- Archived tasks section button -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'tareas_archivadas' %}">
+          <i class="fas fa-folder"></i>
+          <!--Aqui falta poner el url hacia la vista de las tareas @TODO-->
+          <span href="">Tareas Archivadas</span>
         </a>
       </li>
 

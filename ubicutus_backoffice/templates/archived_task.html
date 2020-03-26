@@ -1,18 +1,62 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>nose2</title>
-</head>
-<body style="background-color:pink;">
-	{% for t in arch_tasks %}
-		{{t.name}}
-		{{t.description}}
-		{{t.init_date}}
-		{{t.end_date}}
-		{{t.status}}
-		{{t.archived}}
-		<br>
-		<br>
-	{% endfor %}
-</body>
-</html>
+{% extends 'base_site.html' %}
+{% load static %}
+{% block pageTitle %} Tareas archivadas {% endblock %}
+
+{% block content %}
+
+<div class="container">
+	<div class="alert alert-info alert-dismissible collapse show">
+		<button type = "button" class="close" data-dismiss = "alert">x</button>
+		<div class="row ">
+			<div class="col-1 text-center d-flex align-items-center">
+				<i class="fas fa-info mx-2 fa-lg"></i>
+			</div>
+			<div class="col-11">
+				
+					Las tareas archivadas son ignoradas por el resto de vistas de la página, para que 
+					puedas mantener la atención donde realmente importa. Si deseas desarchivar una tarea,
+					puedes hacerlo desde aquí. 
+				
+			</div>
+		</div>
+		
+	</div>
+	<div class="row my-2">
+		<div class="col-lg-12 mb-4">
+		<!-- Task Card -->
+		<!-- all -->
+		<div class="card shadow mb-4">
+			<div class="card-header py-2 d-flex align-items-center">
+				
+				<h6 class="m-0 font-weight-bold text-primary margin-auto mr-auto">
+					<i class="fas fa-folder"></i>
+					Archivadas
+				</h6>
+
+				<div class="btn p-0 mx-4" type="button" data-toggle="collapse" 
+					data-target="#allBody" aria-expanded="true" aria-controls="allBody">
+					<i class="fas fa-caret-down"></i>
+				</div>
+								
+			</div>
+
+			<div class="card-body collapse show" id="allBody">
+				<!--List of task items-->
+				{% for task in arch_tasks %}
+					{% include 'task_list_item.html' with mtask=task modal="edit-task-modal" %}
+					{% include 'task_modal.html' with mod_task=task %}
+					
+				{% empty %}
+					<span>Por ahora no hay tareas que mostrar	</span>
+				{% endfor %}
+				<!--Edit menu-->
+				{% include 'edit_task_modal.html' with form=edit_task_form mid="edit-task-modal" %}
+
+			</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+{% endblock content %}
