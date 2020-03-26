@@ -511,18 +511,44 @@ def get_user(request):
     return User.objects.filter(username=request.user.username)
 
 # VIEW HOUR FOR ADMINS
+def pairIntervalHours(timeInterval):
+    ## De un intervalo lo convierto en un par [intervalo,tiempo entre intervalo]
+    pairlist = []
+    for t in timeInterval:
+        hours = t.end_time - t.init_time
+        pairlist.append([t,hours])
+    return pairlist
+
+def groupByUserAndMonth(pairInterval):
+    ## Agrupa por usuario y mes
+    newList = []
+    for pair in pairInterval:
+        needToAppend=True
+        for i in newList:
+            if pair[0].user==i[0].user and pair[0].init_time.month==i[0].init_time.month:
+                i[1]=i[1]+pair[1]
+                needToAppend=False
+                break
+        if needToAppend:
+            newList.append([pair[0],pair[1]])
+    return newList
+
 @login_required
 def horas_trabajadas_admin(request):
-    ## Por los momentos solo hacer get de todas las horas trabajadas
+    ## Vista de Admin
     today = datetime.now()
     time_this_month = TimeInterval.objects.filter(init_time__year=today.year,init_time__month=today.month)
     time_this_year = TimeInterval.objects.filter(init_time__year=today.year)
-    hours_in_this_month = []
-    hours_in_this_year = []
-    for t in time_this_month:
-        hours_in_this_month.append([t,Task.objects.get(id=t.task_id)])
-    for t in time_this_year:
-        hours_in_this_year.append([t,Task.objects.get(id=t.task_id)])
-    
+    time_this_week = TimeInterval.objects.filter(init_time__week=today.strftime("%V"))
+
+    ## Convierto en pares [intervalo,horas]
+    hours_in_this_month = pairIntervalHours(time_this_month)
+    hours_in_this_year = pairIntervalHours(time_this_year)
+    hours_in_this_week = pairIntervalHours(time_this_week)
+
+    ## GroupBy Usuario y Mes
+    hours_in_this_month = groupByUserAndMonth(hours_in_this_month)
+    hours_in_this_year = groupByUserAndMonth(hours_in_this_year)
+    hours_in_this_week = groupByUserAndMonth(hours_in_this_week)
  
-    return render(request, 'consulta_horas_admin.html',{'hours_in_this_month':hours_in_this_month,'hours_in_this_year':hours_in_this_year})
+    return render(request, 'consulta_horas_admin.html',{'hours_in_this_week':hours_in_this_week,'hours_in_this_month':hours_in_this_month,'hours_in_this_year':hours_in_this_year})

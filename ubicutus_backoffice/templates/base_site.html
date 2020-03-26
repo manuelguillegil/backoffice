@@ -64,10 +64,11 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
-      {% if user.is_superuser %}
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
 
+      {% if user.is_superuser %}
       <!-- Heading -->
       <div class="sidebar-heading">
         Super Usuario
@@ -81,11 +82,11 @@
           <span href="">Consultar Trabajo de la Empresa</span>
         </a>
       </li>
-      {% endif %}
-
+      
       <!-- Divider -->
       <hr class="sidebar-divider">
-
+      {% endif %}
+      
       <!-- Heading -->
       <div class="sidebar-heading">
         Interfaz
