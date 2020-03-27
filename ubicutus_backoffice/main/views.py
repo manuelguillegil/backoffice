@@ -71,7 +71,7 @@ def dashboard(request):
     .exclude(status=Task.Status.CLOSED).count()
     
     # Horas trabajadas durante los ultimos 5 dias trabajados
-    time_intervals = TimeInterval.objects.filter(user=request.user).order_by('-init_time')
+    time_intervals = TimeInterval.objects.filter(user=request.user).filter(task__in=all_tasks).order_by('-init_time')
 
     last_day = None
     cnt = 0
@@ -90,7 +90,7 @@ def dashboard(request):
 
 
     # Top 5 tareas trabajadas mas recientemente, junto con su estatus
-    recent_tasks_top5 = TimeInterval.objects.filter(user=request.user)\
+    recent_tasks_top5 = TimeInterval.objects.filter(task__in=all_tasks).filter(user=request.user)\
     .values('task').annotate(x=Max('end_time'))\
     .order_by('-x').values('task__name','task__status')[:5]
 
@@ -727,5 +727,48 @@ def clock_play(request): # PLAY
 # UTILITIES FOR THE QUERIES
 def get_user(request):
     return User.objects.filter(username=request.user.username)
+
+# VIEW HOUR FOR ADMINS
+def pairIntervalHours(timeInterval):
+    ## De un intervalo lo convierto en un par [intervalo,tiempo entre intervalo]
+    pairlist = []
+    for t in timeInterval:
+        hours = t.end_time - t.init_time
+        pairlist.append([t,hours])
+    return pairlist
+
+def groupByUserAndMonth(pairInterval):
+    ## Agrupa por usuario y mes
+    newList = []
+    for pair in pairInterval:
+        needToAppend=True
+        for i in newList:
+            if pair[0].user==i[0].user and pair[0].init_time.month==i[0].init_time.month:
+                i[1]=i[1]+pair[1]
+                needToAppend=False
+                break
+        if needToAppend:
+            newList.append([pair[0],pair[1]])
+    return newList
+
+@login_required
+def horas_trabajadas_admin(request):
+    ## Vista de Admin
+    today = datetime.now()
+    time_this_month = TimeInterval.objects.filter(init_time__year=today.year,init_time__month=today.month)
+    time_this_year = TimeInterval.objects.filter(init_time__year=today.year)
+    time_this_week = TimeInterval.objects.filter(init_time__week=today.strftime("%V"))
+
+    ## Convierto en pares [intervalo,horas]
+    hours_in_this_month = pairIntervalHours(time_this_month)
+    hours_in_this_year = pairIntervalHours(time_this_year)
+    hours_in_this_week = pairIntervalHours(time_this_week)
+
+    ## GroupBy Usuario y Mes
+    hours_in_this_month = groupByUserAndMonth(hours_in_this_month)
+    hours_in_this_year = groupByUserAndMonth(hours_in_this_year)
+    hours_in_this_week = groupByUserAndMonth(hours_in_this_week)
+ 
+    return render(request, 'consulta_horas_admin.html',{'hours_in_this_week':hours_in_this_week,'hours_in_this_month':hours_in_this_month,'hours_in_this_year':hours_in_this_year})
 
 
