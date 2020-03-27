@@ -600,15 +600,41 @@ def obtener_valores(request):
 
 
 @csrf_exempt
-def clock_view(request):
+def clock_view(request): # la comparten PAUSE y RESET
     if request.method == 'POST':
-        
-        request.user.userprofile.clock = request.POST['clock']
-        request.user.userprofile.clock_status = int(request.POST['clock_status'])
-        request.user.userprofile.save()
+
+        myDict = request.user.userprofile
+
+        newStatus = int(request.POST['clock_status'])
+        myDict.clock = request.POST['clock']
+        myDict.clock_status = newStatus
+        clockString = myDict.clock
+
+        task = myDict.clock_last_task
+
+        if(task == None):
+            return return JsonResponse({'status':'error','clockString':clockString})
+
+        last_init = myDict.clock_last_init
+
+        if(last_init == None):
+            return return JsonResponse({'status':'error','clockString':clockString})
+
+        # save interval
+        interval = TimeInterval(last_init, datetime.now(), request.user, task)
+        interval.save()
+
+        # last init = None
+        myDict.clock_last_init = None
+
+        # if reset then task = None
+        if(newStatus == 0)
+            myDict.clock_last_task = None
+
+
+        myDict.save()
         request.user.save()
         
-        clockString = request.user.userprofile.clock
 
         if(clockString != None):
             return JsonResponse({'status':'success','clockString': clockString})
@@ -618,26 +644,23 @@ def clock_view(request):
     return HttpResponse('Not Post')
 
 @csrf_exempt
-def clock_unload(request):
+def clock_unload(request): # Cambio de Pagina
     if request.method == 'POST':
         
-        #request.user.userprofile.clock = request.POST['clock']
-        #print("JAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJJAJAJAJAJAJAJAJAJAJA")
-        #print(request.POST)
-        #print(request.body)
         stri = str(request.body)
         mydict = ast.literal_eval(stri[2:-1])
+        myDict = request.user.userprofile
         
-        request.user.userprofile.clock_status = int(mydict['clock_status'])
-        request.user.userprofile.clock = mydict['clock']
-        request.user.userprofile.save()
+        myDict.clock_status = int(mydict['clock_status'])
+        myDict.clock = mydict['clock']
+        myDict.save()
         request.user.save()
         
         print("JEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJJEJEJEJEJEJEJEJEJEJE")
-        print(request.user.userprofile.clock)
-        print(request.user.userprofile.clock_status)
+        print(myDict.clock)
+        print(myDict.clock_status)
         #clockString = request.user.userprofile.clock
-        clockString = "00:00:00"
+        clockString = "--:--:--"
 
         if(clockString != None):
             return JsonResponse({'status':'success','clockString': clockString})
@@ -647,17 +670,42 @@ def clock_unload(request):
     return HttpResponse('Not Post')
 
 @csrf_exempt
-def clock_play(request):
+def clock_play(request): # PLAY 
     if request.method == 'POST':
+
+        myDict = request.user.userprofile
+
+        # la task se deberia guardar en la base de datos por otro lado
+        #myDict.clock_last_task = request.POST['last_task']
+        task = myDict.clock_last_task
+
+        if(task == None):
+            return sonResponse({'status':'error','clockString':'','clock_status':0})
+
+        last_init = myDict.clock_last_init
+
+                                # si le das play, entonces estabas
+        if(last_init != None):  # en pausa o estabas en reset, entonces last_init == None
+            return sonResponse({'status':'error','clockString':'','clock_status':0})
+
+        myDict.clock_last_init = datetime.now()
+        request.user.save()
+        myDict.save()
         
-        clockString = request.user.userprofile.clock
-        clock_status = request.user.userprofile.clock_status
+        clockString = myDict.clock
+        clock_status = myDict.clock_status
+
         print("JIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJJIJIJIJIJIJIJIJIJIJI")
         print(clockString)
         print(clock_status)
 
         if(clockString != None and clock_status!=None):
-            return JsonResponse({'status':'success','clockString': clockString,'clock_status':clock_status})
+            return JsonResponse({
+                'status':'success',
+                'clockString': clockString,
+                'clock_status':clock_status,
+                'last_task' : task,
+                })
         else:
             return JsonResponse({'status':'error','clockString':'','clock_status':clock_status})
 
