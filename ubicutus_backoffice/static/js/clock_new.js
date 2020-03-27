@@ -137,16 +137,23 @@ async function startChr() {
                     if(json.status=='success'){
                         clockString = json.clockString;
                         startchron = json.clock_status;
-
+                        hideWarn();
+                        
                         if(clockString!=''){
                             console.log('llego: '+clockString);
+                            saveClockState();
                             resolve(clockString);
                         }else{
                             reject('fail to get clockString 5');
                         }
                     }
                     else if(json.status=='error'){
+                        
                         reject('fail to get clockString 4');
+                    }
+                    else if(json.status == 'error_task') {
+                        raiseWarn();
+                        reject('Error no task');
                     }
                     else{
                         alert("Respuesta indefinida");
@@ -179,10 +186,10 @@ async function startChr() {
             hours1   = clockString.charCodeAt(1) - "0".charCodeAt(0);
             hours2   = clockString.charCodeAt(0) - "0".charCodeAt(0);
             
-            startchron = states.COUNTING;
+            //startchron = states.COUNTING;
             console.log('start in: estado del crono: '+startchron);
             console.log('start in: count del crono: '+ clockString);
-            saveClockState();
+            // saveClockState();
             console.log('start out: estado del crono: '+startchron);
             console.log('start out: count del crono: '+ clockString);
             chronometer(); 
@@ -277,6 +284,14 @@ async function saveClockState() {
         console.log(e); 
     });
 
+}
+
+function hideWarn(){
+    $('#alertMessage').addClass("d-none");
+}
+
+function raiseWarn(){
+    $('#alertMessage').removeClass("d-none");
 }
 
 document.getElementById('chrono').value = seconds1;
