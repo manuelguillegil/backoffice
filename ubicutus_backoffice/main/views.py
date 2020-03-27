@@ -156,11 +156,10 @@ def task_hours_chart(request):
             if i.task not in task_hours_set:
                 task_hours_set[i.task] = 0
 
-            task_hours_set[i.task] += ((i.end_time - i.init_time).total_seconds())
+            task_hours_set[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
 
     task_hours_top5 = sorted(task_hours_set.items(), key = lambda x: x[1], reverse = True)
     task_hours_top5 = task_hours_top5[:5]
-    task_hours_top5 = [int(x//3600) for x in task_hours_top5]
 
     for entry in task_hours_top5:
         labels.append(entry[0].name)
