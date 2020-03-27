@@ -98,12 +98,14 @@ class RequestVacation(forms.ModelForm):
 
     init_date = forms.DateField(
         label="Fecha inicial",
-        required=True
+        required=True,
+        widget=forms.DateTimeInput(attrs={"id" : 'initDate'})
     )
 
     end_date = forms.DateField(
         label="Fecha final",
-        required=False
+        required=False,
+        widget=forms.DateTimeInput(attrs={"id" : 'endDate'})
     )
 
     description = forms.CharField(

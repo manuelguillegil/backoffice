@@ -10,18 +10,18 @@
 
 
 {% block welcomeMsg %}
-  <img class="p-4 img-fluid" src="{% static 'img/beach.png' %}" alt="">
-  <small class="text-center p-2 ">
-    Aquí podrás solicitar tus vacaciones.
-    Especifica el día en que esperas iniciarlas, 
-    la fecha en que esperas terminarlas, y alguna observación que nosotros debamos tener en 
-    cuenta.
-    ¡Así de simple!
-  </small>
+<img class="p-4 img-fluid" src="{% static 'img/beach.png' %}" alt="">
+<small class="text-center p-2 ">
+  Aquí podrás solicitar tus vacaciones.
+  Especifica el día en que esperas iniciarlas,
+  la fecha en que esperas terminarlas, y alguna observación que nosotros debamos tener en
+  cuenta.
+  ¡Así de simple!
+</small>
 {% endblock %}
 
 {% block form_title %}
-<h1 class = "p-1 h2 text-gray-900 mb-3 text-center"> <strong>Solicitar Vacaciones </strong></h1>
+<h1 class="p-1 h2 text-gray-900 mb-3 text-center"> <strong>Solicitar Vacaciones </strong></h1>
 {% endblock %}
 
 {% block welcome_form %}
@@ -31,21 +31,23 @@
   <div class="form-group row">
     <label class="col-4 col-form-label"> {{ form.init_date.label_tag }}</label>
     <div class="col-8">
-      {{ form.init_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: exampleInitDate"|attr:"placeholder: 2020-1-1" }}
+      {{ form.init_date|attr:"class: form-control form-control-user"|attr:"onchange:setInitDate()"|attr:"type:date"|attr:"placeholder: 2020-1-1" }}
     </div>
     {{ form.init_date.errors }}
   </div>
   <div class="form-group row">
     <label class="col-4 col-form-label">{{ form.end_date.label_tag}}</label>
     <div class="col-8">
-      {{ form.end_date|attr:"class: form-control form-control-user"|attr:"type:date"|attr:"id: exampleEndDate"|attr:"placeholder: 2020-1-1" }}
+      {{ form.end_date|attr:"class: form-control form-control-user"|attr:"onchange:setEndDate()"|attr:"type:date"|attr:"placeholder: 2020-1-1" }}
     </div>
     {{ form.end_date.errors }}
   </div>
   <div class="form-group row">
     <label class="col-8 col-form-label">Días restantes</label>
     <div class="col-4">
-      <div class="form-control text-center rounded-pill p-1 margin-auto" id="remaining_days" readonly><h3 class="p-0"><strong>{{ remaining_days }}</strong></h3></div>
+      <div class="form-control text-center rounded-pill p-1 margin-auto" id="remaining_days" readonly>
+        <h3 class="p-0"><strong id="dias-restantes">{{ remaining_days }}</strong></h3>
+      </div>
     </div>
   </div>
   <div class="form-group row">
@@ -56,3 +58,44 @@
   <button type="submit" class="btn btn-primary btn-user btn-block" id="sendTask">Enviar Solicitud</button>
 </form>
 {% endblock welcome_form %}
+
+{% block cscripts %}
+<script type="text/javascript">
+
+  // onclick = "startChr( '{{ request.session.clock }}')"
+
+  var date1 = null;
+  var date2 = null;
+  var differenceTime = null;
+  var differenceDay = null;
+  var diasRestantes = document.getElementById('dias-restantes').innerHTML;  
+
+  function setEndDate() {
+    var end = $('#endDate').val();
+    date2 = new Date(end);
+    console.log(date2);
+
+    calculateDifferenceDate(date1, date2);
+  };
+
+  function setInitDate() {
+    var init = $('#initDate').val();
+    date1 = new Date(init);
+    console.log(date1);
+
+    calculateDifferenceDate(date1, date2);
+  };
+
+  function calculateDifferenceDate(date1, date2) {
+    if (date1 != null && date2 != null) {
+      differenceTime = date2.getTime() - date1.getTime();
+      differenceDay = differenceTime / (1000 * 3600 * 24);
+      document.getElementById('dias-restantes').innerHTML = diasRestantes - (differenceDay);
+    };
+  };
+
+
+
+
+</script>
+{% endblock %}

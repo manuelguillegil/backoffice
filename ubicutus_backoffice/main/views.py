@@ -221,12 +221,19 @@ def vacaciones(request):
         form = RequestVacation(request.POST)
         if form.is_valid():
             vacation = form.save(commit = False)
-            subject = 'Solicitud de vacaciones de {}'.format(str(user.username))
-            message = vacation.description
-            recepient = 'neilvillamizar@gmail.com' #Arreglar
-            send_mail(subject,
-            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
-            return redirect('dashboard')
+
+            if (profile.remaining_vac_days >= int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")) and int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")) >= 0):
+                subject = 'Solicitud de vacaciones de {}'.format(str(user.username))
+                original_profile = UserProfile.objects.get(id = profile.id)
+                original_profile.remaining_vac_days = profile.remaining_vac_days - ( int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")))
+                original_profile.save()
+                message = vacation.description
+                recepient = 'neilvillamizar@gmail.com' #Arreglar
+                send_mail(subject,
+                message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+
+                print(int(vacation.init_date.strftime("%d")))
+                return redirect('dashboard')
     else:
         form = RequestVacation()
 
