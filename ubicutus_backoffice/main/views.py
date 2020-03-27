@@ -600,7 +600,7 @@ def obtener_valores(request):
 
 
 @csrf_exempt
-def clock_view(request): # la comparten PAUSE y RESET
+def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
     if request.method == 'POST':
 
         myDict = request.user.userprofile
@@ -609,6 +609,9 @@ def clock_view(request): # la comparten PAUSE y RESET
         myDict.clock = request.POST['clock']
         myDict.clock_status = newStatus
         clockString = myDict.clock
+
+        if(newStatus == 1):
+            return JsonResponse({'status':'success','clockString': clockString})
 
         task = myDict.clock_last_task
 
