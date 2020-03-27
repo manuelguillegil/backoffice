@@ -139,10 +139,12 @@ def task_hours_chart(request):
 
     labels = []
     data = []
+    all_tasks = Task.objects.filter(archived=False)
+
 
     task_hours_set = {}
 
-    time_intervals = TimeInterval.objects.filter(user=request.user)
+    time_intervals = TimeInterval.objects.filter(user=request.user).filter(task__in=all_tasks)
 
     if(not time_intervals):
         empty = 1
