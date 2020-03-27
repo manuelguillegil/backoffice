@@ -707,7 +707,6 @@ def clock_play(request): # PLAY
                 'status':'success',
                 'clockString': clockString,
                 'clock_status':clock_status,
-                'last_task' : task,
                 })
         else:
             return JsonResponse({'status':'error_clock','clockString':'','clock_status':clock_status})
