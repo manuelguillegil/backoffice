@@ -1,0 +1,164 @@
+{% extends 'base_site.html' %}
+{% load static %}
+
+
+{% block pageTitle %}Consulta de horas trabajadas por usuario{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+  <!-- Page Heading-->
+  <center>
+  <h1 class="h3 mb-4 text-gray-800 mt-4">Consulta de horas trabajadas por usuario</h1></center>
+
+  {% if user.is_superuser %}
+<!-- /.container-fluid -->
+<!-- Content Row -->
+    <div class="row">
+
+        <!-- Content Column -->
+        <!-- Task Card : New Task -->
+        <div class="col-lg-6 mb-4">
+          <div class="card shadow mb-4 vh-70">
+            <div class="card-header py-2">
+                <div class="row">
+                    <div class="col-11 m-auto">
+                        <h6 class="m-0 font-weight-bold text-primary h-100">
+                            <i class="fas fa-sun"></i> Esta semana
+                        </h6>
+                    </div>
+                    <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                         data-target="#inproBody" aria-expanded="true" aria-controls="newBody">
+                        <i class="fas fa-caret-down"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body collapse show overflow-auto" id="inproBody">
+                      {% if hours_in_this_week%}
+                        <div class="table-responsive">
+                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                              <tr>
+                                <td class="text-center"><strong>Usuario</strong></td>
+                                <td class="text-center"><strong>Tiempo Trabajado</strong></td>
+                              </tr>
+                              {% for p in hours_in_this_week%}
+                              <tr>
+                                <td>{{p.0.user|truncatechars:12}}</td>
+                                <td>{{p.1}} h</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                        </div>
+                        {% else %}
+                        <span>
+                            No hay nada esta semana por ahora
+                            <i class="fas fa-umbrella-beach mr-1"></i>
+                        </span>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Column -->
+        <!-- Task Card : In progress Task -->
+        <div class="col-lg-6 mb-4">
+
+            <div class="card shadow mb-4 vh-70">
+              <div class="card-header py-2">
+                  <div class="row">
+                      <div class="col-11 m-auto">
+                          <h6 class="m-0 font-weight-bold text-primary h-100">
+                              <i class="fas fa-cloud"></i> Por este mes
+                          </h6>
+                      </div>
+                      <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                          data-target="#inproBody" aria-expanded="true" aria-controls="newBody">
+                          <i class="fas fa-caret-down"></i>
+                      </div>
+                  </div>
+              </div>
+              <div class="card-body collapse show overflow-auto" id="inproBody">
+                      {% if hours_in_this_month%}
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                  <tr>
+                                    <td class="text-center"><strong>Usuario</strong></td>
+                                    <td class="text-center"><strong>Tiempo Trabajado</strong></td>
+                                  </tr>
+                                  {% for p in hours_in_this_month%}
+                                  <tr>
+                                    <td>{{p.0.user|truncatechars:12}}</td>
+                                    <td>{{p.1}} h</td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                        {% else %}
+                          <span>
+                              No hay nada este mes por ahora
+                              <i class="fas fa-umbrella-beach mr-1"></i>
+                          </span>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="card shadow mb-4 vh-70">
+                <div class="card-header py-2">
+                    <div class="row">
+                        <div class="col-11 m-auto">
+                            <h6 class="m-0 font-weight-bold text-primary h-100">
+                                <i class="fas fa-calendar"></i> Por mes en este año
+                            </h6>
+                        </div>
+                        <div class="btn text-light col-1" type="button" data-toggle="collapse" 
+                             data-target="#inproBody" aria-expanded="true" aria-controls="newBody">
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body collapse show overflow-auto" id="inproBody">
+                        {%if hours_in_this_year%}
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                  <tr>
+                                    <td class="text-center"><strong>Usuario</strong></td>
+                                    <td class="text-center"><strong>Tiempo Trabajado</strong></td>
+                                    <td class="text-center"><strong>Mes</strong></td>
+                                  </tr>
+                                  {% for p in hours_in_this_year%}
+                                  <tr>
+                                    <td>{{p.0.user|truncatechars:12}}</td>
+                                    <td>{{p.1}} h</td>
+                                    <td>{{p.0.init_time|date:"F"}}</td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                              </table>
+                        </div>
+                        {% else %}
+                        <span>
+                            No hay nada este año por ahora
+                            <i class="fas fa-umbrella-beach mr-1"></i>
+                        </span>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <span>
+        No tienes permiso para ver este contenido
+    </span>
+    {% endif %}
+</div>
+{% endblock %}
+
