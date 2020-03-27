@@ -15,6 +15,7 @@ from datetime import datetime
 
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
+import ast
 
 
 # Create your views here.
@@ -603,9 +604,40 @@ def clock_view(request):
     if request.method == 'POST':
         
         request.user.userprofile.clock = request.POST['clock']
-        request.user.userprofile.clock_status = request.POST['clock_status'] 
+        request.user.userprofile.clock_status = int(request.POST['clock_status'])
         request.user.userprofile.save()
+        request.user.save()
+        
         clockString = request.user.userprofile.clock
+
+        if(clockString != None):
+            return JsonResponse({'status':'success','clockString': clockString})
+        else:
+            return JsonResponse({'status':'error','clockString':''})
+
+    return HttpResponse('Not Post')
+
+@csrf_exempt
+def clock_unload(request):
+    if request.method == 'POST':
+        
+        #request.user.userprofile.clock = request.POST['clock']
+        #print("JAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJAJJAJAJAJAJAJAJAJAJAJA")
+        #print(request.POST)
+        #print(request.body)
+        stri = str(request.body)
+        mydict = ast.literal_eval(stri[2:-1])
+        
+        request.user.userprofile.clock_status = int(mydict['clock_status'])
+        request.user.userprofile.clock = mydict['clock']
+        request.user.userprofile.save()
+        request.user.save()
+        
+        print("JEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJJEJEJEJEJEJEJEJEJEJE")
+        print(request.user.userprofile.clock)
+        print(request.user.userprofile.clock_status)
+        #clockString = request.user.userprofile.clock
+        clockString = "00:00:00"
 
         if(clockString != None):
             return JsonResponse({'status':'success','clockString': clockString})
@@ -619,11 +651,15 @@ def clock_play(request):
     if request.method == 'POST':
         
         clockString = request.user.userprofile.clock
+        clock_status = request.user.userprofile.clock_status
+        print("JIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJJIJIJIJIJIJIJIJIJIJI")
+        print(clockString)
+        print(clock_status)
 
-        if(clockString != None):
-            return JsonResponse({'status':'success','clockString': clockString})
+        if(clockString != None and clock_status!=None):
+            return JsonResponse({'status':'success','clockString': clockString,'clock_status':clock_status})
         else:
-            return JsonResponse({'status':'error','clockString':''})
+            return JsonResponse({'status':'error','clockString':'','clock_status':clock_status})
 
     return HttpResponse('Not Post')
 

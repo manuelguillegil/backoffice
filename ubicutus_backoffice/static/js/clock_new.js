@@ -23,10 +23,43 @@ window.onload = function() {
   startChr(_initialClock);
 }; */
 
-$(window).bind('beforeunload', function() {
+/*$(window).bind('beforeunload', function() {
     console.log('AAAAAAAAAAAA estado del crono: '+startchron);
     console.log('AAAAAAAAAAAA count del crono: '+ clockString);
-    saveClockState();
+    //var aux = startchron;
+    //startchron = states.PAUSED;
+    var data = {'clock': clockString, 'clock_status': startchron };
+    navigator.sendBeacon("/clock-play/", JSON.stringify(data));
+    //saveClockState();
+    //startchron = aux;
+});*/
+
+/*
+window.addEventListener("unload", function logData() {
+    console.log('AAAAAAAAAAAA estado del crono: '+startchron);
+    console.log('AAAAAAAAAAAA count del crono: '+ clockString);
+    var data = {clock: clockString, clock_status: startchron };
+    //var e = navigator.sendBeacon("/clock-unload/", JSON.stringify(data));
+    var e = navigator.sendBeacon("/clock-unload/", "holaaaaaaaaaaaaaaaaaaaaaaaa");
+    if(e){
+        console.log('se guardo en cambio de pagina chamito');
+    }else{
+        console.log('FFFFFFFFFFFFFFF');
+    }
+});
+*/
+
+window.addEventListener("unload", function logData() {
+    console.log('AAAAAAAAAAAA estado del crono: '+startchron);
+    console.log('AAAAAAAAAAAA count del crono: '+ clockString);
+    var data = {clock : clockString, clock_status : startchron };
+    return fetch(/clock-unload/, {
+      method: 'POST', // or 'PUT'
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
 });
 
 // Variable de control del cronometro
@@ -87,6 +120,8 @@ function increase_time(){
 // Inicia el cronometro
 async function startChr() { 
 
+    console.log('plaaaaaaaay');
+
     if(startchron != states.COUNTING){
 
         var promise = new Promise( (resolve, reject) => {
@@ -101,6 +136,7 @@ async function startChr() {
                 success:function(json){
                     if(json.status=='success'){
                         clockString = json.clockString;
+                        startchron = json.clock_status;
 
                         if(clockString!=''){
                             console.log('llego: '+clockString);
@@ -119,7 +155,7 @@ async function startChr() {
                     }
                   },
                   error:function(xhr, errmsg, err){
-                    raiseErr();
+                    //raiseErr();
                     console.log(errmsg)
                     reject('fail to get clockString 2');
                   },
@@ -196,6 +232,7 @@ async function saveClockState() {
     console.log('save state in: estado del crono: '+startchron);
     console.log('save state in: count del crono: '+ clockString);
 
+
     var promise2 = new Promise( (resolve, reject) => {
         $.ajax({
             url: '/clock-view/',
@@ -205,7 +242,7 @@ async function saveClockState() {
             success:function(json){
                 if(json.status=='success'){
 
-                    if(clockString == json.clockString){
+                    if(clockString != ''){
                         console.log('llego: '+clockString);
                         resolve(clockString);
                     }else{
@@ -222,9 +259,9 @@ async function saveClockState() {
                 }
             },
             error:function(xhr, errmsg, err){
-                raiseErr();
-                console.log(errmsg)
-                reject('fail to save clockString 2');
+                //raiseErr();
+                //console.log(errmsg);
+                reject('fail to save clockString 2 (ajax error in saveclock) '+startchron);
             },
         }).done(function(response){
             console.log(response);

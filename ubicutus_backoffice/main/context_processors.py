@@ -1,6 +1,6 @@
 def clock_variable(request):
     if request.user.is_authenticated:
-        clock = '00:00:00'
+        clock = '--:--:--'
 
         clock_var = request.user.userprofile
     
@@ -12,19 +12,20 @@ def clock_variable(request):
         request.user.userprofile.save()
         request.user.save()
 
-        clock = clock_var.clock
-        if(clock == ''):
-            clock = '00:00:00'
-        clock_var.clock = clock
-        request.user.userprofile.save()
-        request.user.save()
-
         clock_status = clock_var.clock_status
         if(clock_status==None or clock_status<0 or clock_status>2):
             clock_status = 0
         clock_var.clock_status = clock_status
         request.user.userprofile.save()
         request.user.save()
+
+         #clock = clock_var.clock
+        if(clock_status != 1):
+            clock = clock_var.clock
+        #    clock = '00:00:00'
+        #clock_var.clock = clock
+        #request.user.userprofile.save()
+        #request.user.save()
         
         return {
             'clock': clock,
