@@ -624,7 +624,8 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
             return JsonResponse({'status':'error_time','clockString':clockString})
 
         # save interval
-        interval = TimeInterval(last_init, datetime.now(), request.user, task)
+        interval = TimeInterval(init_time=last_init, end_time=datetime.now(), user=request.user, task=task)
+        interval.full_clean()
         interval.save()
 
         # last init = None
