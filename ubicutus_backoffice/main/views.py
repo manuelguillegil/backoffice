@@ -613,12 +613,12 @@ def clock_view(request): # la comparten PAUSE y RESET
         task = myDict.clock_last_task
 
         if(task == None):
-            return return JsonResponse({'status':'error','clockString':clockString})
+            return return JsonResponse({'status':'error_task','clockString':clockString})
 
         last_init = myDict.clock_last_init
 
         if(last_init == None):
-            return return JsonResponse({'status':'error','clockString':clockString})
+            return return JsonResponse({'status':'error_time','clockString':clockString})
 
         # save interval
         interval = TimeInterval(last_init, datetime.now(), request.user, task)
@@ -639,7 +639,7 @@ def clock_view(request): # la comparten PAUSE y RESET
         if(clockString != None):
             return JsonResponse({'status':'success','clockString': clockString})
         else:
-            return JsonResponse({'status':'error','clockString':''})
+            return JsonResponse({'status':'error_clock','clockString':''})
 
     return HttpResponse('Not Post')
 
@@ -665,7 +665,7 @@ def clock_unload(request): # Cambio de Pagina
         if(clockString != None):
             return JsonResponse({'status':'success','clockString': clockString})
         else:
-            return JsonResponse({'status':'error','clockString':''})
+            return JsonResponse({'status':'error_clock','clockString':''})
 
     return HttpResponse('Not Post')
 
@@ -680,13 +680,13 @@ def clock_play(request): # PLAY
         task = myDict.clock_last_task
 
         if(task == None):
-            return sonResponse({'status':'error','clockString':'','clock_status':0})
+            return sonResponse({'status':'error_task','clockString':'','clock_status':0})
 
         last_init = myDict.clock_last_init
 
                                 # si le das play, entonces estabas
         if(last_init != None):  # en pausa o estabas en reset, entonces last_init == None
-            return sonResponse({'status':'error','clockString':'','clock_status':0})
+            return sonResponse({'status':'error_time','clockString':'','clock_status':0})
 
         myDict.clock_last_init = datetime.now()
         request.user.save()
@@ -707,7 +707,7 @@ def clock_play(request): # PLAY
                 'last_task' : task,
                 })
         else:
-            return JsonResponse({'status':'error','clockString':'','clock_status':clock_status})
+            return JsonResponse({'status':'error_clock','clockString':'','clock_status':clock_status})
 
     return HttpResponse('Not Post')
 
