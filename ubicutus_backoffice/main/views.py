@@ -40,7 +40,7 @@ def dashboard(request):
             i.init_time = datetime.now()
         if(i.end_time==None):
             i.end_time = datetime.now() #+ timedelta(days=1)
-        worked_hours_total = worked_hours_total + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
+        worked_hours_total = worked_hours_total + ((i.end_time - i.init_time).total_seconds()) #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
 
     # El intervalo entre start_date y end_date es de una semana
@@ -61,7 +61,7 @@ def dashboard(request):
             i.init_time = datetime.now()
         if(i.end_time==None):
             i.end_time = datetime.now() #+ timedelta(days=1)
-        worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds())//3600 #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
+        worked_hours_week = worked_hours_week + ((i.end_time - i.init_time).total_seconds()) #- i.init_time)#hours(i.end_time, i.init_time)#(i.end_time.datetime - i.init_time.datetime).hour
 
     # Tareas completadas
     completed_task = Task.objects.filter(status=Task.Status.CLOSED).filter(user__in = users).filter(archived=False).count()
@@ -86,7 +86,7 @@ def dashboard(request):
             cnt+=1
         if cnt>5:
             break
-        hours_last_five_days += ((i.end_time - i.init_time).total_seconds())//3600
+        hours_last_five_days += ((i.end_time - i.init_time).total_seconds())
 
 
     # Top 5 tareas trabajadas mas recientemente, junto con su estatus
@@ -96,11 +96,11 @@ def dashboard(request):
 
 
     #######################################################
-    args = {'worked_hours_week': int(worked_hours_week),
-            'worked_hours_total': int(worked_hours_total),
+    args = {'worked_hours_week': int(worked_hours_week//3600),
+            'worked_hours_total': int(worked_hours_total//3600),
             'completed_task': completed_task,
             'assigned_task': assigned_task,
-            'hours_last_five_days' : hours_last_five_days,
+            'hours_last_five_days' : int(hours_last_five_days//3600),
             'recent_tasks_top5' : recent_tasks_top5}
 
     return render(request, 'home.html', args)
@@ -156,10 +156,11 @@ def task_hours_chart(request):
             if i.task not in task_hours_set:
                 task_hours_set[i.task] = 0
 
-            task_hours_set[i.task] += ((i.end_time - i.init_time).total_seconds())//3600
+            task_hours_set[i.task] += ((i.end_time - i.init_time).total_seconds())
 
     task_hours_top5 = sorted(task_hours_set.items(), key = lambda x: x[1], reverse = True)
     task_hours_top5 = task_hours_top5[:5]
+    task_hours_top5 = [int(x//3600) for x in task_hours_top5]
 
     for entry in task_hours_top5:
         labels.append(entry[0].name)
@@ -193,7 +194,7 @@ def hours_worked_chart(request):
         empty = 1
 
     for time in time_intervals:
-        hours = ((time.end_time - time.init_time).total_seconds())//3600
+        hours = ((time.end_time - time.init_time).total_seconds())
         
         if time.end_time.weekday() == 0:
             monday += hours
@@ -207,7 +208,7 @@ def hours_worked_chart(request):
             friday += hours
     
     labels = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']
-    data = [monday, tuesday, wedneday, thursday, friday]
+    data = [int(monday//3600), int(tuesday//3600), int(wedneday//3600), int(thursday//3600), int(friday//3600)]
 
     return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
