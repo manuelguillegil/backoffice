@@ -652,7 +652,7 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
 
 @csrf_exempt
 def clock_unload(request): # Cambio de Pagina
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         
         stri = str(request.body)
         mydict = ast.literal_eval(stri[2:-1])

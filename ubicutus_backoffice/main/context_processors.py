@@ -33,3 +33,10 @@ def clock_variable(request):
             'clock_last_task' : clock_last_task,
             'clock_last_init' : clock_last_init,
         }
+
+    return {
+        'clock': '--:--:--',
+        'clock_status': 0,
+        'clock_last_task': None,
+        'clock_last_init': None,
+    }
