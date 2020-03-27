@@ -501,7 +501,7 @@ def editar_tarea_new(request):
 @login_required
 def contador(request):
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(user = request.user)
+    tasks_ip = Task.objects.filter(user = request.user).filter(archived=False)
 
     if request.method == 'POST':
         task_id = request.POST.get('list-hours')
