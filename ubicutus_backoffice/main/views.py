@@ -292,7 +292,7 @@ def adelanto(request):
 @login_required
 def consulta_horas_trabajadas(request):
     ## Por los momentos solo hacer get de todas las horas trabajadas
-    time_i = TimeInterval.objects.filter(user=request.user)
+    time_i = TimeInterval.objects.filter(user=request.user).order_by('-init_time')
     time_intervals = []
     for t in time_i:
         time_intervals.append([t,Task.objects.get(id=t.task_id)])
@@ -501,7 +501,7 @@ def editar_tarea_new(request):
 @login_required
 def contador(request):
     #Query to obtain all in progress tasks
-    tasks_ip = Task.objects.filter(user = request.user)
+    tasks_ip = Task.objects.filter(user = request.user).filter(archived=False)
 
     if request.method == 'POST':
         task_id = request.POST.get('list-hours')
