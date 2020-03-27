@@ -20,7 +20,7 @@
         <!-- Task Card : New Task -->
         <div class="col-lg-6 mb-4">
 
-            <div class="card shadow mb-4  vh-70">
+            <div class="card shadow mb-4">
                 <div class="card-header bg-success py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto" id="newBody">
+                <div class="card-body collapse show overflow-auto vh-70" id="newBody">
                     <ul class=" list-unstyled h-100">
                         <li class="h-100">
                             {% for task in new %}
@@ -59,7 +59,7 @@
         <!-- Task Card : In progress Task -->
         <div class="col-lg-6 mb-4">
 
-            <div class="card shadow mb-4  vh-70">
+            <div class="card shadow mb-4">
                 <div class="card-header bg-warning py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto" id="inproBody">
+                <div class="card-body collapse show overflow-auto vh-70" id="inproBody">
                     <ul class="list-unstyled h-100">
                         <li class="h-100">
                             {% for task in inpro %}
@@ -101,7 +101,7 @@
          <!-- Task Card : Freezed Task -->
        <div class="col-lg-6 mb-4">
 
-            <div class="card shadow mb-4  vh-70">
+            <div class="card shadow mb-4">
                 <div class="card-header bg-danger py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto" id="freezeBody">
+                <div class="card-body collapse show overflow-auto  vh-70" id="freezeBody">
                     <ul class="list-unstyled h-100">
                         <li class="h-100">
                             {% for task in waiting %}
@@ -139,7 +139,7 @@
         <!-- Content Column -->
        <!-- Task Card : Done Task -->
        <div class="col-lg-6 mb-4">
-            <div class="card shadow mb-4  vh-70">
+            <div class="card shadow mb-4">
                 <div class="card-header bg-primary py-2">
                     <div class="row">
                         <div class="col-11 m-auto">
@@ -153,7 +153,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body collapse show overflow-auto" id="doneBody">
+                <div class="card-body collapse show overflow-auto  vh-70" id="doneBody">
                     <ul class="list-unstyled h-100">
                         <li class="h-100">
                             {% for task in done %}
@@ -178,26 +178,20 @@
         <div class="col-lg-12 mb-4">
         <!-- Task Card -->
         <!-- all -->
-        <div class="card shadow mb-4  vh-100">
+        <div class="card shadow mb-4">
             <div class="card-header py-2 d-flex align-items-center">
-                
                 <h6 class="m-0 font-weight-bold text-primary margin-auto mr-auto">Todas</h6>
-
                 <div class="btn p-0 mx-4" type="button" data-toggle="collapse" 
                     data-target="#allBody" aria-expanded="true" aria-controls="allBody">
                     <i class="fas fa-caret-down"></i>
                 </div>
-
                 <!--Add task button-->
                 <div class="btn p-0" data-toggle="modal" data-target="#addTaskModal" id="add-task-btn">
                     <i class="fas fa-plus float-right"></i>
                 </div>
-                
-                
-                
             </div>
 
-            <div class="card-body collapse show overflow-auto" id="allBody">
+            <div class="card-body collapse show overflow-auto vh-100" id="allBody">
                 <ul class="list-unstyled">
                     <li>
                         {% for task in all %}
