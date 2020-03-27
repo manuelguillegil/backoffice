@@ -67,7 +67,7 @@ def dashboard(request):
     .exclude(status=Task.Status.CLOSED).count()
     
     # Horas trabajadas durante los ultimos 5 dias trabajados
-    time_intervals = TimeInterval.objects.filter(user=request.user).order_by('-init_time')
+    time_intervals = TimeInterval.objects.filter(user=request.user).filter(task__in=all_tasks).order_by('-init_time')
 
     last_day = None
     cnt = 0
@@ -86,7 +86,7 @@ def dashboard(request):
 
 
     # Top 5 tareas trabajadas mas recientemente, junto con su estatus
-    recent_tasks_top5 = TimeInterval.objects.filter(user=request.user)\
+    recent_tasks_top5 = TimeInterval.objects.filter(task__in=all_tasks).filter(user=request.user)\
     .values('task').annotate(x=Max('end_time'))\
     .order_by('-x').values('task__name','task__status')[:5]
 
