@@ -25,6 +25,7 @@
 {% endblock %}
 
 {% block welcome_form %}
+<!--Save msgs-->
 <form class="user" name="sendVacation" id="sendVacation" novalidate method="POST">
   {% csrf_token %}
   {{ form.non_field_errors }}

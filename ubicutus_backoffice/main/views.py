@@ -13,6 +13,8 @@ from ubicutus_backoffice.settings import EMAIL_HOST_USER
 from django.core.mail import send_mail
 from datetime import datetime
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMultiAlternatives
+
 
 # Create your views here.
 @login_required
@@ -228,11 +230,16 @@ def vacaciones(request):
                 original_profile.remaining_vac_days = profile.remaining_vac_days - ( int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")))
                 original_profile.save()
                 message = vacation.description
-                recepient = 'neilvillamizar@gmail.com' #Arreglar
-                send_mail(subject,
-                message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+                recepient = 'manuelguillermogil@gmail.com' #Arreglar
+                # send_mail(subject,
+                # message, EMAIL_HOST_USER, [recepient], fail_silently = False)
 
-                print(int(vacation.init_date.strftime("%d")))
+                subject, from_email, to = 'Solicitud de Vacaciones: ' + user.first_name, EMAIL_HOST_USER, 'manuelguillermogil@gmail.com'
+                text_content = 'This is an important message.'
+                html_content = '<div> <div style="position: relative; left: 25%; color: #484848"> <img style="height: auto; width: 500px" src="https://www.ubicutus.com/static/home/images/ubicutus-logo_preview.png" /> <p color="#484848">Solicitd de Vacaciones:  ' + user.first_name + ' </p> <p color="#484848">Fecha de Inicio:  ' + str(vacation.init_date) + ' </p> <p color="#484848">Fecha de Fin: ' + str(vacation.end_date) + ' </p> <p color="#484848">Motivo: ' + vacation.description + ' </p> </div> </div>'
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
                 return redirect('dashboard')
     else:
         form = RequestVacation()
@@ -256,10 +263,12 @@ def adelanto(request):
             advancement = Advancement(user=request.user, quantity = quantity, description = description, aproved = aproved)
             advancementForm = form.save(commit = False)
             subject = 'Solicitud de adelanto de {}'.format(str(user.username))
-            message = advancementForm.description
-            recepient = 'manuelguillermogil@gmail.com' #Arreglar
-            send_mail(subject,
-            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            subject, from_email, to = 'Solicitud de Adelanto: ' + user.first_name, EMAIL_HOST_USER, 'manuelguillermogil@gmail.com'
+            text_content = 'This is an important message.'
+            html_content = '<div> <div style="position: relative; left: 25%; color: #484848"> <img style="height: auto; width: 500px" src="https://www.ubicutus.com/static/home/images/ubicutus-logo_preview.png" /> <p color="#484848">Solicitd de Adelanto:  ' + user.first_name + ' </p> <p color="#484848">Cantidad:  ' + str(advancement.quantity) + ' </p> <p color="#484848">Motivo: ' + advancement.description + ' </p> </div> </div>'
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
             try:
                 advancement.full_clean()
                 advancement.save()
@@ -376,10 +385,12 @@ def reporte(request):
             advancementForm = form.save(commit = False)
             report = form.save(commit = False)
             subject = 'Reporte de falta de {}'.format(str(user.username))
-            message = str(report.date) + ' : ' + str(report.description)
-            recepient = 'manuelguillermogil@gmail.com' #Arreglar
-            send_mail(subject,
-            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            subject, from_email, to = 'Reporte de falta: ' + user.first_name, EMAIL_HOST_USER, 'manuelguillermogil@gmail.com'
+            text_content = 'This is an important message.'
+            html_content = '<div> <div style="position: relative; left: 25%; color: #484848"> <img style="height: auto; width: 500px" src="https://www.ubicutus.com/static/home/images/ubicutus-logo_preview.png" /> <p color="#484848">Reporte de falta:  ' + user.first_name + ' </p> <p color="#484848">Fecha:  ' + str(report.date) + ' </p> <p color="#484848">Motivo: ' + report.description + ' </p> </div> </div>'
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
             try:
                 reportObject.full_clean()
                 reportObject.save()
