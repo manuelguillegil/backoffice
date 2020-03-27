@@ -28,7 +28,14 @@ aria-hidden="true">
     </div>
 
     <div class="modal-body w-100">
-        
+        <!--Save msgs-->
+        <div class="alert alert-success my-2 d-none" id="alert-save-succ"> Cambios guardados exitosamente. Refresca la página para ver los cambios </div>
+        <div class="alert alert-danger my-2 d-none" id="alert-save-err"> No se pudieron guardar estos cambios. </div>
+        <div class="alert alert-warning my-2 d-none" id="alert-save-warn"> Estos cambios son incorrectos. </div>
+        <!--Get data msgs-->
+        <div class="alert alert-danger my-2 d-none" id="alert-get-err"> Ocurrió un error y no se pudieron recuperar los datos </div>
+        <div class="alert alert-warning my-2 d-none" id="alert-get-warn"> Estos datos no pueden ser recuperados </div>
+
             
         <form method="POST" class="edit-task-mod-form" id="task-edit-form" data-submit="submitEdit">
             {% csrf_token %}
@@ -87,7 +94,7 @@ aria-hidden="true">
                         <div class="font-weight-bold">
                             {{ form.status.label_tag }}   
                         </div>      
-                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"id:edit-status" }}
+                        {{ form.status |attr:"class:form-control"|attr:"placeholder:Fecha inicial"|attr:"id:edit-task-status"|attr:"type:select" }}
                         {% if form.status.help_text %}
                         <p class="help-block">{{ form.status.help_text|safe }}</p>
                         {% endif %}
@@ -99,14 +106,6 @@ aria-hidden="true">
                 <button type="button" class="btn btn-primary rounded w-100 btn-outline-al btn-xl submitEdit" id="submitEdit">Guardar</button>
             </div>
         </form>
-        <!--Save msgs-->
-        <div class="alert alert-success my-2 d-none" id="alert-save-succ"> Cambios guardados exitosamente. Refresca la página para ver los cambios </div>
-        <div class="alert alert-danger my-2 d-none" id="alert-save-err"> No se pudieron guardar estos cambios. </div>
-        <div class="alert alert-warning my-2 d-none" id="alert-save-warn"> Estos cambios son incorrectos. </div>
-        <!--Get data msgs-->
-        <div class="alert alert-danger my-2 d-none" id="alert-get-err"> Ocurrió un error y no se pudieron recuperar los datos </div>
-        <div class="alert alert-warning my-2 d-none" id="alert-get-warn"> Estos datos no pueden ser recuperados </div>
-
     </div>
 
     <div class="modal-footer">
@@ -194,6 +193,7 @@ aria-hidden="true">
                             document.getElementById('edit-task-init-date').valueAsDate = new Date(json.init_date);
                             document.getElementById('edit-task-end-date').valueAsDate = new Date(json.end_date);
                             $('#edit-task-status').val(json.status);
+                            
                             $formFields.prop("disabled",false);
                         }
                         else if(json.success=='no'){
@@ -234,6 +234,7 @@ aria-hidden="true">
             //Show an error message for the get data operation
             function raiseSuccSave(){
                 $('#alert-save-succ').removeClass('d-none');
+                location.reload()
             }
             //Show an error message for the get data operation
             function raiseErrSave(){

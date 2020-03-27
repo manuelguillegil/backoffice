@@ -54,7 +54,8 @@ class UserProfile(models.Model):
         choices=Position,
         default=REQSTUDENT,
     )
-    remaining_vac_days = models.IntegerField(default=30)
+
+    remaining_vac_days = models.IntegerField(default=19)
     clock_last_task = models.ForeignKey(Task,on_delete=models.SET_NULL,blank=True,null=True, default=None)
     clock_last_init = models.DateTimeField(blank=True, null=True, default=None)
     clock_status = models.IntegerField(default=0)

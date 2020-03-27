@@ -16,6 +16,8 @@ from datetime import datetime
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 import ast
+from django.core.mail import EmailMultiAlternatives
+
 
 
 # Create your views here.
@@ -29,9 +31,10 @@ def dashboard(request):
     hours_last_five_days = 0
 
     users = get_user(request)
+    all_tasks = Task.objects.filter(user__in=users).filter(archived=False)
 
     #suma de horas trabajadas por el request.user
-    time_intervals = TimeInterval.objects.filter(user=request.user)
+    time_intervals = TimeInterval.objects.filter(user=request.user).filter(task__in=all_tasks)
     for i in time_intervals:
         if(i.init_time==None):
             i.init_time = datetime.now()
@@ -51,7 +54,7 @@ def dashboard(request):
         user=request.user, 
         end_time__lte=et,  
         init_time__gte=st,
-    )
+    ).filter(task__in=all_tasks)
 
     for i in time_intervals:
         if(i.init_time==None):
@@ -108,8 +111,8 @@ def dashboard(request):
 def status_chart(request):
     empty = 0
 
-    labels = []
-    data = []
+    labels = ['Hecho', 'En curso', 'Nuevo', 'Detenido']
+    data = [0, 0, 0, 0]
 
     queryset = Task.objects.filter(user=request.user).filter(archived=False)\
     .values('status').annotate(task_count=Count('pk'))\
@@ -120,31 +123,13 @@ def status_chart(request):
 
     for entry in queryset:
         if entry['status'] == 'Closed':
-            labels.append('Hecho')
+            data[0] = entry['task_count']
         elif entry['status'] == 'In progress':
-            labels.append('En curso')
+            data[1] = entry['task_count']
         elif entry['status'] == 'Waiting':
-            labels.append('Detenido')
+            data[3] = entry['task_count']
         else:
-            labels.append('Nuevo')
-        data.append(entry['task_count'])
-
-    if 'Closed' not in queryset.values():
-        labels.append('Hecho')
-        data.append(0)
-
-    if 'Waiting' not in queryset.values():
-        labels.append('Detenido')
-        data.append(0)
-
-    if 'In progress' not in queryset.values():
-        labels.append('En curso')
-        data.append(0)
-
-    if 'New' not in queryset.values():
-        labels.append('Nuevo')
-        data.append(0)
-
+            data[2] = entry['task_count']
     
     return JsonResponse(data = { 'labels': labels, 'data': data, 'empty': empty})
 
@@ -243,12 +228,24 @@ def vacaciones(request):
         form = RequestVacation(request.POST)
         if form.is_valid():
             vacation = form.save(commit = False)
-            subject = 'Solicitud de vacaciones de {}'.format(str(user.username))
-            message = vacation.description
-            recepient = 'neilvillamizar@gmail.com' #Arreglar
-            send_mail(subject,
-            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
-            return redirect('dashboard')
+
+            if (profile.remaining_vac_days >= int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")) and int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")) >= 0):
+                subject = 'Solicitud de vacaciones de {}'.format(str(user.username))
+                original_profile = UserProfile.objects.get(id = profile.id)
+                original_profile.remaining_vac_days = profile.remaining_vac_days - ( int(vacation.end_date.strftime("%d")) - int(vacation.init_date.strftime("%d")))
+                original_profile.save()
+                message = vacation.description
+                recepient = 'manuelguillermogil@gmail.com' #Arreglar
+                # send_mail(subject,
+                # message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+
+                subject, from_email, to = 'Solicitud de Vacaciones: ' + user.first_name, EMAIL_HOST_USER, 'manuelguillermogil@gmail.com'
+                text_content = 'This is an important message.'
+                html_content = '<div> <div style="position: relative; left: 25%; color: #484848"> <img style="height: auto; width: 500px" src="https://www.ubicutus.com/static/home/images/ubicutus-logo_preview.png" /> <p color="#484848">Solicitd de Vacaciones:  ' + user.first_name + ' </p> <p color="#484848">Fecha de Inicio:  ' + str(vacation.init_date) + ' </p> <p color="#484848">Fecha de Fin: ' + str(vacation.end_date) + ' </p> <p color="#484848">Motivo: ' + vacation.description + ' </p> </div> </div>'
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+                return redirect('dashboard')
     else:
         form = RequestVacation()
 
@@ -271,10 +268,12 @@ def adelanto(request):
             advancement = Advancement(user=request.user, quantity = quantity, description = description, aproved = aproved)
             advancementForm = form.save(commit = False)
             subject = 'Solicitud de adelanto de {}'.format(str(user.username))
-            message = advancementForm.description
-            recepient = 'manuelguillermogil@gmail.com' #Arreglar
-            send_mail(subject,
-            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            subject, from_email, to = 'Solicitud de Adelanto: ' + user.first_name, EMAIL_HOST_USER, 'manuelguillermogil@gmail.com'
+            text_content = 'This is an important message.'
+            html_content = '<div> <div style="position: relative; left: 25%; color: #484848"> <img style="height: auto; width: 500px" src="https://www.ubicutus.com/static/home/images/ubicutus-logo_preview.png" /> <p color="#484848">Solicitd de Adelanto:  ' + user.first_name + ' </p> <p color="#484848">Cantidad:  ' + str(advancement.quantity) + ' </p> <p color="#484848">Motivo: ' + advancement.description + ' </p> </div> </div>'
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
             try:
                 advancement.full_clean()
                 advancement.save()
@@ -391,10 +390,12 @@ def reporte(request):
             advancementForm = form.save(commit = False)
             report = form.save(commit = False)
             subject = 'Reporte de falta de {}'.format(str(user.username))
-            message = str(report.date) + ' : ' + str(report.description)
-            recepient = 'manuelguillermogil@gmail.com' #Arreglar
-            send_mail(subject,
-            message, EMAIL_HOST_USER, [recepient], fail_silently = False)
+            subject, from_email, to = 'Reporte de falta: ' + user.first_name, EMAIL_HOST_USER, 'manuelguillermogil@gmail.com'
+            text_content = 'This is an important message.'
+            html_content = '<div> <div style="position: relative; left: 25%; color: #484848"> <img style="height: auto; width: 500px" src="https://www.ubicutus.com/static/home/images/ubicutus-logo_preview.png" /> <p color="#484848">Reporte de falta:  ' + user.first_name + ' </p> <p color="#484848">Fecha:  ' + str(report.date) + ' </p> <p color="#484848">Motivo: ' + report.description + ' </p> </div> </div>'
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
             try:
                 reportObject.full_clean()
                 reportObject.save()
@@ -579,7 +580,11 @@ def desarchivar_tarea(request):
 def tareas_archivadas(request):
     users = get_user(request)
     arch_tasks = Task.objects.filter(archived=True).filter(user__in = users)
-    args = {'arch_tasks' : arch_tasks}
+    args = {
+        'arch_tasks' : arch_tasks,
+        'edit_task_form' : EditTaskForm(),
+        'dearch_task_form' : TaskId()
+    }
     return render(request, 'archived_task.html', args)
 
 
@@ -663,9 +668,9 @@ def clock_unload(request): # Cambio de Pagina
         myDict.save()
         request.user.save()
         
-        print("JEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJJEJEJEJEJEJEJEJEJEJE")
-        print(myDict.clock)
-        print(myDict.clock_status)
+        #print("JEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJJEJEJEJEJEJEJEJEJEJE")
+        #print(myDict.clock)
+        #print(myDict.clock_status)
         #clockString = request.user.userprofile.clock
         clockString = "--:--:--"
 
@@ -702,9 +707,9 @@ def clock_play(request): # PLAY
         clockString = myDict.clock
         clock_status = myDict.clock_status
 
-        print("JIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJJIJIJIJIJIJIJIJIJIJI")
-        print(clockString)
-        print(clock_status)
+        #print("JIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJJIJIJIJIJIJIJIJIJIJI")
+        #print(clockString)
+        #print(clock_status)
 
         if(clockString != None and clock_status!=None):
             return JsonResponse({
