@@ -33,7 +33,7 @@ class UserProfile(models.Model):
         choices=Position,
         default=REQSTUDENT,
     )
-    remaining_vac_days = models.IntegerField(default=30)
+    remaining_vac_days = models.IntegerField(default=19)
 
 class  Task(models.Model):
 
