@@ -616,12 +616,12 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
         task = myDict.clock_last_task
 
         if(task == None):
-            return return JsonResponse({'status':'error_task','clockString':clockString})
+            return JsonResponse({'status':'error_task','clockString':clockString})
 
         last_init = myDict.clock_last_init
 
         if(last_init == None):
-            return return JsonResponse({'status':'error_time','clockString':clockString})
+            return JsonResponse({'status':'error_time','clockString':clockString})
 
         # save interval
         interval = TimeInterval(last_init, datetime.now(), request.user, task)
@@ -631,7 +631,7 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
         myDict.clock_last_init = None
 
         # if reset then task = None
-        if(newStatus == 0)
+        if(newStatus == 0):
             myDict.clock_last_task = None
 
 
