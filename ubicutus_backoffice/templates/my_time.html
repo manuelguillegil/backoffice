@@ -27,8 +27,8 @@
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="stopChr()">Detener</button>
     <button class="btn btn-primary btn-user btn-block rounded-pill" onclick="resetChr()">Resetear</button>
   </div>
-
-  {% if request.user.userprofile.clock_last_task == null %}
+  
+  {% if request.user.userprofile.clock_last_task == None %}
   <div class="alert alert-success mt-3" id="alertMessage">Por favor asigne una tarea para ser cronometrada.</div>
   <form class="user mt-4" method="POST" id="select-task-form">
     {% csrf_token %}

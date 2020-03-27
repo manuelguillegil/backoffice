@@ -141,6 +141,7 @@ async function startChr() {
                         
                         if(clockString!=''){
                             console.log('llego: '+clockString);
+                            startchron = states.COUNTING;
                             saveClockState();
                             resolve(clockString);
                         }else{
@@ -258,6 +259,13 @@ async function saveClockState() {
                         reject('fail to save clockString 5');
                     }
                 }
+                else if(json.status == 'error_task') {
+                    raiseWarn();
+                    reject('Error no task');
+                }
+                else if(json.status == 'error_time') {
+                    reject('No Init time');
+                }
                 else if(json.status=='error'){
                     reject('fail to save clockString 4');
                 }
@@ -280,7 +288,7 @@ async function saveClockState() {
     return promise2.then( clockvalue => {
 
         clockString = clockvalue;
-        console.log('jeje')
+        console.log('jeje');
 
     }).catch( e => { 
         console.log(e); 

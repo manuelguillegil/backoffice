@@ -505,6 +505,7 @@ def contador(request):
         task = get_object_or_404(Task, pk=task_id)
 
         request.user.userprofile.clock_last_task = task
+        request.user.userprofile.full_clean()
         request.user.userprofile.save()
         
         # time = request.session['clock']
@@ -611,6 +612,8 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
         clockString = myDict.clock
 
         if(newStatus == 1):
+            myDict.save()
+            request.user.save()
             return JsonResponse({'status':'success','clockString': clockString})
 
         task = myDict.clock_last_task
@@ -620,13 +623,14 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
 
         last_init = myDict.clock_last_init
 
-        if(last_init == None):
+        if(last_init == None and newStatus!=0):
             return JsonResponse({'status':'error_time','clockString':clockString})
 
         # save interval
-        interval = TimeInterval(init_time=last_init, end_time=datetime.now(), user=request.user, task=task)
-        interval.full_clean()
-        interval.save()
+        if(last_init != None):
+            interval = TimeInterval(init_time=last_init, end_time=datetime.now(), user=request.user, task=task)
+            interval.full_clean()
+            interval.save()
 
         # last init = None
         myDict.clock_last_init = None
@@ -638,7 +642,6 @@ def clock_view(request): # la comparten PAUSE y RESET (y play en menor medida)
 
         myDict.save()
         request.user.save()
-        
 
         if(clockString != None):
             return JsonResponse({'status':'success','clockString': clockString})
@@ -689,7 +692,7 @@ def clock_play(request): # PLAY
         last_init = myDict.clock_last_init
 
                                 # si le das play, entonces estabas
-        if(last_init != None):  # en pausa o estabas en reset, entonces last_init == None
+        if(last_init != None and myDict.clock_status != 1):  # en pausa o estabas en reset, entonces last_init == None
             return JsonResponse({'status':'error_time','clockString':'','clock_status':0})
 
         myDict.clock_last_init = datetime.now()
