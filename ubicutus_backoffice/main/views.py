@@ -27,9 +27,10 @@ def dashboard(request):
     hours_last_five_days = 0
 
     users = get_user(request)
+    all_tasks = Task.objects.filter(user__in=users).filter(archived=False)
 
     #suma de horas trabajadas por el request.user
-    time_intervals = TimeInterval.objects.filter(user=request.user)
+    time_intervals = TimeInterval.objects.filter(user=request.user).filter(task__in=all_tasks)
     for i in time_intervals:
         if(i.init_time==None):
             i.init_time = datetime.now()
@@ -49,7 +50,7 @@ def dashboard(request):
         user=request.user, 
         end_time__lte=et,  
         init_time__gte=st,
-    )
+    ).filter(task__in=all_tasks)
 
     for i in time_intervals:
         if(i.init_time==None):
