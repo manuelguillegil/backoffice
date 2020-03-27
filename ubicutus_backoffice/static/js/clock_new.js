@@ -148,12 +148,14 @@ async function startChr() {
                         }
                     }
                     else if(json.status=='error'){
-                        
                         reject('fail to get clockString 4');
                     }
                     else if(json.status == 'error_task') {
                         raiseWarn();
                         reject('Error no task');
+                    }
+                    else if(json.status == 'error_time') {
+                        reject('No Init time');
                     }
                     else{
                         alert("Respuesta indefinida");
