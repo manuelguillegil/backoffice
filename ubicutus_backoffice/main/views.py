@@ -683,13 +683,13 @@ def clock_play(request): # PLAY
         task = myDict.clock_last_task
 
         if(task == None):
-            return sonResponse({'status':'error_task','clockString':'','clock_status':0})
+            return JsonResponse({'status':'error_task','clockString':'','clock_status':0})
 
         last_init = myDict.clock_last_init
 
                                 # si le das play, entonces estabas
         if(last_init != None):  # en pausa o estabas en reset, entonces last_init == None
-            return sonResponse({'status':'error_time','clockString':'','clock_status':0})
+            return JsonResponse({'status':'error_time','clockString':'','clock_status':0})
 
         myDict.clock_last_init = datetime.now()
         request.user.save()

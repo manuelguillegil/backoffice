@@ -29,7 +29,7 @@
   </div>
 
   {% if request.user.userprofile.clock_last_task == null %}
-  <div class="alert alert-success mt-3 d-none" id="alertMessage">Por favor asigne una tarea para ser cronometrada.</div>
+  <div class="alert alert-success mt-3" id="alertMessage">Por favor asigne una tarea para ser cronometrada.</div>
   <form class="user mt-4" method="POST" id="select-task-form">
     {% csrf_token %}
     <select name="list-hours" id="task-select" class="form-control">
