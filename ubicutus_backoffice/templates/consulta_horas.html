@@ -13,7 +13,7 @@
 <div class="container-fluid">
   <div class="row justify-content-center ">
   <!-- DataTales Example -->
-  <div class="card shadow mb-4 mt-4">
+  <div class="card shadow mb-4 mt-4 vh-100 w-75">
     <div class="card-header py-3">
       <h3 class="m-0 font-weight-bold text-primary text-center">Total de horas trabajadas</h3>
     </div>
@@ -21,6 +21,7 @@
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
+            {% if time_intervals %}
             <tr>
               <td class="text-center"><strong>Id intervalo</strong></td>
               <td class="text-center"><strong>Fecha inicial</strong></td>
@@ -28,7 +29,10 @@
               <td class="text-center"><strong>Nombre Tarea</strong></td>
               <td class="text-center"><strong>Descripción</strong></td>
             </tr>
-            {% for p in time_intervals%}
+            <tbody>
+              
+            </tbody>
+            {% for p in time_intervals %}
             <tr>
               <td>{{p.0.id}}</td>
               <td>{{p.0.init_time}}</td>
@@ -37,6 +41,13 @@
               <td>{{p.1.description}}</td>
             </tr>
             {% endfor %}
+            {% else %}
+            <div class="container text-center">
+              <span>
+                Aún no hay nada que mostrar
+              </span>
+            </div>
+            {% endif %}
           </tbody>
         </table>
       </div>
