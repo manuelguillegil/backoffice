@@ -50,8 +50,6 @@ window.addEventListener("unload", function logData() {
 */
 
 window.addEventListener("unload", function logData() {
-    console.log('AAAAAAAAAAAA estado del crono: '+startchron);
-    console.log('AAAAAAAAAAAA count del crono: '+ clockString);
     var data = {clock : clockString, clock_status : startchron };
     return fetch(/clock-unload/, {
       method: 'POST', // or 'PUT'
@@ -79,8 +77,6 @@ function chronometer() {
             pageElement.innerHTML = clockString;
         }
         
-        console.log('crono: estado del crono: '+startchron);
-        console.log('crono: count del crono: '+ clockString);
         // Esperamos un tiempo y se vuelve a llamar a chronometer para seguir contando
         setTimeout("chronometer()", 1000);
     }
@@ -120,7 +116,6 @@ function increase_time(){
 // Inicia el cronometro
 async function startChr() { 
 
-    console.log('plaaaaaaaay');
 
     if(startchron != states.COUNTING){
 
@@ -160,13 +155,11 @@ async function startChr() {
                     }
                     else{
                         alert("Respuesta indefinida");
-                        console.log(json);
                         reject('fail to get clockString 3');
                     }
                   },
                   error:function(xhr, errmsg, err){
                     //raiseErr();
-                    console.log(errmsg)
                     reject('fail to get clockString 2');
                   },
                 dataType:'json',
@@ -189,12 +182,7 @@ async function startChr() {
             hours1   = clockString.charCodeAt(1) - "0".charCodeAt(0);
             hours2   = clockString.charCodeAt(0) - "0".charCodeAt(0);
             
-            //startchron = states.COUNTING;
-            console.log('start in: estado del crono: '+startchron);
-            console.log('start in: count del crono: '+ clockString);
-            // saveClockState();
-            console.log('start out: estado del crono: '+startchron);
-            console.log('start out: count del crono: '+ clockString);
+            
             chronometer(); 
 
         }).catch( e => { 
@@ -207,11 +195,7 @@ async function startChr() {
 // Detiene el cronometro
 function stopChr() { 
     startchron = states.PAUSED;
-    console.log('pause in: estado del crono: '+startchron);
-    console.log('pause in: count del crono: '+ clockString);
     saveClockState();
-    console.log('pause out: estado del crono: '+startchron);
-    console.log('pause out: count del crono: '+ clockString);
 }
 
 // Resetea a los valores por defecto las variables
@@ -226,11 +210,7 @@ function resetChr() {
     seconds1 = 0; 
     
     clockString = '' + hours2 + hours1 + ':' + mints2 + mints1 + ':' + seconds2 + seconds1;
-    console.log('reset in: estado del crono: '+startchron);
-    console.log('reset in: count del crono: '+ clockString);
     saveClockState();
-    console.log('reset out: estado del crono: '+startchron);
-    console.log('reset out: count del crono: '+ clockString);
     document.getElementById('chrono').innerHTML = clockString;
     
     if(pageElement != null) {
@@ -239,10 +219,7 @@ function resetChr() {
 }
 
 async function saveClockState() {
-    console.log('save state in: estado del crono: '+startchron);
-    console.log('save state in: count del crono: '+ clockString);
-
-
+    
     var promise2 = new Promise( (resolve, reject) => {
         $.ajax({
             url: '/clock-view/',
@@ -253,7 +230,6 @@ async function saveClockState() {
                 if(json.status=='success'){
 
                     if(clockString != ''){
-                        console.log('llego: '+clockString);
                         resolve(clockString);
                     }else{
                         reject('fail to save clockString 5');
@@ -271,7 +247,6 @@ async function saveClockState() {
                 }
                 else{
                     alert("Respuesta indefinida");
-                    console.log(json);
                     reject('fail to save clockString 3');
                 }
             },
@@ -288,7 +263,6 @@ async function saveClockState() {
     return promise2.then( clockvalue => {
 
         clockString = clockvalue;
-        console.log('jeje');
 
     }).catch( e => { 
         console.log(e); 

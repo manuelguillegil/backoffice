@@ -532,7 +532,6 @@ def contador(request):
 def eliminar_tarea(request):
     users = get_user(request)
     if request.method == 'POST':
-        print("me llegó un post")
         form = TaskId(request.POST)
         pk = form.data['task_id']
         if ( Task.objects.filter(id=pk).filter(user__in = users).exists() ):
@@ -670,9 +669,6 @@ def clock_unload(request): # Cambio de Pagina
         myDict.save()
         request.user.save()
         
-        #print("JEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJEJJEJEJEJEJEJEJEJEJEJE")
-        #print(myDict.clock)
-        #print(myDict.clock_status)
         #clockString = request.user.userprofile.clock
         clockString = "--:--:--"
 
@@ -708,10 +704,6 @@ def clock_play(request): # PLAY
         
         clockString = myDict.clock
         clock_status = myDict.clock_status
-
-        #print("JIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJIJJIJIJIJIJIJIJIJIJIJI")
-        #print(clockString)
-        #print(clock_status)
 
         if(clockString != None and clock_status!=None):
             return JsonResponse({
