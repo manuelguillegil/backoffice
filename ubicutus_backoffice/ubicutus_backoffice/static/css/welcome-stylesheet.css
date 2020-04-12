@@ -1,8 +1,8 @@
 
 :root{
     --gradient-degree: 45deg;
-    --ubi-pink: #C83764;
-    --ubi-orange: #dc7d28;  
+    --ubi-pink: #036d46;
+    --ubi-orange: #64e0b3;  
 }
 
 
@@ -14,7 +14,7 @@
 
 
 .bg-welcome {
-    background-image: linear-gradient(45deg, #C83764, #dc7d28);
+    background-image: linear-gradient(45deg, #036d46, #64e0b3);
     padding-top: 5rem;
   }
 

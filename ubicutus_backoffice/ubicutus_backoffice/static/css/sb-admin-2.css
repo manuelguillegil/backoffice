@@ -14,9 +14,9 @@
   --blue: #4e73df;
   --indigo: #6610f2;
   --purple: #6f42c1;
-  --pink: #C83764;
+  --pink: #036d46;
   --red: #e74a3b;
-  --orange: #DC7D28;
+  --orange: #64e0b3;
   --yellow: #f6c23e;
   --green: #1cc88a;
   --teal: #20c9a6;
@@ -24,11 +24,11 @@
   --white: #fff;
   --gray: #969697;
   --gray-dark: #3c3c3c;
-  --primary: #C83764;
+  --primary: #036d46;
   --secondary: #969697;
   --success: #1cc88a;
   --info: #36b9cc;
-  --warning: #DC7D28;
+  --warning: #64e0b3;
   --danger: #e74a3b;
   --light: #FBE3E3;
   --dark: #565656;
@@ -39,8 +39,8 @@
   --breakpoint-xl: 1200px;
   --font-family-sans-serif: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --ubicutus-rosado: #C83764;
-  --ubicutus-naranja: #DC7D28;
+  --ubicutus-rosado: #036d46;
+  --ubicutus-naranja: #64e0b3;
   --ubicutus-gris-claro: #3c3c3c;
   --ubicutus-gris-oscuro: #969697;
   --ubicutus-rosado: #FBE3E3;
